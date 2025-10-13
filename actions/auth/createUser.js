@@ -43,6 +43,8 @@ export default async function createUser(formData) {
 
     // encrypt 2-factor auth verification code
     const twoFactorAuthCode = getRandom6DigitNumber();
+    // TODO: DELETE BELOW LINE
+    console.log('Verification code: ', twoFactorAuthCode);
     const twoFactorAuthSalt = await bcrypt.genSalt(10);
     const hashedtwoFactorAuthCode = await bcrypt.hash(
       twoFactorAuthCode.toString(),

@@ -7,6 +7,8 @@ export const FORM_ERROR_USER_NOT_FOUND = 'User Not Found';
 export const FORM_ERROR_MISSING_PASSWORD = 'Password Required';
 export const FORM_ERROR_MISSING_CONFIRM_PASSWORD = 'Confirm Password Required';
 export const FORM_ERROR_MISSING_NEW_PASSWORD = 'New Password Required';
+export const VERIFICATION_EXPIRED = 'Verification Code Expired';
+export const VERIFICATION_INCORRECT = 'Incorrect Verification Code';
 export const FORM_ERROR_MISSING_NEW_CONFIRM_PASSWORD =
   'Confirm New Password Required';
 export const FORM_ERROR_INCORRECT_EMAIL_PASSWORD =

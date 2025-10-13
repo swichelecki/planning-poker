@@ -1,6 +1,6 @@
 @use '../styles/variables';
 
-.entry-form {
+.auth-form {
   &__form {
     margin: 0 auto;
     max-width: 480px;
@@ -28,10 +28,22 @@
       padding-top: 8px;
     }
   }
+  &__form-add-text-field {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 24px;
+  }
+  &__form-add-text-field-field-wrapper {
+    flex: 0 1 70%;
+  }
+  &__form-add-text-field-btn-wrapper {
+    flex: 0 1 30%;
+  }
 }
 
 @media screen and (max-width: 700px) {
-  .entry-form {
+  .auth-form {
     &__form {
       max-width: 345px;
       margin-top: 24px;

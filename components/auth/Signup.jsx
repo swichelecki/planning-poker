@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUser } from '../../actions';
+import { createUser, loginUser } from '../../actions';
 //import { useAppContext } from '../../context';
-import { FormTextField, Toast, CTA } from '../../components';
+import { FormTextField, FormAddTextField, CTA, Toast } from '../../components';
 import { createUserSchema, loginSchema } from '../../schemas/schemas';
 import { USER_ALREADY_EXISTS } from '../../constants';
 
@@ -19,6 +19,8 @@ const Signup = () => {
     password: '',
     confirmPassword: '',
     verification: '',
+    team: '',
+    teammates: [],
   });
   const [errorMessage, setErrorMessage] = useState({
     name: '',
@@ -26,9 +28,15 @@ const Signup = () => {
     password: '',
     confirmPassword: '',
     verification: '',
+    team: '',
+    teammates: '',
   });
   const [show2FactorAuthField, setShow2FactorAuthField] = useState(false);
+  // TODO: showCreateRoom needs to be set back to false by default
+  const [showCreateRoom, setShowCreateRoom] = useState(true);
   const [isAwaitingLogInResponse, setisAwaitingLogInResponse] = useState(false);
+
+  console.log('form', form);
 
   // when 6-digit 2-factor authentication code added to form log in user
   useEffect(() => {
@@ -54,7 +62,9 @@ const Signup = () => {
     setisAwaitingLogInResponse(true);
     const response = await loginUser(zodFormData);
     if (response.status === 200) {
-      router.push('/settings');
+      setShowCreateRoom(true);
+      setShow2FactorAuthField(false);
+      setisAwaitingLogInResponse(false);
     } else if (response.status === 403 || response.status === 410) {
       setisAwaitingLogInResponse(false);
       setErrorMessage({
@@ -74,8 +84,12 @@ const Signup = () => {
     }
   };
 
+  /*  const handleAddTeammate = (email) => {
+    setForm({ ...form, teammates: [...form.teammates].push(email) });
+  }; */
+
   // create account and send user 2-factor authentication code in email
-  const onSubmit = async (e) => {
+  const handleCreateUser = async (e) => {
     e.preventDefault();
 
     const zodValidationResults = createUserSchema.safeParse(form);
@@ -109,9 +123,17 @@ const Signup = () => {
     }
   };
 
+  const handleCreateRoom = async (e) => {
+    e.preventDefault();
+    console.log('form', form);
+  };
+
   return (
-    <form onSubmit={onSubmit} className='entry-form__form'>
-      {!show2FactorAuthField && (
+    <form
+      onSubmit={!showCreateRoom ? handleCreateUser : handleCreateRoom}
+      className='auth-form__form'
+    >
+      {!show2FactorAuthField && !showCreateRoom && (
         <>
           <FormTextField
             label='Name'
@@ -164,12 +186,48 @@ const Signup = () => {
           showSpinner={isAwaitingLogInResponse}
         />
       )}
+      {showCreateRoom && (
+        <>
+          <FormTextField
+            label='Team Name'
+            //subLabel='Create a team name for which you want a planning poker room'
+            type='text'
+            id='team'
+            name='team'
+            value={form?.team}
+            onChangeHandler={handleForm}
+            errorMessage={errorMessage.team}
+          />
+          {form?.teammates?.length > 0 &&
+            form?.teammates?.map((item, index) => (
+              <FormAddTextField
+                key={`form-add-text-field__${index}`}
+                emailAddressMapped={item}
+                // make this a delete button
+                //handleAddTeammate={handleAddTeammate}
+              />
+            ))}
+          <FormAddTextField
+            teammates={form?.teammates}
+            handleAddTeammate={setForm}
+          />
+        </>
+      )}
       <div className='entry-form__form-row'>
-        {!show2FactorAuthField && (
+        {!show2FactorAuthField && !showCreateRoom && (
           <CTA
             text='Create Account'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
             ariaLabel='Create your Saturday account'
+            btnType='submit'
+            showSpinner={isAwaitingLogInResponse}
+          />
+        )}
+        {showCreateRoom && (
+          <CTA
+            text='Create Team and Invite Teammates'
+            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            ariaLabel='Create Team and Invite Teammates'
             btnType='submit'
             showSpinner={isAwaitingLogInResponse}
           />

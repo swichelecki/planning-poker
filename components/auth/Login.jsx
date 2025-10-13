@@ -99,7 +99,7 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} className='entry-form__form'>
+    <form onSubmit={onSubmit} className='auth-form__form'>
       {!show2FactorAuthField && (
         <>
           <FormTextField
