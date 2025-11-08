@@ -1,3 +1,5 @@
+@use '../styles/variables';
+
 * {
   box-sizing: border-box;
 }
@@ -45,8 +47,8 @@ input:disabled,
 button:disabled,
 select:disabled {
   cursor: not-allowed !important;
-  //background-color: $color-border !important;
-  //color: $color-background !important;
+  background-color: variables.$color-border;
+  color: gray;
 }
 
 .loader {

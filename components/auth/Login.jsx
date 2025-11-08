@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 //import { useAppContext } from '../../context';
 import { FormTextField, Toast, CTA } from '../../components';
 import { loginSchema } from '../../schemas/schemas';
-import { FORM_ERROR_INCORRECT_EMAIL_PASSWORD } from '../../constants';
+import { INCORRECT_EMAIL_PASSWORD } from '../../constants';
 
 const Login = () => {
   const router = useRouter();
@@ -89,8 +89,8 @@ const Login = () => {
     } else if (response.status === 403) {
       setisAwaitingLogInResponse(false);
       setErrorMessage({
-        email: FORM_ERROR_INCORRECT_EMAIL_PASSWORD,
-        password: FORM_ERROR_INCORRECT_EMAIL_PASSWORD,
+        email: INCORRECT_EMAIL_PASSWORD,
+        password: INCORRECT_EMAIL_PASSWORD,
       });
     } else {
       setShowToast(<Toast serverError={response} />);

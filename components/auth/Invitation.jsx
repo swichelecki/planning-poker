@@ -1,34 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { createUser, loginUser, createRoom } from '../../actions';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { createUser, loginUser } from '../../actions';
 //import { useAppContext } from '../../context';
-import { FormTextField, FormAddTextField, CTA, Toast } from '../../components';
+import { FormTextField, CTA, Toast } from '../../components';
 import { z } from 'zod';
-import {
-  createUserSchema,
-  createRoomSchema,
-  loginSchema,
-  emailAddressSchema,
-} from '../../schemas/schemas';
+import { createUserSchema, loginSchema } from '../../schemas/schemas';
 import { USER_ALREADY_EXISTS } from '../../constants';
 
-const Signup = () => {
+const InvitationForm = () => {
   const router = useRouter();
+  const params = useSearchParams();
+  const [room] = params.values();
+  const decodedRoom = decodeURI(room);
 
   //const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
-    userId: '',
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
     verification: '',
-    team: '',
-    teammates: [],
+    team: decodedRoom?.split('|')[0] ?? '',
+    teamNameUnique: decodedRoom?.split('|')[1] ?? '',
   });
   const [errorMessage, setErrorMessage] = useState({
     firstName: '',
@@ -37,14 +34,8 @@ const Signup = () => {
     password: '',
     confirmPassword: '',
     verification: '',
-    team: '',
-    teammates: '',
   });
-  const [emailAddress, setEmailAddress] = useState('');
   const [show2FactorAuthField, setShow2FactorAuthField] = useState(false);
-  const [showCreateRoom, setShowCreateRoom] = useState(false);
-  const [addTeammateAndCreateRoom, setAddTeammateAndCreateRoom] =
-    useState(false);
   const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
 
   // when 6-digit 2-factor authentication code added to form log in user
@@ -59,11 +50,6 @@ const Signup = () => {
       window.scrollTo(0, 0);
     }
   }, []);
-
-  // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
-  useEffect(() => {
-    if (addTeammateAndCreateRoom) handleCreateRoom();
-  }, [addTeammateAndCreateRoom]);
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -94,12 +80,13 @@ const Signup = () => {
     }
 
     setIsAwaitingResponse(true);
-    const response = await createUser(zodFormData);
+    const response = await createUser(
+      { ...zodFormData, team: form.team, teamNameUnique: form.teamNameUnique },
+      true
+    );
     if (response.status === 200) {
       setShow2FactorAuthField(true);
       setIsAwaitingResponse(false);
-      setForm({ ...form, userId: response.userId });
-      console.log('esponse.userId ', response.userId);
     } else if (response.status === 409) {
       setIsAwaitingResponse(false);
       setErrorMessage({
@@ -112,7 +99,7 @@ const Signup = () => {
     }
   };
 
-  // log in user and show create-room UI
+  // log in user
   const handleUserLoginAfter2FactorVerification = async () => {
     const zodValidationResults = loginSchema.safeParse(form);
     const { data: zodFormData, success, error } = zodValidationResults;
@@ -128,8 +115,7 @@ const Signup = () => {
     setIsAwaitingResponse(true);
     const response = await loginUser(zodFormData);
     if (response.status === 200) {
-      setShowCreateRoom(true);
-      setShow2FactorAuthField(false);
+      router.push('/room');
       setIsAwaitingResponse(false);
     } else if (response.status === 403 || response.status === 410) {
       setIsAwaitingResponse(false);
@@ -140,98 +126,10 @@ const Signup = () => {
     }
   };
 
-  // add teammate email
-  const handleAddTeammate = () => {
-    const zodValidationResults = emailAddressSchema.safeParse({
-      email: emailAddress,
-    });
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { email } = properties;
-      return setErrorMessage({ ...errorMessage, teammates: email?.errors[0] });
-    }
-
-    setForm((current) => {
-      return {
-        ...current,
-        teammates: [...current.teammates, zodFormData?.email],
-      };
-    });
-    setEmailAddress('');
-  };
-
-  // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
-  const handleAddTeammateAndCreateRoom = (e) => {
-    e.preventDefault();
-    const zodValidationResults = emailAddressSchema.safeParse({
-      email: emailAddress,
-    });
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { email } = properties;
-      return setErrorMessage({ ...errorMessage, teammates: email?.errors[0] });
-    }
-
-    setForm((current) => {
-      return {
-        ...current,
-        teammates: [...current.teammates, zodFormData?.email],
-      };
-    });
-    setAddTeammateAndCreateRoom(true);
-  };
-
-  // create room and invite teammates
-  const handleCreateRoom = async (e = null) => {
-    e?.preventDefault();
-    const zodValidationResults = createRoomSchema.safeParse(form);
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { team, teammates } = properties;
-
-      if (!team && !teammates) {
-        const serverError = {
-          status: 400,
-          error: 'Zod validation failed. Check console.',
-        };
-        setShowToast(<Toast serverError={serverError} />);
-        console.error(error);
-        return;
-      }
-
-      return setErrorMessage({
-        ...errorMessage,
-        team: team?.errors[0],
-        teammates: teammates?.errors[0],
-      });
-    }
-
-    setIsAwaitingResponse(true);
-    const response = await createRoom(zodFormData);
-    if (response.status === 200) {
-      router.push('/room');
-    } else {
-      setShowToast(<Toast serverError={response} />);
-      setIsAwaitingResponse(false);
-    }
-  };
-
   return (
-    <form
-      onSubmit={
-        !showCreateRoom
-          ? handleCreateUser
-          : emailAddress
-            ? handleAddTeammateAndCreateRoom
-            : handleCreateRoom
-      }
-      className='auth-form__form'
-    >
+    <form onSubmit={handleCreateUser} className='auth-form__form'>
       {/* create account fields */}
-      {!show2FactorAuthField && !showCreateRoom && (
+      {!show2FactorAuthField && (
         <>
           <FormTextField
             label='First Name'
@@ -294,65 +192,14 @@ const Signup = () => {
           showSpinner={isAwaitingResponse}
         />
       )}
-      {/* create room and invite teammates fields */}
-      {showCreateRoom && (
-        <>
-          <FormTextField
-            label='Team Name'
-            type='text'
-            id='team'
-            name='team'
-            value={form?.team}
-            onChangeHandler={handleForm}
-            errorMessage={errorMessage.team}
-          />
-          {form?.teammates?.length > 0 &&
-            form?.teammates?.map((item, index) => (
-              <FormAddTextField
-                key={`form-add-text-field__${index}`}
-                setForm={setForm}
-                emailAddressItem={item}
-              />
-            ))}
-          {!isAwaitingResponse && (
-            <FormAddTextField
-              setForm={setForm}
-              emailAddress={emailAddress}
-              setEmailAddress={setEmailAddress}
-              errorMessage={errorMessage}
-              setErrorMessage={setErrorMessage}
-            />
-          )}
-          <div className='form-field'>
-            <CTA
-              text='+'
-              className='cta-button cta-button--small cta-button--green'
-              ariaLabel='Add Teammate Email'
-              btnType='button'
-              handleClick={handleAddTeammate}
-            />
-          </div>
-        </>
-      )}
       <div className='entry-form__form-row'>
         {/* create account button */}
-        {!show2FactorAuthField && !showCreateRoom && (
+        {!show2FactorAuthField && (
           <CTA
             text='Create Account'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
             ariaLabel='Create your Planning Poker account'
             btnType='submit'
-            showSpinner={isAwaitingResponse}
-          />
-        )}
-        {/* create room and invite teammates button */}
-        {showCreateRoom && (
-          <CTA
-            text='Create Room & Invite Teammates'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Create Room & Invite Teammatess'
-            btnType='submit'
-            id='createRoomBtn'
             showSpinner={isAwaitingResponse}
           />
         )}
@@ -368,4 +215,13 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+// have to wrap form in suspense boundry because it is a static page using useSearchParams
+const Invitation = () => {
+  return (
+    <Suspense>
+      <InvitationForm />
+    </Suspense>
+  );
+};
+
+export default Invitation;

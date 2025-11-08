@@ -4,12 +4,12 @@ import connectDB from '../../config/db';
 import User from '../../models/User';
 import bcrypt from 'bcryptjs';
 import { handleServerError, getRandom6DigitNumber } from '../../utilities';
-//import { Resend } from 'resend';
-//import { UserCreatedEmail, User2FactorAuthEmail } from '../../components';
+import { Resend } from 'resend';
+import { UserCreatedEmail, User2FactorAuthEmail } from '../../components';
 import { createUserSchema } from '../../schemas/schemas';
-//const resendApiKey = process.env.RESEND_API_KEY;
+const resendApiKey = process.env.RESEND_API_KEY;
 
-export default async function createUser(formData) {
+export default async function createUser(formData, acceptInvitation) {
   if (!(formData instanceof Object)) {
     return {
       status: 400,
@@ -36,10 +36,14 @@ export default async function createUser(formData) {
   try {
     await connectDB();
 
-    const { name, email, password } = zodData;
+    const { firstName, lastName, email, password } = zodData;
+    const { team, teamNameUnique } = formData;
 
     const userExists = await User.findOne({ email });
     if (userExists) return { status: 409 };
+
+    if ((acceptInvitation && !team) || (acceptInvitation && !teamNameUnique))
+      return { status: 400, error: 'Missing room information.' };
 
     // encrypt 2-factor auth verification code
     const twoFactorAuthCode = getRandom6DigitNumber();
@@ -53,28 +57,34 @@ export default async function createUser(formData) {
 
     const passwordSsalt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, passwordSsalt);
-    await User.create({
-      name,
+
+    const room = acceptInvitation
+      ? {
+          roomName: team,
+          roomNameUnique: teamNameUnique,
+        }
+      : {};
+
+    const user = await User.create({
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
       twoFactorAuthCode: hashedtwoFactorAuthCode,
+      ...(Object.keys(room).length > 0 && { rooms: room }),
     });
 
     // send new-user email to admin
-    /* const resend = new Resend(resendApiKey);
+    const resend = new Resend(resendApiKey);
 
     const { error: errorNewUserLogin } = await resend.emails.send({
-      from: 'Saturday <contact@saturdaysimplelife.com>',
+      from: 'Planning Poker <onboarding@resend.dev>',
       to: 'swichelecki@gmail.com',
-      subject: 'Saturday User Account Created',
+      subject: 'Planning Poker User Account Created',
       react: UserCreatedEmail({
+        firstName,
+        lastName,
         email,
-        timezone,
-        continent,
-        country,
-        regionName,
-        city,
-        twoFactorAuthCode,
       }),
     });
 
@@ -82,17 +92,17 @@ export default async function createUser(formData) {
 
     // send verification code email
     const { error: errorNotifyAdmin } = await resend.emails.send({
-      from: 'Saturday <contact@saturdaysimplelife.com>',
+      from: 'Planning Poker <onboarding@resend.dev>',
       to: email,
-      subject: `Saturday Verification Code: ${twoFactorAuthCode}`,
+      subject: `Planning Poker Verification Code: ${twoFactorAuthCode}`,
       react: User2FactorAuthEmail({
         twoFactorAuthCode,
       }),
     });
 
-    if (errorNotifyAdmin) console.error('Resend error: ', errorNotifyAdmin); */
+    if (errorNotifyAdmin) console.error('Resend error: ', errorNotifyAdmin);
 
-    return { status: 200 };
+    return { status: 200, userId: user._id.toString() };
   } catch (error) {
     const errorMessage = handleServerError(error);
     console.error(errorMessage);

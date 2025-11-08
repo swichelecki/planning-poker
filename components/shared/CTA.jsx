@@ -9,7 +9,7 @@ import Link from 'next/link';
  * @param id {string} id for JavaScript logic
  * @param btnType {string} for buttons - can be button or submit, button being the default
  * @param ariaLabel {string} accessibility label, text being the fallback
- * @param isDisabled {boolean} disable button, false being the default
+ * @param disabled {boolean} disable button, false being the default
  * @param showSpinner {boolean} used for button to show loading spinner, default false
  * @param handleClick {function} for click event on button
  * @returns Call to Action component
@@ -23,7 +23,7 @@ const CTA = ({
   id,
   btnType = 'button',
   ariaLabel,
-  isDisabled = false,
+  disabled = false,
   showSpinner = false,
   handleClick,
 }) => {
@@ -45,7 +45,7 @@ const CTA = ({
           className={className}
           aria-label={ariaText}
           {...(id && { id: id })}
-          {...(isDisabled && { disabled: true })}
+          {...(disabled && { disabled: true })}
         >
           {showSpinner && <div className='loader'></div>}
           {text}

@@ -2,7 +2,11 @@ import { Schema, model, models } from 'mongoose';
 
 const UserSchema = new Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -15,11 +19,7 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    rooms: {
-      type: [String],
-      required: true,
-      default: [],
-    },
+    rooms: [{ roomName: { type: String }, roomNameUnique: { type: String } }],
     isAdmin: {
       type: Boolean,
       required: true,

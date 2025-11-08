@@ -1,21 +1,33 @@
 'use client';
 
-import { useState } from 'react';
 import { FormTextField, CTA } from '../../components';
 
 const FormAddTextField = ({
-  emailAddressMapped = '',
-  teammates,
-  handleAddTeammate,
+  setForm,
+  emailAddress,
+  emailAddressItem,
+  setEmailAddress,
+  errorMessage,
+  setErrorMessage,
 }) => {
-  const [emailAddress, setEmailAddress] = useState('');
+  // handle adding teammate email
+  const handleEmailAddress = (e) => {
+    setEmailAddress(e.target.value);
+    if (errorMessage['teammates']) {
+      setErrorMessage({ ...errorMessage, teammates: '' });
+    }
+  };
 
-  const handleForm = (e) => {
-    setEmailAddress({ ...form, [e.target.name]: e.target.value });
-
-    /*  if (errorMessage[e.target.name]) {
-      setErrorMessage({ ...errorMessage, [e.target.name]: '' });
-    } */
+  // delete teammate email
+  const handleDeleteTeammate = (emailAddressItem) => {
+    setForm((current) => {
+      return {
+        ...current,
+        teammates: [
+          ...current.teammates.filter((item) => item !== emailAddressItem),
+        ],
+      };
+    });
   };
 
   return (
@@ -23,38 +35,24 @@ const FormAddTextField = ({
       <div className='auth-form__form-add-text-field-field-wrapper'>
         <FormTextField
           label='Teammate Email Address'
-          type='email'
+          type='email novalidate'
           id='teammate'
-          name='teammate'
-          value={emailAddressMapped ? emailAddressMapped : emailAddress}
-          onChangeHandler={(e) => setEmailAddress(e.target.value)}
-          //errorMessage={errorMessage.teammate}
+          name='teammates'
+          disabled={emailAddressItem}
+          value={emailAddressItem ? emailAddressItem : emailAddress}
+          onChangeHandler={handleEmailAddress}
+          errorMessage={errorMessage?.teammates}
         />
       </div>
       <div className='auth-form__form-add-text-field-btn-wrapper'>
         <CTA
-          text='Add'
-          className='cta-button cta-button--medium cta-button--full cta-button--green'
-          ariaLabel='Add Another Teammate'
+          text='x'
+          className='cta-button cta-button--small cta-button--red'
+          ariaLabel='Delete Teammate Email'
           btnType='button'
+          disabled={!emailAddressItem}
           handleClick={() => {
-            if (teammates?.length === 0) {
-              handleAddTeammate((current) => {
-                return {
-                  ...current,
-                  teammates: [emailAddress],
-                };
-              });
-              setEmailAddress('');
-            } else {
-              handleAddTeammate((current) => {
-                return {
-                  ...current,
-                  teammates: [...current.teammates, emailAddress],
-                };
-              });
-              setEmailAddress('');
-            }
+            handleDeleteTeammate(emailAddressItem);
           }}
         />
       </div>
