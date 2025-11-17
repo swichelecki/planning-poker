@@ -99,7 +99,6 @@ const Signup = () => {
       setShow2FactorAuthField(true);
       setIsAwaitingResponse(false);
       setForm({ ...form, userId: response.userId });
-      console.log('esponse.userId ', response.userId);
     } else if (response.status === 409) {
       setIsAwaitingResponse(false);
       setErrorMessage({

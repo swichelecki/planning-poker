@@ -24,3 +24,4 @@ export const SERVER_ERROR_MESSAGE = 'A Server Error Has Occurred';
 export const MISSING_TEAM_NAME = 'Team Name Required';
 export const MISSING_TEAMMATES = 'Must Invite at Least One Teammate';
 export const TEAMMATES_LIMIT = 'Limit 20 Teammates Per Planning Poker Room';
+export const MISSING_SELECTED_ROOM = 'Must Select a Planning Poker Room';

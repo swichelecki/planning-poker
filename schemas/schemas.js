@@ -11,6 +11,7 @@ import {
   MISSING_TEAM_NAME,
   MISSING_TEAMMATES,
   TEAMMATES_LIMIT,
+  MISSING_SELECTED_ROOM,
 } from '../constants';
 
 export const createUserSchema = z
@@ -59,6 +60,11 @@ export const loginSchema = z.object({
     .max(50, CHARACTER_LIMIT_50),
   password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
   verification: z.string().max(6, TWO_FACTOR_CODE_LIMIT).optional(),
+});
+
+export const chooseRoomSchema = z.object({
+  userId: z.string(),
+  selectedRoom: z.string().min(1, MISSING_SELECTED_ROOM),
 });
 
 /*

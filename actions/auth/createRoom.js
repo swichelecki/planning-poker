@@ -45,7 +45,7 @@ export default async function createRoom(formData) {
     await connectDB();
 
     const { userId, team, teammates } = zodData;
-    // needs to change to id
+
     const user = await User.findOne({ _id: userId });
 
     if (!user) return { status: 404 };
@@ -78,6 +78,7 @@ export default async function createRoom(formData) {
     for (const email of teammates) {
       const { error } = await resend.emails.send({
         from: 'Planning Poker <onboarding@resend.dev>',
+        // TODO: take out my email
         //to: email,
         to: 'swichelecki@gmail.com',
         subject: `${firstName} ${lastName} Has Invited You to Join Planning Poker`,

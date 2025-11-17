@@ -62,7 +62,7 @@ export default async function loginUser(formData) {
         .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
         .sign(new TextEncoder().encode(jwtSecret));
       (await cookies()).set('planning_poker', token);
-      return { status: 200 };
+      return { status: 200, user: JSON.parse(JSON.stringify(user)) };
     }
 
     return { status: 403 };
