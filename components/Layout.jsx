@@ -1,19 +1,22 @@
-/* 'use client';
+'use client';
 
 import { useAppContext } from '../context';
+import { useScrollToTop } from '../hooks';
 import { Header } from '../components';
 
 const Layout = ({ children }) => {
   const { modal, toast } = useAppContext();
 
+  useScrollToTop();
+
   return (
-    <div className='app-wrapper'>
+    <>
       <Header />
       <main className='container'>{children}</main>
       {modal && modal}
       {toast && toast}
-    </div>
+    </>
   );
 };
 
-export default Layout; */
+export default Layout;

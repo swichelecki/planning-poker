@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createUser, loginUser } from '../../actions';
-//import { useAppContext } from '../../context';
+import { useAppContext } from '../../context';
 import { FormTextField, CTA, Toast } from '../../components';
 import { z } from 'zod';
 import { createUserSchema, loginSchema } from '../../schemas/schemas';
@@ -15,7 +15,7 @@ const InvitationForm = () => {
   const [room] = params.values();
   const decodedRoom = decodeURI(room);
 
-  //const { setShowToast } = useAppContext();
+  const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
     firstName: '',
@@ -44,12 +44,6 @@ const InvitationForm = () => {
       handleUserLoginAfter2FactorVerification();
     }
   }, [form.verification]);
-
-  useEffect(() => {
-    if (window && typeof window !== 'undefined') {
-      window.scrollTo(0, 0);
-    }
-  }, []);
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -128,7 +122,7 @@ const InvitationForm = () => {
 
   return (
     <form onSubmit={handleCreateUser} className='auth-form__form'>
-      {/* create account fields */}
+      {/* step 1: create account */}
       {!show2FactorAuthField && (
         <>
           <FormTextField
@@ -176,9 +170,16 @@ const InvitationForm = () => {
             onChangeHandler={handleForm}
             errorMessage={errorMessage.confirmPassword}
           />
+          <CTA
+            text='Create Account'
+            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            ariaLabel='Create your Planning Poker account'
+            btnType='submit'
+            showSpinner={isAwaitingResponse}
+          />
         </>
       )}
-      {/* 2-factor authentication field */}
+      {/* step 2: 2-factor authentication */}
       {show2FactorAuthField && (
         <FormTextField
           label='Verification Code'
@@ -192,25 +193,6 @@ const InvitationForm = () => {
           showSpinner={isAwaitingResponse}
         />
       )}
-      <div className='entry-form__form-row'>
-        {/* create account button */}
-        {!show2FactorAuthField && (
-          <CTA
-            text='Create Account'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Create your Planning Poker account'
-            btnType='submit'
-            showSpinner={isAwaitingResponse}
-          />
-        )}
-        <CTA
-          text='Log In'
-          type='anchor'
-          href='/login'
-          className='cta-text-link'
-          ariaLabel='Log in to Planning Poker'
-        />
-      </div>
     </form>
   );
 };

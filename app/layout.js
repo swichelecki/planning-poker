@@ -1,7 +1,6 @@
 //import { Geist, Geist_Mono } from 'next/font/google';
-// TODO: ADD LAYOUT COMPONENT AND GLOBAL CONTEXT
-/* import { GloablContext } from '../components';
-import { Layout } from '../components'; */
+import { GloablContext } from '../components';
+import { Layout } from '../components';
 import '../styles/styles.scss';
 
 /* const geistSans = Geist({
@@ -53,13 +52,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
-      <body>{children}</body>
-
-      {/*  
-      TODO: ADD LAYOUT COMPONENT AND GLOBAL CONTEXT
-      <GloablContext>
+      <body>
+        <GloablContext>
           <Layout>{children}</Layout>
-        </GloablContext> */}
+        </GloablContext>
+      </body>
     </html>
   );
 }

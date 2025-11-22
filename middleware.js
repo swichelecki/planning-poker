@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
-//import { getUserFromCookie } from './utilities/getUserFromCookie';
+import { getUserFromCookie } from './utilities/getUserFromCookie';
 
 export async function middleware(req) {
-  /* const { user, newUser, admin } = await getUserFromCookie();
+  const { user, isAdmin } = await getUserFromCookie();
 
   if (
     (!user && req.nextUrl.pathname === '/login') ||
     (!user && req.nextUrl.pathname === '/signup') ||
     (!user && req.nextUrl.pathname === '/reset') ||
+    (!user && req.nextUrl.pathname === '/invitation') ||
     (!user && req.nextUrl.pathname === '/')
   ) {
     return NextResponse.next();
@@ -18,45 +19,24 @@ export async function middleware(req) {
     return NextResponse.redirect(req.nextUrl);
   }
 
-  if (user && newUser && req.nextUrl.pathname === '/settings') {
-    return NextResponse.next();
-  }
-
-  if (user && newUser && req.nextUrl.pathname !== '/account') {
-    req.nextUrl.pathname = '/settings';
-    return NextResponse.redirect(req.nextUrl);
-  }
-
   if (
-    (user && req.nextUrl.pathname === '/login') ||
     (user && req.nextUrl.pathname === '/signup') ||
     (user && req.nextUrl.pathname === '/reset') ||
+    (user && req.nextUrl.pathname === '/invitation') ||
     (user && req.nextUrl.pathname === '/')
   ) {
-    req.nextUrl.pathname = '/dashboard';
+    req.nextUrl.pathname = '/login';
     return NextResponse.redirect(req.nextUrl);
   }
 
-  if (user && !admin && req.nextUrl.pathname === '/admin') {
-    req.nextUrl.pathname = '/dashboard';
+  if (user && !isAdmin && req.nextUrl.pathname === '/admin') {
+    req.nextUrl.pathname = '/login';
     return NextResponse.redirect(req.nextUrl);
-  } */
+  }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    /*  '/dashboard',
-    '/login',
-    '/signup',
-    '/reset',
-    '/settings',
-    '/account',
-    '/contact',
-    '/notes',
-    '/admin',
-    '/details/:path*',
-    '/', */
-  ],
+  matcher: ['/login', '/signup', '/invitation', '/room', '/'],
 };

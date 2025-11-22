@@ -1,8 +1,9 @@
-//export { default as GloablContext } from './GlobalContext';
+export { default as GloablContext } from './GlobalContext';
+export { default as Header } from './header/Header';
 export { default as Login } from './auth/Login';
 export { default as Signup } from './auth/Signup';
 export { default as Invitation } from './auth/Invitation';
-//export { default as Layout } from './Layout';
+export { default as Layout } from './Layout';
 export { default as FormTextField } from './forms/FormTextField';
 export { default as FormErrorMessage } from './forms/FormErrorMessage';
 export { default as FormAddTextField } from './forms/FormAddTextField';

@@ -53,9 +53,10 @@ export default async function loginUser(formData) {
         return { status: 403, error: VERIFICATION_INCORRECT };
       }
 
+      // create cookie with jwt
       const token = await new SignJWT({
         hasToken: true,
-        id: user._id,
+        id: user._id.toString(),
         isAdmin: user.isAdmin,
       })
         .setExpirationTime('1h')

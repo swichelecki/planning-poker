@@ -2,19 +2,29 @@
 
 .auth-form {
   &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: start;
     margin: 0 auto;
     max-width: 480px;
     width: 100%;
     padding: 48px 58px;
     border-radius: 12px;
     border: 1px solid variables.$color-border;
+    a {
+      //margin-top: 12px;
+      font-weight: 400;
+      text-decoration: underline;
+      color: variables.$button-purple;
+    }
   }
-  &__form-controls-wrapper {
+  /*   &__form-controls-wrapper {
     max-width: 360px;
     width: 100%;
     margin: 0 auto;
-  }
-  &__form-row {
+  } */
+  /*   &__form-row {
     display: flex;
     flex-direction: column;
     margin-bottom: 32px;
@@ -27,7 +37,7 @@
     &:last-of-type {
       padding-top: 8px;
     }
-  }
+  } */
   &__form-add-text-field {
     display: flex;
     align-items: center;

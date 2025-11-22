@@ -1,13 +1,12 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-//import { useAppContext } from '../../context';
+import { useAppContext } from '../../context';
 import { MdError, MdOutlineClear } from 'react-icons/md';
 import { ImCheckmark } from 'react-icons/im';
 
 const Toast = ({ isSuccess = false, serverError = '', message = '' }) => {
-  return <></>;
-  /*  const { setShowToast } = useAppContext();
+  const { setShowToast } = useAppContext();
 
   const toastRef = useRef(null);
 
@@ -47,7 +46,7 @@ const Toast = ({ isSuccess = false, serverError = '', message = '' }) => {
         <MdOutlineClear />
       </button>
     </div>
-  ); */
+  );
 };
 
 export default Toast;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createUser, loginUser, createRoom } from '../../actions';
-//import { useAppContext } from '../../context';
+import { useAppContext } from '../../context';
 import { FormTextField, FormAddTextField, CTA, Toast } from '../../components';
 import { z } from 'zod';
 import {
@@ -17,7 +17,7 @@ import { USER_ALREADY_EXISTS } from '../../constants';
 const Signup = () => {
   const router = useRouter();
 
-  //const { setShowToast } = useAppContext();
+  const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
     userId: '',
@@ -53,12 +53,6 @@ const Signup = () => {
       handleUserLoginAfter2FactorVerification();
     }
   }, [form.verification]);
-
-  useEffect(() => {
-    if (window && typeof window !== 'undefined') {
-      window.scrollTo(0, 0);
-    }
-  }, []);
 
   // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
   useEffect(() => {
@@ -229,7 +223,7 @@ const Signup = () => {
       }
       className='auth-form__form'
     >
-      {/* create account fields */}
+      {/* step 1: create account */}
       {!show2FactorAuthField && !showCreateRoom && (
         <>
           <FormTextField
@@ -277,9 +271,23 @@ const Signup = () => {
             onChangeHandler={handleForm}
             errorMessage={errorMessage.confirmPassword}
           />
+          <CTA
+            text='Create Account'
+            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            ariaLabel='Create your Planning Poker account'
+            btnType='submit'
+            showSpinner={isAwaitingResponse}
+          />
+          <CTA
+            text='Log In'
+            type='anchor'
+            href='/login'
+            className='cta-text-link'
+            ariaLabel='Log in to Planning Poker'
+          />
         </>
       )}
-      {/* 2-factor authentication field */}
+      {/* step 2: 2-factor authentication */}
       {show2FactorAuthField && (
         <FormTextField
           label='Verification Code'
@@ -293,7 +301,7 @@ const Signup = () => {
           showSpinner={isAwaitingResponse}
         />
       )}
-      {/* create room and invite teammates fields */}
+      {/* step 3: create room and invite teammates fields */}
       {showCreateRoom && (
         <>
           <FormTextField
@@ -322,30 +330,13 @@ const Signup = () => {
               setErrorMessage={setErrorMessage}
             />
           )}
-          <div className='form-field'>
-            <CTA
-              text='+'
-              className='cta-button cta-button--small cta-button--green'
-              ariaLabel='Add Teammate Email'
-              btnType='button'
-              handleClick={handleAddTeammate}
-            />
-          </div>
-        </>
-      )}
-      <div className='entry-form__form-row'>
-        {/* create account button */}
-        {!show2FactorAuthField && !showCreateRoom && (
           <CTA
-            text='Create Account'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Create your Planning Poker account'
-            btnType='submit'
-            showSpinner={isAwaitingResponse}
+            text='+'
+            className='cta-button cta-button--small cta-button--green'
+            ariaLabel='Add Teammate Email'
+            btnType='button'
+            handleClick={handleAddTeammate}
           />
-        )}
-        {/* create room and invite teammates button */}
-        {showCreateRoom && (
           <CTA
             text='Create Room & Invite Teammates'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
@@ -354,15 +345,8 @@ const Signup = () => {
             id='createRoomBtn'
             showSpinner={isAwaitingResponse}
           />
-        )}
-        <CTA
-          text='Log In'
-          type='anchor'
-          href='/login'
-          className='cta-text-link'
-          ariaLabel='Log in to Planning Poker'
-        />
-      </div>
+        </>
+      )}
     </form>
   );
 };

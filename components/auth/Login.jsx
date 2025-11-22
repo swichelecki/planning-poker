@@ -7,7 +7,7 @@ import {
   loginUser,
   createRoom,
 } from '../../actions';
-//import { useAppContext } from '../../context';
+import { useAppContext } from '../../context';
 import { z } from 'zod';
 import {
   FormTextField,
@@ -24,10 +24,12 @@ import {
 } from '../../schemas/schemas';
 import { INCORRECT_EMAIL_PASSWORD } from '../../constants';
 
-const Login = () => {
+const Login = ({ user }) => {
+  const { _id: userId, rooms, isAdmin } = user;
+
   const router = useRouter();
 
-  //const { setShowToast } = useAppContext();
+  const { setShowToast, setUserId, setIsAdmin } = useAppContext();
 
   const [form, setForm] = useState({
     email: '',
@@ -60,11 +62,15 @@ const Login = () => {
     useState(false);
   const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
 
+  // if already logged in skip first step of form and set global state
   useEffect(() => {
-    if (window && typeof window !== 'undefined') {
-      window.scrollTo(0, 0);
+    if (userId) {
+      setshowChoseRoom(true);
+      setUserRooms(rooms);
+      setUserId(userId);
+      setIsAdmin(isAdmin);
     }
-  }, []);
+  }, [userId, rooms, isAdmin]);
 
   // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
   useEffect(() => {
@@ -279,6 +285,7 @@ const Login = () => {
       }
       className='auth-form__form'
     >
+      {/* step 1: enter user name and password */}
       {!show2FactorAuthField && !showChoseRoom && (
         <>
           <FormTextField
@@ -299,8 +306,30 @@ const Login = () => {
             onChangeHandler={handleForm}
             errorMessage={errorMessage.password}
           />
+          <CTA
+            text='Log In'
+            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            ariaLabel='Log in to Planning Poker'
+            btnType='submit'
+            showSpinner={isAwaitingResponse}
+          />
+          <CTA
+            text='Sign Up'
+            type='anchor'
+            href='/signup'
+            className='cta-text-link'
+            ariaLabel='Sign up for Planning Poker'
+          />
+          {/*  <CTA
+            text='Forgot Password'
+            type='anchor'
+            href='/reset'
+            className='cta-text-link'
+            ariaLabel='Reset password'
+          /> */}
         </>
       )}
+      {/* step 2: enter 2-factor authentication */}
       {show2FactorAuthField && (
         <FormTextField
           label='Verification Code'
@@ -314,67 +343,39 @@ const Login = () => {
           showSpinner={isAwaitingResponse}
         />
       )}
+      {/* step 3: enter room or create new room */}
       {showChoseRoom && !showCreateNewRoom && (
-        <FormSelectField
-          label='Select Planning Poker Room'
-          id='selectPlanningPokerRoom'
-          name='selectedRoom'
-          value={selectRoomForm?.selectedRoom}
-          onChangeHandler={handleFormSelectField}
-          options={userRooms}
-          errorMessage={errorMessage.selectedRoom}
-        />
-      )}
-      <div className='entry-form__form-row'>
-        {!show2FactorAuthField && !showChoseRoom && (
+        <>
+          <FormSelectField
+            label='Select Planning Poker Room'
+            id='selectPlanningPokerRoom'
+            name='selectedRoom'
+            value={selectRoomForm?.selectedRoom}
+            onChangeHandler={handleFormSelectField}
+            options={userRooms}
+            errorMessage={errorMessage.selectedRoom}
+          />
           <CTA
-            text='Log In'
+            text='Enter Room'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Log in to Planning Poker'
+            ariaLabel='Enter Planning Poker Room'
             btnType='submit'
             showSpinner={isAwaitingResponse}
           />
-        )}
-        {showChoseRoom && !showCreateNewRoom && (
-          <>
-            <CTA
-              text='Enter Room'
-              className='cta-button cta-button--large cta-button--full cta-button--purple'
-              ariaLabel='Enter Planning Poker Room'
-              btnType='submit'
-              showSpinner={isAwaitingResponse}
-            />
-            <p>-- Or Create a New Room and Invite Teammates --</p>
-            <CTA
-              text='Create Room'
-              className='cta-button cta-button--large cta-button--full cta-button--purple'
-              ariaLabel='Create a New Planning Poker Room and Invite Teammates'
-              btnType='button'
-              handleClick={() => {
-                setshowCreateNewRoom(true);
-              }}
-              //showSpinner={isAwaitingResponse}
-            />
-          </>
-        )}
-        {!show2FactorAuthField && !showChoseRoom && (
+          <p>&mdash; Or Create a New Room and Invite Teammates &mdash;</p>
           <CTA
-            text='Sign Up'
-            type='anchor'
-            href='/signup'
-            className='cta-text-link'
-            ariaLabel='Sign up for Planning Poker'
+            text='Create Room'
+            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            ariaLabel='Create a New Planning Poker Room and Invite Teammates'
+            btnType='button'
+            handleClick={() => {
+              setshowCreateNewRoom(true);
+            }}
+            //showSpinner={isAwaitingResponse}
           />
-          /*  
-          <CTA
-            text='Forgot Password'
-            type='anchor'
-            href='/reset'
-            className='cta-text-link'
-            ariaLabel='Reset password'
-          /> */
-        )}
-      </div>
+        </>
+      )}
+      {/* optional step 4: create new room */}
       {showCreateNewRoom && (
         <>
           <FormTextField
@@ -408,25 +409,30 @@ const Login = () => {
               setErrorMessage={setErrorMessage}
             />
           )}
-          <div className='form-field'>
-            <CTA
-              text='+'
-              className='cta-button cta-button--small cta-button--green'
-              ariaLabel='Add Teammate Email'
-              btnType='button'
-              handleClick={handleAddTeammate}
-            />
-          </div>
-          <div className='entry-form__form-row'>
-            <CTA
-              text='Create Room & Invite Teammates'
-              className='cta-button cta-button--large cta-button--full cta-button--purple'
-              ariaLabel='Create Room & Invite Teammatess'
-              btnType='submit'
-              id='createRoomBtn'
-              showSpinner={isAwaitingResponse}
-            />
-          </div>
+          <CTA
+            text='+'
+            className='cta-button cta-button--small cta-button--green'
+            ariaLabel='Add Teammate Email'
+            btnType='button'
+            handleClick={handleAddTeammate}
+          />
+          <CTA
+            text='Create Room & Invite Teammates'
+            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            ariaLabel='Create Room & Invite Teammatess'
+            btnType='submit'
+            id='createRoomBtn'
+            showSpinner={isAwaitingResponse}
+          />
+          <CTA
+            text='Go Back'
+            className='cta-button cta-button--small'
+            ariaLabel='Go Back to Choose Room or Create Room'
+            btnType='button'
+            handleClick={() => {
+              setshowCreateNewRoom(false);
+            }}
+          />
         </>
       )}
     </form>
