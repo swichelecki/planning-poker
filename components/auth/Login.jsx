@@ -23,6 +23,7 @@ import {
   emailAddressSchema,
 } from '../../schemas/schemas';
 import { INCORRECT_EMAIL_PASSWORD } from '../../constants';
+import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
 
 const Login = ({ user }) => {
   const { _id: userId, rooms, isAdmin } = user;
@@ -37,11 +38,11 @@ const Login = ({ user }) => {
     verification: '',
   });
   const [selectRoomForm, setSelectRoomForm] = useState({
-    userId: '',
+    userId: userId ?? '',
     selectedRoom: '',
   });
   const [createRoomForm, setCreateRoomForm] = useState({
-    userId: '',
+    userId: userId ?? '',
     team: '',
     teammates: [],
   });
@@ -189,6 +190,7 @@ const Login = ({ user }) => {
     }
 
     console.log('selectRoomForm ', selectRoomForm);
+    alert('room selected successfully');
     // TODO: join room using zodFormData and web sockets and push to /room
     // router.push('/room');
   };
@@ -362,7 +364,7 @@ const Login = ({ user }) => {
             btnType='submit'
             showSpinner={isAwaitingResponse}
           />
-          <p>&mdash; Or Create a New Room and Invite Teammates &mdash;</p>
+          <p>&mdash; Or Create a New Room &mdash;</p>
           <CTA
             text='Create Room'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
@@ -410,8 +412,9 @@ const Login = ({ user }) => {
             />
           )}
           <CTA
-            text='+'
-            className='cta-button cta-button--small cta-button--green'
+            icon={<MdAddCircle />}
+            text='Add Another Email Address'
+            className='cta-button cta-button--icon cta-button--icon-green'
             ariaLabel='Add Teammate Email'
             btnType='button'
             handleClick={handleAddTeammate}
@@ -426,7 +429,7 @@ const Login = ({ user }) => {
           />
           <CTA
             text='Go Back'
-            className='cta-button cta-button--small'
+            className='cta-button cta-text-link'
             ariaLabel='Go Back to Choose Room or Create Room'
             btnType='button'
             handleClick={() => {

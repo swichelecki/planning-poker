@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <header className='header'>
       <div className='header__inner-wrapper'>
-        <Link href='/login' prefetch={false} className='h1'>
+        <Link href='/login' prefetch={false}>
           Agile Story Planning Poker
         </Link>
         <div className='header__content-right'>

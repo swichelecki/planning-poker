@@ -2,7 +2,7 @@
 
 import connectDB from '../../config/db';
 import User from '../../models/User';
-import { handleServerError } from '../../utilities';
+import { handleServerError, getUserFromCookie } from '../../utilities';
 import { Resend } from 'resend';
 import { UserInvitationEmail } from '../../components';
 import { createRoomSchema } from '../../schemas/schemas';
@@ -17,7 +17,7 @@ export default async function createRoom(formData) {
   }
 
   // check that cookie user id matches FormData user id
-  /*   const { userId: cookieUserId, cookieError } = await getUserFromCookie();
+  const { userId: cookieUserId, cookieError } = await getUserFromCookie();
   if (cookieError) return cookieError;
 
   const { userId } = formData;
@@ -26,7 +26,7 @@ export default async function createRoom(formData) {
       status: 400,
       error: 'Unauthorized',
     };
-  } */
+  }
 
   // check that data shape is correct
   const zodValidationResults = createRoomSchema.safeParse(formData);

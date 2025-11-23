@@ -10,7 +10,9 @@
     display: flex;
     align-self: flex-start;
     margin-bottom: 4px;
-    font-size: 1.125rem; // 18px
+    font-weight: 700;
+    //font-size: 1.125rem; // 18px
+
     cursor: pointer;
   }
   input {
@@ -22,12 +24,15 @@
     //background-color: $color-input;
     //color: $color-font;
     border: 1px solid variables.$color-border;
+    background-color: variables.$color-input;
     //color-scheme: dark;
   }
   &__sublabel {
     margin-bottom: 8px;
     font-weight: 300;
     line-height: 1.6;
+    font-size: 0.875rem; // 14px;
+    color: variables.$color-font-light;
     //color: $color-list-item-svg;
   }
   &__select-wrapper {
@@ -41,6 +46,7 @@
       border: 1px solid variables.$color-border;
       cursor: pointer;
       appearance: none;
+      color: variables.$color-font;
     }
     &:after {
       content: '';
@@ -49,7 +55,7 @@
       right: 12px;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 6px solid variables.$color-list-item-svg;
+      border-top: 6px solid variables.$color-font;
     }
   }
   /*   &__quill-wrapper {
@@ -67,10 +73,11 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
   .form-field {
     &__sublabel {
       font-size: 1rem; // 16px
     }
   }
 }
+ */

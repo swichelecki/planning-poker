@@ -1,7 +1,7 @@
 import connectDB from '../../../config/db';
 import User from '../../../models/User';
 import { Login } from '../../../components';
-import { getUserFromCookie } from '../../../utilities/getUserFromCookie';
+import { getUserFromCookie, handleServerError } from '../../../utilities';
 
 export const metadata = {
   title: 'Log In',
@@ -22,7 +22,8 @@ async function getUser() {
 
     return user;
   } catch (error) {
-    console.error(error);
+    const errorMessage = handleServerError(error);
+    console.error(errorMessage);
   }
 }
 

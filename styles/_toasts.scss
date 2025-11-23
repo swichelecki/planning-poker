@@ -19,11 +19,11 @@
     font-size: 1.75rem; // 28px;
   }
   p:first-of-type {
-    color: variables.$color-background;
+    color: variables.$color-font;
     font-weight: 600;
   }
   p:last-of-type {
-    color: variables.$color-list-item-svg;
+    color: variables.$color-font;
     font-size: 0.8125rem; // 13px;
   }
   button {

@@ -19,6 +19,20 @@
     padding: 14px;
     font-size: 1.125rem; // 18px
     border-radius: 26px;
+    font-weight: 700;
+  }
+  &--icon {
+    font-size: 2rem; // 32px
+    span {
+      svg {
+        font-size: 2rem; // 32px
+      }
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 1rem; // 16px;
+      color: variables.$color-font-light;
+    }
   }
   &--full {
     width: 100%;
@@ -87,6 +101,16 @@
     .loader {
       border: 2px solid variables.$button-yellow;
       border-top: 2px solid transparent;
+    }
+  }
+  &--icon-green {
+    svg {
+      fill: variables.$button-green;
+    }
+  }
+  &--icon-red {
+    svg {
+      fill: variables.$button-red;
     }
   }
 }

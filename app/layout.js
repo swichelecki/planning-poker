@@ -1,17 +1,14 @@
-//import { Geist, Geist_Mono } from 'next/font/google';
+import { TikTok_Sans } from 'next/font/google';
 import { GloablContext } from '../components';
 import { Layout } from '../components';
 import '../styles/styles.scss';
 
-/* const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const tikTokSans = TikTok_Sans({
+  weight: ['400', '700'],
+  variable: '--font-tiktok-sans',
+  subsets: ['latin'],
+  fallback: ['sans-serif'],
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-}); */
 
 export const metadata = {
   generator: 'Next.js',
@@ -52,7 +49,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
-      <body>
+      <body className={`${tikTokSans.variable}`}>
         <GloablContext>
           <Layout>{children}</Layout>
         </GloablContext>

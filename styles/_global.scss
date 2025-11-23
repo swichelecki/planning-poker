@@ -13,11 +13,11 @@ body {
 }
 
 body {
-  //font-family: var(--source-sans-pro), sans-serif;
+  font-family: var(--font-tiktok-sans), sans-serif;
   font-weight: 400;
   font-size: 1rem; // 16px
-  //color: $color-font;
-  //background-color: $color-background-dark;
+  color: variables.$color-font;
+  background-color: variables.$color-background;
 }
 
 img {
@@ -76,10 +76,10 @@ select:disabled {
 }
 
 @media screen and (max-width: 600px) {
-  body {
+  /*   body {
     font-size: 1.125rem; // 18px
   }
-
+ */
   .container {
     padding: 0;
   }

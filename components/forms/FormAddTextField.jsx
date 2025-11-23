@@ -1,6 +1,7 @@
 'use client';
 
 import { FormTextField, CTA } from '../../components';
+import { MdRemoveCircle } from 'react-icons/md';
 
 const FormAddTextField = ({
   setForm,
@@ -44,18 +45,19 @@ const FormAddTextField = ({
           errorMessage={errorMessage?.teammates}
         />
       </div>
-      <div className='auth-form__form-add-text-field-btn-wrapper'>
-        <CTA
-          text='x'
-          className='cta-button cta-button--small cta-button--red'
-          ariaLabel='Delete Teammate Email'
-          btnType='button'
-          disabled={!emailAddressItem}
-          handleClick={() => {
-            handleDeleteTeammate(emailAddressItem);
-          }}
-        />
-      </div>
+      {emailAddressItem && (
+        <div className='auth-form__form-add-text-field-btn-wrapper'>
+          <CTA
+            icon={<MdRemoveCircle />}
+            className='cta-button cta-button--icon cta-button--icon-red'
+            ariaLabel='Delete Teammate Email'
+            btnType='button'
+            handleClick={() => {
+              handleDeleteTeammate(emailAddressItem);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

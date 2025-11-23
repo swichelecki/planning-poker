@@ -17,6 +17,7 @@ import Link from 'next/link';
 
 const CTA = ({
   text,
+  icon,
   type = 'button',
   href,
   className,
@@ -30,7 +31,7 @@ const CTA = ({
   const anchor = 'anchor';
   const button = 'button';
 
-  if (!text) return;
+  if (!text && !icon) return;
   if (type === anchor && !href) return;
   if (type === button && btnType === button && !handleClick) return;
 
@@ -48,7 +49,14 @@ const CTA = ({
           {...(disabled && { disabled: true })}
         >
           {showSpinner && <div className='loader'></div>}
-          {text}
+          {text && !icon && text}
+          {!text && icon && icon}
+          {text && icon && (
+            <span>
+              {icon}
+              {text}
+            </span>
+          )}
         </button>
       )}
       {type === anchor && (

@@ -10,6 +10,7 @@ export const getUserFromCookie = async () => {
   let user = false;
   let userId;
   let isAdmin;
+  let cookieError = false;
 
   if (!token?.value) return { user };
 
@@ -27,11 +28,13 @@ export const getUserFromCookie = async () => {
   } catch (error) {
     const errorMessage = handleServerError(error);
     console.error(errorMessage);
+    cookieError = { status: 500, error: errorMessage };
   }
 
   return {
     user,
     userId,
     isAdmin,
+    cookieError,
   };
 };
