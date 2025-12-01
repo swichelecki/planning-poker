@@ -23,7 +23,7 @@ import {
   emailAddressSchema,
 } from '../../schemas/schemas';
 import { INCORRECT_EMAIL_PASSWORD } from '../../constants';
-import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
+import { MdAddCircle } from 'react-icons/md';
 
 const Login = ({ user }) => {
   const { _id: userId, rooms, isAdmin } = user;
@@ -190,9 +190,8 @@ const Login = ({ user }) => {
     }
 
     console.log('selectRoomForm ', selectRoomForm);
-    alert('room selected successfully');
     // TODO: join room using zodFormData and web sockets and push to /room
-    // router.push('/room');
+    router.push('/room');
   };
 
   // add teammate email

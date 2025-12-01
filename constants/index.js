@@ -1,3 +1,21 @@
+import { GiCoffeeMug } from 'react-icons/gi';
+
+export const CARDS = [
+  '0',
+  '1/2',
+  '1',
+  '2',
+  '3',
+  '5',
+  '8',
+  '13',
+  '20',
+  '40',
+  '100',
+  '?',
+  <GiCoffeeMug />,
+];
+
 export const MOBILE_BREAKPOINT = 600;
 export const CHARACTER_LIMIT_50 = 'Limit 50 Characters';
 export const MISSING_NAME = 'Name Required';

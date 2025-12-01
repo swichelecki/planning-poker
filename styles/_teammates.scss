@@ -1,0 +1,41 @@
+@use '../styles/variables';
+
+.teammates-list {
+  max-width: 170px;
+  width: 100%;
+  position: absolute;
+  top: 32px;
+  left: 12px;
+  padding: 12px 12px 24px;
+  border-radius: 12px;
+  background-color: variables.$color-input;
+  border: 1px solid variables.$color-border;
+  z-index: 2;
+  h2 {
+    //font-size: 1.125rem; // 18px
+    font-size: 0.875rem; // 14px
+    padding-bottom: 6px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      position: relative;
+      padding: 2px 0 2px 18px;
+      font-size: 0.875rem; // 14px
+      font-weight: 700;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: variables.$button-green;
+      }
+    }
+  }
+}

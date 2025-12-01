@@ -44,6 +44,8 @@ export default async function request2FactorAuthentication(formData) {
 
       // encrypt 2-factor auth verification code
       const twoFactorAuthCode = getRandom6DigitNumber();
+      // TODO: for testing - DELETE!
+      console.log('auth code ', twoFactorAuthCode);
       const salt = await bcrypt.genSalt(10);
       const hashedtwoFactorAuthCode = await bcrypt.hash(
         twoFactorAuthCode.toString(),

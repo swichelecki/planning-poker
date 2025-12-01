@@ -1,0 +1,121 @@
+@use '../styles/variables';
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+dialog {
+  border: 0;
+  padding: 0;
+  border-radius: 12px;
+  overflow: visible;
+  background-color: variables.$color-white;
+  color: variables.$color-font;
+  border: 1px solid variables.$color-border;
+}
+
+.modal {
+  max-width: 500px;
+  width: 100%;
+  //min-width: 295px;
+  position: relative;
+  &__inner-wrapper {
+    padding: 32px 32px 48px;
+    & > button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      border-radius: 50%;
+      color: variables.$color-font;
+      background-color: transparent;
+      transition: all 0.3s;
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      &:hover {
+        box-shadow: 0 0 0 1px variables.$color-font;
+        background-color: variables.$color-font;
+      }
+    }
+  }
+  /*   h2 {
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 1.5rem; // 24px;
+  }
+  &__modal-button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+  }
+  &__form-modal--large,
+  &__form-modal--small {
+    max-width: 500px;
+    width: 100%;
+    h2 {
+      text-align: left;
+    }
+  } */
+  /*   &__image-modal {
+    max-width: 1000px;
+    width: 100%;
+    border: unset;
+    max-height: 563px;
+    .modal__inner-wrapper {
+      padding: 0;
+    }
+    & > button {
+      top: -12px;
+      right: -12px;
+    }
+    img {
+      border-radius: 12px;
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+  &__subscription-modal {
+    background-color: $color-background-dark;
+  } */
+}
+
+/* @media screen and (max-width: 1080px) {
+  dialog.modal.modal__image-modal {
+    & > button {
+      top: 18px;
+      right: 18px;
+    }
+  }
+}
+
+@media screen and (max-height: 966px) {
+  dialog.modal.modal__form-modal--large {
+    display: flex;
+    flex-direction: column;
+    margin: 16px auto;
+    max-height: unset;
+  }
+}
+
+@media screen and (max-height: 666px) {
+  dialog.modal.modal__form-modal--small {
+    display: flex;
+    flex-direction: column;
+    margin: 16px auto;
+    max-height: unset;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  dialog.modal.modal__form-modal--large,
+  dialog.modal.modal__form-modal--small {
+    width: 90%;
+  }
+} */

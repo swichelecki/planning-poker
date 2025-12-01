@@ -12,7 +12,7 @@
     margin-bottom: 4px;
     font-weight: 700;
     //font-size: 1.125rem; // 18px
-
+    color: variables.$color-font-light;
     cursor: pointer;
   }
   input {
@@ -22,8 +22,8 @@
     border-radius: 9px;
     width: 100%;
     //background-color: $color-input;
-    //color: $color-font;
-    border: 1px solid variables.$color-border;
+    color: variables.$color-font;
+    border: 1px solid variables.$color-border-muted;
     background-color: variables.$color-input;
     //color-scheme: dark;
   }
@@ -41,8 +41,8 @@
       width: 100%;
       padding: 12px;
       font: inherit;
-      //color: $color-font;
-      //background-color: $color-input;
+      color: variables.$color-font;
+      background-color: variables.$color-white;
       border: 1px solid variables.$color-border;
       cursor: pointer;
       appearance: none;
