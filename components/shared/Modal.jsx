@@ -2,12 +2,17 @@
 
 import { useEffect, useRef } from 'react';
 import { useAppContext } from '../../context';
+import { socket } from '../../lib/socketClient';
+import { CTA } from '../../components';
 //import { useInnerHeight } from '../../hooks';
 //import { handleModalResetPageScrolling } from '../../utilities';
 //import { IoClose } from 'react-icons/io5';
 
 const Modal = ({
   children,
+  setVotes,
+  setHasVoted,
+  room,
   //showCloseButton = true,
   //closeModalWhenClickingOutside = false,
 }) => {
@@ -68,16 +73,21 @@ const Modal = ({
 
   const handleCloseModal = () => {
     setShowModal(null);
-    //handleModalResetPageScrolling();
+    setVotes([]);
+    setHasVoted(false);
+    socket.emit('clear-votes', { room });
   };
 
   return (
     <dialog ref={modalRef} className='modal'>
       <div className='modal__inner-wrapper'>
         {children}
-        <button onClick={handleCloseModal} type='button'>
-          Clear
-        </button>
+        <CTA
+          handleClick={handleCloseModal}
+          btnType='button'
+          text='Clear'
+          className='cta-button cta-button--small cta-button--black'
+        />
       </div>
     </dialog>
   );

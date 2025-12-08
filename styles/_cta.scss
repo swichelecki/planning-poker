@@ -103,6 +103,24 @@
       border-top: 2px solid transparent;
     }
   }
+  &--black {
+    background-color: variables.$color-background;
+    color: variables.$color-font;
+    border: 1px solid variables.$color-font;
+    transition: all 0.3s;
+    svg {
+      fill: variables.$color-font;
+    }
+    .loader {
+      border: 2px solid variables.$color-font;
+      border-top: 2px solid transparent;
+    }
+    &:hover {
+      color: variables.$color-background;
+      background-color: variables.$color-font;
+      border: 1px solid variables.$color-font;
+    }
+  }
   &--icon-green {
     svg {
       fill: variables.$button-green;

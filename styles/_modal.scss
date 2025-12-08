@@ -15,33 +15,19 @@ dialog {
 }
 
 .modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   max-width: 500px;
   width: 100%;
-  //min-width: 295px;
+  min-height: 295px;
   position: relative;
   &__inner-wrapper {
     padding: 32px 32px 48px;
     & > button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 32px;
-      height: 32px;
       position: absolute;
       top: 18px;
       right: 18px;
-      border-radius: 50%;
-      color: variables.$color-font;
-      background-color: transparent;
-      transition: all 0.3s;
-      svg {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-      &:hover {
-        box-shadow: 0 0 0 1px variables.$color-font;
-        background-color: variables.$color-font;
-      }
     }
   }
   /*   h2 {

@@ -64,6 +64,7 @@ export const loginSchema = z.object({
 
 export const chooseRoomSchema = z.object({
   userId: z.string(),
+  username: z.string(),
   selectedRoom: z.string().min(1, MISSING_SELECTED_ROOM),
 });
 

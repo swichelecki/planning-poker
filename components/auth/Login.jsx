@@ -26,7 +26,7 @@ import { INCORRECT_EMAIL_PASSWORD } from '../../constants';
 import { MdAddCircle } from 'react-icons/md';
 
 const Login = ({ user }) => {
-  const { _id: userId, rooms, isAdmin } = user;
+  const { _id: userId, rooms, isAdmin, firstName, lastName } = user;
 
   const router = useRouter();
 
@@ -39,10 +39,12 @@ const Login = ({ user }) => {
   });
   const [selectRoomForm, setSelectRoomForm] = useState({
     userId: userId ?? '',
+    username: `${firstName} ${lastName}` ?? '',
     selectedRoom: '',
   });
   const [createRoomForm, setCreateRoomForm] = useState({
     userId: userId ?? '',
+    username: `${firstName} ${lastName}` ?? '',
     team: '',
     teammates: [],
   });
@@ -100,9 +102,18 @@ const Login = ({ user }) => {
       setIsAwaitingResponse(false);
       setShow2FactorAuthField(false);
       setshowChoseRoom(true);
-      setCreateRoomForm({ ...createRoomForm, userId: response.user._id });
-      setSelectRoomForm({ ...selectRoomForm, userId: response.user._id });
+      setCreateRoomForm({
+        ...createRoomForm,
+        userId: response.user._id,
+        username: `${response.user.firstName} ${response.user.lastName}`,
+      });
+      setSelectRoomForm({
+        ...selectRoomForm,
+        userId: response.user._id,
+        username: `${response.user.firstName} ${response.user.lastName}`,
+      });
       setUserRooms(response.user.rooms);
+      // setUsername(`${response.user.firstName} ${response.user.lastName}`);
     } else if (response.status === 403 || response.status === 410) {
       setIsAwaitingResponse(false);
       setErrorMessage({
@@ -168,7 +179,7 @@ const Login = ({ user }) => {
     e.preventDefault();
 
     const zodValidationResults = chooseRoomSchema.safeParse(selectRoomForm);
-    const { data: zodFormData, success, error } = zodValidationResults;
+    const { success, error } = zodValidationResults;
     if (!success) {
       const { properties } = z.treeifyError(error);
       const { selectedRoom } = properties;
@@ -189,9 +200,11 @@ const Login = ({ user }) => {
       });
     }
 
-    console.log('selectRoomForm ', selectRoomForm);
-    // TODO: join room using zodFormData and web sockets and push to /room
-    router.push('/room');
+    const params = new URLSearchParams();
+    params.append('username', selectRoomForm.username);
+    params.append('room', selectRoomForm.selectedRoom);
+
+    router.push(`/room?${params.toString()}`);
   };
 
   // add teammate email

@@ -1,9 +1,9 @@
-const Card = ({ symbol, index, handleShowModal }) => {
+const Card = ({ symbol, index, handleVote, username }) => {
   return (
     <button
       type='button'
       onClick={() => {
-        handleShowModal(symbol);
+        handleVote(typeof symbol === 'string' ? symbol : 'coffee', username);
       }}
       className={`card__wrapper card__wrapper--${index + 1 ?? 0}`}
       aria-label={

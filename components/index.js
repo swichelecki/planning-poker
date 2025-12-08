@@ -10,6 +10,7 @@ export { default as FormAddTextField } from './forms/FormAddTextField';
 export { default as FormSelectField } from './forms/FormSelectField';
 export { default as Room } from './room/Room';
 export { default as Teammates } from './room/Teammates';
+export { default as Votes } from './room/Votes';
 export { default as Card } from './room/Card';
 export { default as Toast } from './shared/Toast';
 export { default as CTA } from './shared/CTA';

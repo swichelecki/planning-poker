@@ -19,7 +19,15 @@ app.prepare().then(() => {
     socket.on('join-room', ({ room, username }) => {
       socket.join(room);
       console.log(`User ${username} joined room ${room}`);
-      socket.to(room).emit('user_joined', `${username} joined room ${room}`);
+      socket.to(room).emit('user_joined', username);
+    });
+
+    socket.on('new-vote', ({ room, vote }) => {
+      socket.to(room).emit('new_vote', vote);
+    });
+
+    socket.on('clear-votes', ({ room }) => {
+      socket.to(room).emit('clear_votes', room);
     });
 
     socket.on('disconnect', () => {
