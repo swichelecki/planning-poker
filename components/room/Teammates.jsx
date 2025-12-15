@@ -10,7 +10,7 @@ const Teammates = ({ teammates, room }) => {
       <h2>{roomFormatted}</h2>
       <ul>
         {teammates?.map((teammate, index) => (
-          <li key={`teammate__${index}`}>{teammate}</li>
+          <li key={`teammate__${index}`}>{teammate.username}</li>
         ))}
       </ul>
       {/* for mobile <button>Teammates</button> */}

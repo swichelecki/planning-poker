@@ -1,4 +1,6 @@
 const Card = ({ symbol, index, handleVote, username }) => {
+  if (!symbol || !handleVote || !username) return <></>;
+
   return (
     <button
       type='button'

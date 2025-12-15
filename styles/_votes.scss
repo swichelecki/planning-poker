@@ -24,4 +24,10 @@
       }
     }
   }
+  .loader {
+    border: 2px solid variables.$color-font;
+    border-top: 2px solid transparent;
+    width: 18px;
+    height: 18px;
+  }
 }

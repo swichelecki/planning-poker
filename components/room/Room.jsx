@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAppContext } from '../../context';
 import { socket } from '../../lib/socketClient';
@@ -11,30 +11,52 @@ const Room = () => {
   const { setShowModal } = useAppContext();
   const searchParams = useSearchParams();
 
+  const hasEmittedJoinRef = useRef(false);
+
   const username = searchParams.get('username');
   const room = searchParams.get('room');
 
-  const [teammates, setTeammates] = useState([username]);
+  const [teammates, setTeammates] = useState([]);
   const [votes, setVotes] = useState([]);
   const [hasVoted, setHasVoted] = useState(false);
+  const [isVoteComplete, setIsVoteComplete] = useState(false);
 
   // web sockets update ui after actions taken by other users in the room
   useEffect(() => {
-    socket.on('user_joined', (username) => {
-      setTeammates((curr) => [...curr, username]);
-      console.log('FRONT END user joined: ', username);
+    socket.on('user_joined', (teammates) => {
+      console.log('new user joined teammates ', teammates);
+      setTeammates(teammates);
+      setVotes(
+        teammates.map((item) => {
+          return { symbol: '', username: item.username };
+        })
+      );
     });
 
     socket.on('new_vote', (vote) => {
-      console.log('FE votes ', vote);
-      setVotes((curr) => [...curr, vote]);
+      setVotes(
+        votes.map((item) => {
+          if (item.username !== vote.username) {
+            return item;
+          } else {
+            return vote;
+          }
+        })
+      );
     });
 
     socket.on('clear_votes', () => {
-      console.log('FE clear votes');
       setShowModal(null);
       setHasVoted(false);
-      setVotes([]);
+      setVotes(
+        votes.map((item) => {
+          return { symbol: '', username: item.username };
+        })
+      );
+    });
+
+    socket.on('teammate_left_room', (teammates) => {
+      setTeammates(teammates);
     });
 
     return () => {
@@ -42,11 +64,14 @@ const Room = () => {
       socket.off('new_vote');
       socket.off('clear_votes');
     };
-  }, []);
+  }, [votes]);
 
   // handle join room
   useEffect(() => {
-    if (room && username) socket.emit('join-room', { room, username });
+    if (room && username && !hasEmittedJoinRef.current) {
+      hasEmittedJoinRef.current = true;
+      socket.emit('join-room', { room, username });
+    }
   }, []);
 
   // show modal after voting
@@ -54,15 +79,24 @@ const Room = () => {
     if (!hasVoted) return;
     setShowModal(
       <Modal setVotes={setVotes} setHasVoted={setHasVoted} room={room}>
-        <Votes votes={votes} />
+        <Votes votes={votes} isVoteComplete={isVoteComplete} />
       </Modal>
     );
-  }, [hasVoted, votes]);
+  }, [hasVoted, votes, isVoteComplete]);
+
+  useEffect(() => {
+    for (let item of votes) {
+      if (!item.symbol || item.symbol.length <= 0) return;
+      setIsVoteComplete(true);
+    }
+  }, [votes]);
+
+  console.log('votes ', votes);
 
   // handle voting
   const handleVote = (symbol, username) => {
     const vote = { symbol, username };
-    setVotes((curr) => [...curr, { symbol, username }]);
+    //setVotes((curr) => [...curr, { symbol, username }]);
     setHasVoted(true);
     socket.emit('new-vote', { room, vote });
   };

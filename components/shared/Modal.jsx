@@ -72,9 +72,9 @@ const Modal = ({
   }, [innerHeight]); */
 
   const handleCloseModal = () => {
-    setShowModal(null);
+    /*   setShowModal(null);
     setVotes([]);
-    setHasVoted(false);
+    setHasVoted(false); */
     socket.emit('clear-votes', { room });
   };
 
