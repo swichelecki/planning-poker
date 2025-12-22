@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   request2FactorAuthentication,
   loginUser,
@@ -29,6 +29,9 @@ const Login = ({ user }) => {
   const { _id: userId, rooms, isAdmin, firstName, lastName } = user;
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const room = searchParams.get('room');
+  const decodedRoom = decodeURI(room);
 
   const { setShowToast, setUserId, setIsAdmin } = useAppContext();
 
@@ -87,6 +90,7 @@ const Login = ({ user }) => {
     }
   }, [form.verification]);
 
+  // log in user and show create-room UI
   const handleUserLoginAfter2FactorVerification = async () => {
     const zodValidationResults = loginSchema.safeParse(form);
     const { data: zodFormData, success, error } = zodValidationResults;
@@ -99,20 +103,33 @@ const Login = ({ user }) => {
     setIsAwaitingResponse(true);
     const response = await loginUser(zodFormData);
     if (response.status === 200) {
-      setIsAwaitingResponse(false);
-      setShow2FactorAuthField(false);
-      setShowChooseRoom(true);
-      setCreateRoomForm({
-        ...createRoomForm,
-        userId: response.user._id,
-        username: `${response.user.firstName} ${response.user.lastName}`,
-      });
-      setSelectRoomForm({
-        ...selectRoomForm,
-        userId: response.user._id,
-        username: `${response.user.firstName} ${response.user.lastName}`,
-      });
-      setUserRooms(response.user.rooms);
+      if (decodedRoom !== 'null') {
+        // if existing user invited via email to new room go directly to room
+        const params = new URLSearchParams();
+        params.append(
+          'username',
+          `${response.user.firstName} ${response.user.lastName}`
+        );
+        params.append('room', decodedRoom);
+
+        router.push(`/room?${params.toString()}`);
+      } else {
+        // go to choose or create room UI
+        setIsAwaitingResponse(false);
+        setShow2FactorAuthField(false);
+        setShowChooseRoom(true);
+        setCreateRoomForm({
+          ...createRoomForm,
+          userId: response.user._id,
+          username: `${response.user.firstName} ${response.user.lastName}`,
+        });
+        setSelectRoomForm({
+          ...selectRoomForm,
+          userId: response.user._id,
+          username: `${response.user.firstName} ${response.user.lastName}`,
+        });
+        setUserRooms(response.user.rooms);
+      }
     } else if (response.status === 403 || response.status === 410) {
       setIsAwaitingResponse(false);
       setErrorMessage({

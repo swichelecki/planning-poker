@@ -76,18 +76,36 @@ export default async function createRoom(formData) {
     const resend = new Resend(resendApiKey);
     // send invitation emails to teammates
     for (const email of teammates) {
+      // if user exists already add room to user data record
+      const userExists = await User.findOne({ email });
+      if (userExists) {
+        const user = await User.findOne({ email });
+        await User.updateOne(
+          {
+            _id: user._id,
+          },
+          {
+            $push: { rooms: room },
+          }
+        );
+      }
+
       const { error } = await resend.emails.send({
         from: 'Planning Poker <onboarding@resend.dev>',
         // TODO: take out my email
         to: 'swichelecki@gmail.com',
         //to: email,
         //to: 'onboarding@resend.dev',
-        subject: `${firstName} ${lastName} Has Invited You to Join Planning Poker`,
+        subject: userExists
+          ? `${firstName} ${lastName} Has Invited You to a New Agile Story Planning Poker Team`
+          : `${firstName} ${lastName} Has Invited You to Agile Story Planning Poker`,
         react: UserInvitationEmail({
           firstName,
           lastName,
           team,
           encodedRoomInfo,
+          email,
+          userExists,
         }),
       });
 

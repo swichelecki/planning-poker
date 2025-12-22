@@ -3,17 +3,23 @@ const UserInvitationEmail = ({
   lastName,
   team,
   encodedRoomInfo,
+  email,
+  userExists,
 }) => {
   return (
     <div>
       <p>
-        You have been invited by {firstName} {lastName} to join {team} at
-        Planning Poker.
+        You have been invited by {firstName} {lastName} to join {team} at Agile
+        Story Planning Poker.
       </p>
       <p>
         Click{' '}
         <a
-          href={`${process.env.NEXT_PUBLIC_URL}/invitation?room=${encodedRoomInfo}`}
+          href={
+            userExists
+              ? `${process.env.NEXT_PUBLIC_URL}/login?room=${encodedRoomInfo}`
+              : `${process.env.NEXT_PUBLIC_URL}/invitation?room=${encodedRoomInfo}&email=${email}`
+          }
           target='blank'
           aria-label='Click to create your Planning Poker account'
         >

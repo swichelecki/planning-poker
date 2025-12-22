@@ -13,6 +13,7 @@ import {
   emailAddressSchema,
 } from '../../schemas/schemas';
 import { USER_ALREADY_EXISTS } from '../../constants';
+import { MdAddCircle } from 'react-icons/md';
 
 const Signup = () => {
   const router = useRouter();
@@ -205,7 +206,11 @@ const Signup = () => {
     setIsAwaitingResponse(true);
     const response = await createRoom(zodFormData);
     if (response.status === 200) {
-      router.push('/room');
+      const params = new URLSearchParams();
+      params.append('username', `${form.firstName} ${form.lastName}`);
+      params.append('room', response.roomNameUnique);
+
+      router.push(`/room?${params.toString()}`);
     } else {
       setShowToast(<Toast serverError={response} />);
       setIsAwaitingResponse(false);
@@ -331,8 +336,9 @@ const Signup = () => {
             />
           )}
           <CTA
-            text='+'
-            className='cta-button cta-button--small cta-button--green'
+            icon={<MdAddCircle />}
+            text='Add Another Email Address'
+            className='cta-button cta-button--icon cta-button--icon-green'
             ariaLabel='Add Teammate Email'
             btnType='button'
             handleClick={handleAddTeammate}

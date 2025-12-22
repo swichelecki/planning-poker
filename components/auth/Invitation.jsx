@@ -14,14 +14,16 @@ const InvitationForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const room = searchParams.get('room');
+  const email = searchParams.get('email');
   const decodedRoom = decodeURI(room);
+  const decodedEmail = decodeURI(email);
 
   const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
-    email: '',
+    email: decodedEmail,
     password: '',
     confirmPassword: '',
     verification: '',
