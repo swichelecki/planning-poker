@@ -10,15 +10,15 @@
     padding: 16px;
     border-radius: 8px;
     font-size: 2.25rem; // 36px
-    //border: 1px solid variables.$color-border;
-    border: 1px solid variables.$color-border;
-    background-color: variables.$color-input;
+    //border: 1px solid variables.$border;
+    border: 1px solid variables.$border;
+    background-color: variables.$background-light;
     transition: border 200ms ease-in;
-    color: variables.$color-font;
+    color: variables.$font;
     /*     &:hover {
-      border: 1px solid variables.$color-font-light;
+      border: 1px solid variables.$font-light;
       & > div {
-        color: variables.$color-font-light;
+        color: variables.$font-light;
         transition: color 200ms ease-in;
       }
     } */
@@ -80,8 +80,8 @@
   &__symbol-bottom-left,
   &__symbol-bottom-right {
     font-size: 1.125rem; // 18px
-    //color: variables.$color-border;
-    color: variables.$color-font-light;
+    //color: variables.$border;
+    color: variables.$font-muted;
     font-weight: 700;
   }
   &__symbol-top-left {

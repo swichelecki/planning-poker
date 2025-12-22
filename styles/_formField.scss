@@ -12,7 +12,7 @@
     margin-bottom: 4px;
     font-weight: 700;
     //font-size: 1.125rem; // 18px
-    color: variables.$color-font-light;
+    color: variables.$font-muted;
     cursor: pointer;
   }
   input {
@@ -21,10 +21,10 @@
     font: inherit;
     border-radius: 9px;
     width: 100%;
-    //background-color: $color-input;
-    color: variables.$color-font;
-    border: 1px solid variables.$color-border-muted;
-    background-color: variables.$color-input;
+    //background-color: $background-light;
+    color: variables.$font;
+    border: 1px solid variables.$border-muted;
+    background-color: variables.$background-light;
     //color-scheme: dark;
   }
   &__sublabel {
@@ -32,7 +32,7 @@
     font-weight: 300;
     line-height: 1.6;
     font-size: 0.875rem; // 14px;
-    color: variables.$color-font-light;
+    color: variables.$font-muted;
     //color: $color-list-item-svg;
   }
   &__select-wrapper {
@@ -41,12 +41,12 @@
       width: 100%;
       padding: 12px;
       font: inherit;
-      color: variables.$color-font;
-      background-color: variables.$color-white;
-      border: 1px solid variables.$color-border;
+      color: variables.$font;
+      background-color: variables.$background;
+      border: 1px solid variables.$border;
       cursor: pointer;
       appearance: none;
-      color: variables.$color-font;
+      color: variables.$font;
     }
     &:after {
       content: '';
@@ -55,7 +55,7 @@
       right: 12px;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 6px solid variables.$color-font;
+      border-top: 6px solid variables.$font;
     }
   }
   /*   &__quill-wrapper {

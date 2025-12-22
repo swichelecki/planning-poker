@@ -16,8 +16,8 @@ body {
   font-family: var(--font-tiktok-sans), sans-serif;
   font-weight: 400;
   font-size: 1rem; // 16px
-  color: variables.$color-font;
-  background-color: variables.$color-background;
+  color: variables.$font;
+  background-color: variables.$background-dark;
 }
 
 img {
@@ -51,12 +51,12 @@ input:disabled,
 button:disabled,
 select:disabled {
   cursor: not-allowed !important;
-  background-color: variables.$color-border;
+  background-color: variables.$border;
   color: gray;
 }
 
 .loader {
-  //border: 2px solid $color-font;
+  border: 2px solid variables.$font-muted;
   border-radius: 50%;
   border-top: 2px solid transparent;
   width: 12px;

@@ -57,7 +57,7 @@ const Login = ({ user }) => {
     teammates: '',
   });
   const [show2FactorAuthField, setShow2FactorAuthField] = useState(false);
-  const [showChoseRoom, setshowChoseRoom] = useState(false);
+  const [showChooseRoom, setShowChooseRoom] = useState(false);
   const [showCreateNewRoom, setshowCreateNewRoom] = useState(false);
   const [userRooms, setUserRooms] = useState([]);
   const [emailAddress, setEmailAddress] = useState('');
@@ -68,7 +68,7 @@ const Login = ({ user }) => {
   // if already logged in skip first step of form and set global state
   useEffect(() => {
     if (userId) {
-      setshowChoseRoom(true);
+      setShowChooseRoom(true);
       setUserRooms(rooms);
       setUserId(userId);
       setIsAdmin(isAdmin);
@@ -101,7 +101,7 @@ const Login = ({ user }) => {
     if (response.status === 200) {
       setIsAwaitingResponse(false);
       setShow2FactorAuthField(false);
-      setshowChoseRoom(true);
+      setShowChooseRoom(true);
       setCreateRoomForm({
         ...createRoomForm,
         userId: response.user._id,
@@ -113,7 +113,6 @@ const Login = ({ user }) => {
         username: `${response.user.firstName} ${response.user.lastName}`,
       });
       setUserRooms(response.user.rooms);
-      // setUsername(`${response.user.firstName} ${response.user.lastName}`);
     } else if (response.status === 403 || response.status === 410) {
       setIsAwaitingResponse(false);
       setErrorMessage({
@@ -175,6 +174,7 @@ const Login = ({ user }) => {
     }
   };
 
+  // choose and join room
   const handleChooseRoom = async (e) => {
     e.preventDefault();
 
@@ -279,19 +279,28 @@ const Login = ({ user }) => {
     setIsAwaitingResponse(true);
     const response = await createRoom(zodFormData);
     if (response.status === 200) {
-      router.push('/room');
+      const params = new URLSearchParams();
+      params.append('username', `${firstName} ${lastName}`);
+      params.append('room', response.roomNameUnique);
+
+      router.push(`/room?${params.toString()}`);
     } else {
       setShowToast(<Toast serverError={response} />);
       setIsAwaitingResponse(false);
     }
   };
 
+  // if user don't show ui until state set so step 1 skipped
+  if (userId && !showChooseRoom) {
+    return <></>;
+  }
+
   return (
     <form
       onSubmit={
-        !show2FactorAuthField && !showChoseRoom
+        !show2FactorAuthField && !showChooseRoom
           ? handleBeginLoginProcess
-          : showChoseRoom && !showCreateNewRoom
+          : showChooseRoom && !showCreateNewRoom
             ? handleChooseRoom
             : emailAddress && showCreateNewRoom
               ? handleAddTeammateAndCreateRoom
@@ -300,7 +309,7 @@ const Login = ({ user }) => {
       className='auth-form__form'
     >
       {/* step 1: enter user name and password */}
-      {!show2FactorAuthField && !showChoseRoom && (
+      {!show2FactorAuthField && !showChooseRoom && (
         <>
           <FormTextField
             label='Email'
@@ -358,10 +367,10 @@ const Login = ({ user }) => {
         />
       )}
       {/* step 3: enter room or create new room */}
-      {showChoseRoom && !showCreateNewRoom && (
+      {showChooseRoom && !showCreateNewRoom && (
         <>
           <FormSelectField
-            label='Select Planning Poker Room'
+            label='Select Team'
             id='selectPlanningPokerRoom'
             name='selectedRoom'
             value={selectRoomForm?.selectedRoom}
@@ -376,7 +385,9 @@ const Login = ({ user }) => {
             btnType='submit'
             showSpinner={isAwaitingResponse}
           />
-          <p>&mdash; Or Create a New Room &mdash;</p>
+          <p className='auth-form__message'>
+            &mdash; Or Create a New Room &mdash;
+          </p>
           <CTA
             text='Create Room'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
@@ -385,7 +396,6 @@ const Login = ({ user }) => {
             handleClick={() => {
               setshowCreateNewRoom(true);
             }}
-            //showSpinner={isAwaitingResponse}
           />
         </>
       )}
@@ -432,7 +442,7 @@ const Login = ({ user }) => {
             handleClick={handleAddTeammate}
           />
           <CTA
-            text='Create Room & Invite Teammates'
+            text='Create Room'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
             ariaLabel='Create Room & Invite Teammatess'
             btnType='submit'

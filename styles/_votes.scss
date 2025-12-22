@@ -15,7 +15,7 @@
     font-size: 1.375rem; // 22px
     span {
       font-size: 1.375rem; // 22px
-      color: variables.$color-font;
+      color: variables.$font;
       font-weight: 700;
       svg {
         position: relative;
@@ -24,8 +24,13 @@
       }
     }
   }
+  &__green-checkmark {
+    svg {
+      fill: variables.$button-green;
+    }
+  }
   .loader {
-    border: 2px solid variables.$color-font;
+    border: 2px solid variables.$font;
     border-top: 2px solid transparent;
     width: 18px;
     height: 18px;

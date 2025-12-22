@@ -1,8 +1,8 @@
 @use '../styles/variables';
 
 .header {
-  background-color: variables.$color-white;
-  border-bottom: 1px solid variables.$color-border;
+  background-color: variables.$background;
+  border-bottom: 1px solid variables.$border;
   &__inner-wrapper {
     display: flex;
     justify-content: space-between;
@@ -13,7 +13,7 @@
     width: 100%;
     padding: 14px 48px;
     & > a {
-      color: variables.$color-font;
+      color: variables.$font;
       font-weight: 700;
       display: inline-block;
     }

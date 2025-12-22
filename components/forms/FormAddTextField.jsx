@@ -32,31 +32,27 @@ const FormAddTextField = ({
   };
 
   return (
-    <div className='auth-form__form-add-text-field'>
-      <div className='auth-form__form-add-text-field-field-wrapper'>
-        <FormTextField
-          label='Teammate Email Address'
-          type='email novalidate'
-          id='teammate'
-          name='teammates'
-          disabled={emailAddressItem}
-          value={emailAddressItem ? emailAddressItem : emailAddress}
-          onChangeHandler={handleEmailAddress}
-          errorMessage={errorMessage?.teammates}
-        />
-      </div>
+    <div className='auth-form__form-field-with-cta'>
+      <FormTextField
+        label='Teammate Email Address'
+        type='email novalidate'
+        id='teammate'
+        name='teammates'
+        disabled={emailAddressItem}
+        value={emailAddressItem ? emailAddressItem : emailAddress}
+        onChangeHandler={handleEmailAddress}
+        errorMessage={errorMessage?.teammates}
+      />
       {emailAddressItem && (
-        <div className='auth-form__form-add-text-field-btn-wrapper'>
-          <CTA
-            icon={<MdRemoveCircle />}
-            className='cta-button cta-button--icon cta-button--icon-red'
-            ariaLabel='Delete Teammate Email'
-            btnType='button'
-            handleClick={() => {
-              handleDeleteTeammate(emailAddressItem);
-            }}
-          />
-        </div>
+        <CTA
+          icon={<MdRemoveCircle />}
+          className='cta-button cta-button--icon cta-button--icon-red'
+          ariaLabel='Delete Teammate Email'
+          btnType='button'
+          handleClick={() => {
+            handleDeleteTeammate(emailAddressItem);
+          }}
+        />
       )}
     </div>
   );

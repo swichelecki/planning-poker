@@ -11,49 +11,28 @@
     width: 100%;
     padding: 48px 58px;
     border-radius: 12px;
-    border: 1px solid variables.$color-border;
-    background-color: variables.$color-white;
+    border: 1px solid variables.$border;
+    background-color: variables.$background;
     a {
-      //margin-top: 12px;
       font-weight: 400;
       text-decoration: underline;
       color: variables.$button-purple;
     }
   }
-  /*   &__form-controls-wrapper {
-    max-width: 360px;
-    width: 100%;
+  &__message {
     margin: 0 auto;
-  } */
-  /*   &__form-row {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 32px;
-    a {
-      margin-top: 12px;
-      font-weight: 400;
-      text-decoration: underline;
-      color: variables.$button-purple;
-    }
-    &:last-of-type {
-      padding-top: 8px;
-    }
-  } */
-  &__form-add-text-field {
+    color: variables.$font-muted;
+    font-weight: 700;
+  }
+  &__form-field-with-cta {
     display: flex;
     align-items: center;
     width: 100%;
     gap: 12px;
-    & + div > button {
-      display: flex;
-      align-self: flex-start;
+    & > button {
+      position: relative;
+      top: 12px;
     }
-  }
-  &__form-add-text-field-field-wrapper {
-    flex: 1 1 auto;
-  }
-  &__form-add-text-field-btn-wrapper {
-    flex: 0 0 24px;
   }
 }
 

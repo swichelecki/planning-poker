@@ -10,7 +10,9 @@ const Votes = ({ votes, isVoteComplete }) => {
             {!item?.symbol ? (
               <div className='loader'></div>
             ) : !isVoteComplete ? (
-              <ImCheckmark />
+              <span className='votes__green-checkmark'>
+                <ImCheckmark />
+              </span>
             ) : item?.symbol !== 'coffee' ? (
               item?.symbol
             ) : (

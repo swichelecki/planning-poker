@@ -47,8 +47,11 @@ app.prepare().then(() => {
     // clean up in-memory state when user disconnects
     socket.on('disconnect', () => {
       console.log(`User disconnected ${socket.id}`);
-      console.log('teammates before ', teammates);
-      console.log('rooms before ', rooms);
+      console.log('teammates before deletion ', teammates);
+      console.log('rooms before deletion ', rooms);
+
+      if (Object.keys(teammates).length <= 0 && Object.keys(rooms).length <= 0)
+        return;
 
       for (let i = teammates[rooms[socket.id]].length - 1; i >= 0; i--) {
         if (teammates[rooms[socket.id]][i].socket === socket.id) {
@@ -60,13 +63,14 @@ app.prepare().then(() => {
         delete teammates[rooms[socket.id]];
       }
 
-      console.log('teammates after ', teammates);
-      console.log('rooms after ', rooms);
       socket
         .to([rooms[socket.id]])
         .emit('teammate_left_room', teammates[rooms[socket.id]]);
 
       delete rooms[socket.id];
+
+      console.log('teammates after deletion ', teammates);
+      console.log('rooms after deletion ', rooms);
     });
   });
 

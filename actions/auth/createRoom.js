@@ -71,7 +71,7 @@ export default async function createRoom(formData) {
 
     const firstName = user.firstName;
     const lastName = user.lastName;
-    const encodedRoomInfo = encodeURI(`${team}|${roomNameUnique}`);
+    const encodedRoomInfo = encodeURI(roomNameUnique);
 
     const resend = new Resend(resendApiKey);
     // send invitation emails to teammates
@@ -79,8 +79,9 @@ export default async function createRoom(formData) {
       const { error } = await resend.emails.send({
         from: 'Planning Poker <onboarding@resend.dev>',
         // TODO: take out my email
-        //to: email,
         to: 'swichelecki@gmail.com',
+        //to: email,
+        //to: 'onboarding@resend.dev',
         subject: `${firstName} ${lastName} Has Invited You to Join Planning Poker`,
         react: UserInvitationEmail({
           firstName,
@@ -93,7 +94,7 @@ export default async function createRoom(formData) {
       if (error) console.error('Resend error: ', error);
     }
 
-    return { status: 200 };
+    return { status: 200, roomNameUnique };
   } catch (error) {
     const errorMessage = handleServerError(error);
     console.error(errorMessage);

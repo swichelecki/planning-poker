@@ -29,9 +29,9 @@
       }
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       font-size: 1rem; // 16px;
-      color: variables.$color-font-light;
+      color: variables.$font-muted;
     }
   }
   &--full {
@@ -104,21 +104,21 @@
     }
   }
   &--black {
-    background-color: variables.$color-background;
-    color: variables.$color-font;
-    border: 1px solid variables.$color-font;
+    background-color: variables.$background-dark;
+    color: variables.$font;
+    border: 1px solid variables.$font;
     transition: all 0.3s;
     svg {
-      fill: variables.$color-font;
+      fill: variables.$font;
     }
     .loader {
-      border: 2px solid variables.$color-font;
+      border: 2px solid variables.$font;
       border-top: 2px solid transparent;
     }
     &:hover {
-      color: variables.$color-background;
-      background-color: variables.$color-font;
-      border: 1px solid variables.$color-font;
+      color: variables.$background-dark;
+      background-color: variables.$font;
+      border: 1px solid variables.$font;
     }
   }
   &--icon-green {

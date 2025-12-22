@@ -7,12 +7,13 @@ import { useAppContext } from '../../context';
 import { FormTextField, CTA, Toast } from '../../components';
 import { z } from 'zod';
 import { createUserSchema, loginSchema } from '../../schemas/schemas';
+import { handleRoomNameFormatting } from '../../utilities/handleRoomNameFormatting';
 import { USER_ALREADY_EXISTS } from '../../constants';
 
 const InvitationForm = () => {
   const router = useRouter();
-  const params = useSearchParams();
-  const [room] = params.values();
+  const searchParams = useSearchParams();
+  const room = searchParams.get('room');
   const decodedRoom = decodeURI(room);
 
   const { setShowToast } = useAppContext();
@@ -24,8 +25,8 @@ const InvitationForm = () => {
     password: '',
     confirmPassword: '',
     verification: '',
-    team: decodedRoom?.split('|')[0] ?? '',
-    teamNameUnique: decodedRoom?.split('|')[1] ?? '',
+    team: handleRoomNameFormatting(decodedRoom),
+    teamNameUnique: decodedRoom,
   });
   const [errorMessage, setErrorMessage] = useState({
     firstName: '',
@@ -93,7 +94,7 @@ const InvitationForm = () => {
     }
   };
 
-  // log in user
+  // log in user and join room
   const handleUserLoginAfter2FactorVerification = async () => {
     const zodValidationResults = loginSchema.safeParse(form);
     const { data: zodFormData, success, error } = zodValidationResults;
@@ -109,8 +110,11 @@ const InvitationForm = () => {
     setIsAwaitingResponse(true);
     const response = await loginUser(zodFormData);
     if (response.status === 200) {
-      router.push('/room');
-      setIsAwaitingResponse(false);
+      const params = new URLSearchParams();
+      params.append('username', `${form.firstName} ${form.lastName}`);
+      params.append('room', form.teamNameUnique);
+
+      router.push(`/room?${params.toString()}`);
     } else if (response.status === 403 || response.status === 410) {
       setIsAwaitingResponse(false);
       setErrorMessage({ ...errorMessage, verification: response.error });

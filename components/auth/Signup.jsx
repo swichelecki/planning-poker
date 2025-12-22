@@ -338,7 +338,7 @@ const Signup = () => {
             handleClick={handleAddTeammate}
           />
           <CTA
-            text='Create Room & Invite Teammates'
+            text='Create Room'
             className='cta-button cta-button--large cta-button--full cta-button--purple'
             ariaLabel='Create Room & Invite Teammatess'
             btnType='submit'

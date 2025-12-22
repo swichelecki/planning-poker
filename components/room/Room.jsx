@@ -21,10 +21,9 @@ const Room = () => {
   const [hasVoted, setHasVoted] = useState(false);
   const [isVoteComplete, setIsVoteComplete] = useState(false);
 
-  // web sockets update ui after actions taken by other users in the room
+  // web sockets ui updates
   useEffect(() => {
     socket.on('user_joined', (teammates) => {
-      console.log('new user joined teammates ', teammates);
       setTeammates(teammates);
       setVotes(
         teammates.map((item) => {
@@ -48,6 +47,7 @@ const Room = () => {
     socket.on('clear_votes', () => {
       setShowModal(null);
       setHasVoted(false);
+      setIsVoteComplete(false);
       setVotes(
         votes.map((item) => {
           return { symbol: '', username: item.username };
@@ -84,19 +84,15 @@ const Room = () => {
     );
   }, [hasVoted, votes, isVoteComplete]);
 
+  // show green checkmark in modal while voting or votes when all have voted
   useEffect(() => {
-    for (let item of votes) {
-      if (!item.symbol || item.symbol.length <= 0) return;
-      setIsVoteComplete(true);
-    }
+    if (!votes || votes.length <= 0) return;
+    if (!votes.some((item) => item.symbol.length <= 0)) setIsVoteComplete(true);
   }, [votes]);
-
-  console.log('votes ', votes);
 
   // handle voting
   const handleVote = (symbol, username) => {
     const vote = { symbol, username };
-    //setVotes((curr) => [...curr, { symbol, username }]);
     setHasVoted(true);
     socket.emit('new-vote', { room, vote });
   };

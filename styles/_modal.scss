@@ -9,9 +9,9 @@ dialog {
   padding: 0;
   border-radius: 12px;
   overflow: visible;
-  background-color: variables.$color-white;
-  color: variables.$color-font;
-  border: 1px solid variables.$color-border;
+  background-color: variables.$background;
+  color: variables.$font;
+  border: 1px solid variables.$border;
 }
 
 .modal {

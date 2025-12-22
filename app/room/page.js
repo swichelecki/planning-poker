@@ -1,4 +1,4 @@
-import { Room } from '../../../components';
+import { Room } from '../../components';
 
 export const metadata = {
   title: 'Room',
