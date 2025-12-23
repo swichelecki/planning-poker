@@ -12,6 +12,7 @@ export { default as Room } from './room/Room';
 export { default as Teammates } from './room/Teammates';
 export { default as Votes } from './room/Votes';
 export { default as Card } from './room/Card';
+export { default as Indicator } from './room/Indicator';
 export { default as Toast } from './shared/Toast';
 export { default as CTA } from './shared/CTA';
 export { default as Modal } from './shared/Modal';

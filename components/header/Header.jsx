@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
+import { socket } from '../../lib/socketClient';
 import { useAppContext } from '../../context';
-//const UserMenu = dynamic(() => import('../../components/header/UserMenu'));
+const UserMenu = dynamic(() => import('../../components/header/UserMenu'));
 const CTA = dynamic(() => import('../../components/shared/CTA'));
 
 const Header = () => {
@@ -14,12 +15,19 @@ const Header = () => {
   return (
     <header className='header'>
       <div className='header__inner-wrapper'>
-        <Link href='/login' prefetch={false}>
+        <Link
+          href='/'
+          prefetch={false}
+          onClick={() => {
+            if (!userId) return;
+            socket.disconnect();
+          }}
+        >
           Agile Story Planning Poker
         </Link>
         <div className='header__content-right'>
           {userId ? (
-            <>{/* <UserMenu isAdmin={isAdmin} /> */}</>
+            <UserMenu isAdmin={isAdmin} />
           ) : pathname === '/' ? (
             <>
               <CTA

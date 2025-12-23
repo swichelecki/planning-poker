@@ -1,0 +1,44 @@
+@use '../styles/variables';
+
+.indicator {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px 24px 0;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  button {
+    z-index: 2;
+  }
+  svg:first-of-type {
+    position: relative;
+    top: -83px;
+    left: -11px;
+    #curve {
+      fill: transparent;
+    }
+    text {
+      font-size: 0.75rem; // 12px
+      text-transform: uppercase;
+      fill: variables.$font;
+      letter-spacing: 1.4px;
+      font-weight: 700;
+      transform-origin: 50% 50%;
+    }
+  }
+  svg:last-of-type {
+    position: absolute;
+    top: 26px;
+    left: 26px;
+    font-size: 2rem;
+  }
+  &__spinner {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background-color: variables.$button-blue;
+    animation: spin 6s linear infinite;
+  }
+}

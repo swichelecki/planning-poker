@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAppContext } from '../../context';
 import { socket } from '../../lib/socketClient';
-import { Teammates, Votes, Card, Modal } from '../../components';
+import { Teammates, Votes, Card, Indicator, Modal } from '../../components';
 import { CARDS } from '../../constants';
 
-const Room = () => {
-  const { setShowModal } = useAppContext();
+const Room = ({ user }) => {
+  const { userId, isAdmin } = user;
+  const { setShowModal, setUserId, setIsAdmin } = useAppContext();
   const searchParams = useSearchParams();
 
   const hasEmittedJoinRef = useRef(false);
@@ -20,6 +21,12 @@ const Room = () => {
   const [votes, setVotes] = useState([]);
   const [hasVoted, setHasVoted] = useState(false);
   const [isVoteComplete, setIsVoteComplete] = useState(false);
+
+  //  set global state
+  useEffect(() => {
+    setUserId(userId);
+    setIsAdmin(isAdmin);
+  }, [userId, isAdmin]);
 
   // web sockets ui updates
   useEffect(() => {
@@ -113,6 +120,9 @@ const Room = () => {
             />
           ))}
         </section>
+        {!hasVoted && votes.some((item) => item.symbol.length > 0) && (
+          <Indicator room={room} />
+        )}
       </div>
     </>
   );

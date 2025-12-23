@@ -35,6 +35,7 @@ const Modal = ({ children, room }) => {
           handleClick={handleCloseModal}
           btnType='button'
           text='Clear'
+          ariaLabel='Reset Voting'
           className='cta-button cta-button--small cta-button--black'
         />
       </div>

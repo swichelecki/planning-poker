@@ -30,9 +30,9 @@
     }
   }
   .loader {
-    border: 2px solid variables.$font;
-    border-top: 2px solid transparent;
-    width: 18px;
-    height: 18px;
+    border: 4px solid variables.$font-muted;
+    border-top: 4px solid transparent;
+    width: 28px;
+    height: 28px;
   }
 }

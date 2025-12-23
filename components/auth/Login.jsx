@@ -217,6 +217,7 @@ const Login = ({ user }) => {
       });
     }
 
+    setIsAwaitingResponse(true);
     const params = new URLSearchParams();
     params.append('username', selectRoomForm.username);
     params.append('room', selectRoomForm.selectedRoom);

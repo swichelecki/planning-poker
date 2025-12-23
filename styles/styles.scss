@@ -1,5 +1,6 @@
 @use './global';
 @use './header';
+@use './userMenu';
 @use './typography';
 @use './variables';
 @use './cta';
@@ -10,5 +11,6 @@
 @use './teammates';
 @use './votes';
 @use './card';
+@use './indicator';
 @use './toasts';
 @use './modal';
