@@ -12,10 +12,11 @@ const tikTokSans = TikTok_Sans({
 
 export const metadata = {
   generator: 'Next.js',
-  applicationName: 'Planning Poker',
+  applicationName: 'Agile Story Planning Poker',
   title: {
-    template: '%s | Planning Poker',
-    default: 'Planning Poker | Free Agile Estimation App',
+    template: '%s | Agile Story Planning Poker',
+    default:
+      'Agile Story Planning Poker | Free Agile Story Planning Estimation App',
   },
   /* description:
     'Saturday is your super simple, no-AI daily planner. Manage all of your everyday tasks and obligations with Saturday’s customizable interface designed to simplify your life.',

@@ -278,8 +278,8 @@ const Signup = () => {
           />
           <CTA
             text='Create Account'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Create your Planning Poker account'
+            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
+            ariaLabel='Create your Agile Story Planning Poker account'
             btnType='submit'
             showSpinner={isAwaitingResponse}
           />
@@ -288,7 +288,7 @@ const Signup = () => {
             type='anchor'
             href='/login'
             className='cta-text-link'
-            ariaLabel='Log in to Planning Poker'
+            ariaLabel='Log in to Agile Story Planning Poker'
           />
         </>
       )}
@@ -345,7 +345,7 @@ const Signup = () => {
           />
           <CTA
             text='Create Room'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
             ariaLabel='Create Room & Invite Teammatess'
             btnType='submit'
             id='createRoomBtn'

@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "dev:socket": "NODE_OPTIONS='--trace-warnings --no-warnings' node server.mjs",
-    "build": "next build --turbopack",
-    "start": "next start"
+    "dev": "NODE_OPTIONS='--trace-warnings --no-warnings' node server.mjs",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.mjs"
   },
   "dependencies": {
     "@react-email/render": "^2.0.0",
     "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.3",
     "jose": "^6.1.0",
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.1",

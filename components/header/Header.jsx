@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { socket } from '../../lib/socketClient';
 import { useAppContext } from '../../context';
+import { PlayingCards } from '../../components';
 const UserMenu = dynamic(() => import('../../components/header/UserMenu'));
 const CTA = dynamic(() => import('../../components/shared/CTA'));
 
@@ -23,7 +24,8 @@ const Header = () => {
             socket.disconnect();
           }}
         >
-          Agile Story Planning Poker
+          <PlayingCards />
+          <span>Agile Story Planning Poker</span>
         </Link>
         <div className='header__content-right'>
           {userId ? (

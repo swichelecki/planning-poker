@@ -64,9 +64,9 @@ export default async function request2FactorAuthentication(formData) {
       const resend = new Resend(resendApiKey);
 
       const { error } = await resend.emails.send({
-        from: 'Planning Poker <onboarding@resend.dev>',
+        from: 'Agile Story Planning Poker <onboarding@resend.dev>',
         to: email,
-        subject: `Planning Poker Verification Code: ${twoFactorAuthCode}`,
+        subject: `Agile Story Planning Poker Verification Code: ${twoFactorAuthCode}`,
         react: User2FactorAuthEmail({
           twoFactorAuthCode,
         }),

@@ -21,7 +21,7 @@ const UserInvitationEmail = ({
               : `${process.env.NEXT_PUBLIC_URL}/invitation?room=${encodedRoomInfo}&email=${email}`
           }
           target='blank'
-          aria-label='Click to create your Planning Poker account'
+          aria-label='Click to create your Agile Story Planning Poker account'
         >
           here
         </a>{' '}

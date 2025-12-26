@@ -1,0 +1,34 @@
+@use '../styles/variables';
+
+.playing-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem; // 24px
+  svg {
+    fill: variables.$background-dark;
+  }
+  svg:first-of-type {
+    z-index: 100;
+    position: relative;
+    left: 10px;
+  }
+  svg:last-of-type {
+    position: relative;
+    transform: rotate(24deg);
+    right: 0px;
+  }
+  &--large {
+    font-size: 20rem;
+    svg {
+      color: variables.$button-purple;
+      fill: variables.$button-purple-dark;
+    }
+    svg:first-of-type {
+      left: 80px;
+    }
+    svg:last-of-type {
+      right: 60px;
+    }
+  }
+}

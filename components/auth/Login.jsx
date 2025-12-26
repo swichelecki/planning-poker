@@ -349,8 +349,8 @@ const Login = ({ user }) => {
           />
           <CTA
             text='Log In'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Log in to Planning Poker'
+            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
+            ariaLabel='Log in to Agile Story Planning Poker'
             btnType='submit'
             showSpinner={isAwaitingResponse}
           />
@@ -359,7 +359,7 @@ const Login = ({ user }) => {
             type='anchor'
             href='/signup'
             className='cta-text-link'
-            ariaLabel='Sign up for Planning Poker'
+            ariaLabel='Sign up for Agile Story Planning Poker'
           />
           {/*  <CTA
             text='Forgot Password'
@@ -398,8 +398,8 @@ const Login = ({ user }) => {
           />
           <CTA
             text='Enter Room'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Enter Planning Poker Room'
+            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
+            ariaLabel='Enter Agile Story Planning Poker Room'
             btnType='submit'
             showSpinner={isAwaitingResponse}
           />
@@ -408,8 +408,8 @@ const Login = ({ user }) => {
           </p>
           <CTA
             text='Create Room'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Create a New Planning Poker Room and Invite Teammates'
+            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
+            ariaLabel='Create a New Agile Story Planning Poker Room and Invite Teammates'
             btnType='button'
             handleClick={() => {
               setshowCreateNewRoom(true);
@@ -461,7 +461,7 @@ const Login = ({ user }) => {
           />
           <CTA
             text='Create Room'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
+            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
             ariaLabel='Create Room & Invite Teammatess'
             btnType='submit'
             id='createRoomBtn'

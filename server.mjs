@@ -1,12 +1,13 @@
+import 'dotenv/config';
 import { createServer } from 'node:http';
 import next from 'next';
 import { Server } from 'socket.io';
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = process.env.HOSTNAME || 'localhost';
+const host = process.env.HOST || '0.0.0.0';
 const port = parseInt(process.env.PORT || '3000', 10);
 
-const app = next({ dev, hostname, port });
+const app = next({ dev, host, port });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
@@ -75,6 +76,6 @@ app.prepare().then(() => {
   });
 
   httpServer.listen(port, () => {
-    console.log(`Server running on http://${hostname}:${port}`);
+    console.log(`Server running on http://${host}:${port}`);
   });
 });

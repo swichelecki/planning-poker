@@ -80,7 +80,7 @@ export default async function createUser(formData, acceptInvitation) {
     const { error: errorNewUserLogin } = await resend.emails.send({
       from: 'Planning Poker <onboarding@resend.dev>',
       to: 'swichelecki@gmail.com',
-      subject: 'Planning Poker User Account Created',
+      subject: 'Agile Story Planning Poker User Account Created',
       react: UserCreatedEmail({
         firstName,
         lastName,
@@ -92,9 +92,9 @@ export default async function createUser(formData, acceptInvitation) {
 
     // send verification code email
     const { error: errorNotifyAdmin } = await resend.emails.send({
-      from: 'Planning Poker <onboarding@resend.dev>',
+      from: 'Agile Story Planning Poker <onboarding@resend.dev>',
       to: email,
-      subject: `Planning Poker Verification Code: ${twoFactorAuthCode}`,
+      subject: `Agile Story Planning Poker Verification Code: ${twoFactorAuthCode}`,
       react: User2FactorAuthEmail({
         twoFactorAuthCode,
       }),

@@ -6,19 +6,25 @@
   justify-content: center;
   text-align: center;
   gap: 6px;
+  transition: all 0.3s;
   &--small {
     padding: 8px 18px;
     border-radius: 20px;
   }
   &--medium {
-    padding: 12px 16px;
+    padding: 16px 20px;
     font-size: 1.125rem; // 18px
     border-radius: 26px;
   }
   &--large {
-    padding: 14px;
+    padding: 16px;
     font-size: 1.125rem; // 18px
     border-radius: 26px;
+  }
+  &--full {
+    width: 100%;
+  }
+  &--bold {
     font-weight: 700;
   }
   &--icon {
@@ -34,8 +40,10 @@
       color: variables.$font-muted;
     }
   }
-  &--full {
-    width: 100%;
+  .loader {
+    width: 14px;
+    height: 14px;
+    transition: all 0.3s;
   }
   &--purple {
     background-color: variables.$button-purple-dark;
@@ -44,8 +52,20 @@
       fill: variables.$button-purple;
     }
     .loader {
-      border: 2px solid variables.$button-purple;
-      border-top: 2px solid transparent;
+      border: 3px solid variables.$button-purple;
+      border-top: 3px solid transparent;
+    }
+    &:hover,
+    &:active {
+      background-color: variables.$button-purple;
+      color: variables.$button-purple-dark;
+      svg {
+        fill: variables.$button-purple-dark;
+      }
+      .loader {
+        border: 3px solid variables.$button-purple-dark;
+        border-top: 3px solid transparent;
+      }
     }
   }
   &--green {
@@ -55,8 +75,8 @@
       fill: variables.$button-green;
     }
     .loader {
-      border: 2px solid variables.$button-green;
-      border-top: 2px solid transparent;
+      border: 3px solid variables.$button-green;
+      border-top: 3px solid transparent;
     }
   }
   &--red {
@@ -66,8 +86,8 @@
       fill: variables.$button-red;
     }
     .loader {
-      border: 2px solid variables.$button-red;
-      border-top: 2px solid transparent;
+      border: 3px solid variables.$button-red;
+      border-top: 3px solid transparent;
     }
   }
   &--orange {
@@ -77,8 +97,8 @@
       fill: variables.$button-orange;
     }
     .loader {
-      border: 2px solid variables.$button-orange;
-      border-top: 2px solid transparent;
+      border: 3px solid variables.$button-orange;
+      border-top: 3px solid transparent;
     }
   }
   &--blue {
@@ -88,8 +108,8 @@
       fill: variables.$button-blue;
     }
     .loader {
-      border: 2px solid variables.$button-blue;
-      border-top: 2px solid transparent;
+      border: 3px solid variables.$button-blue;
+      border-top: 3px solid transparent;
     }
   }
   &--yellow {
@@ -99,8 +119,8 @@
       fill: variables.$button-yellow;
     }
     .loader {
-      border: 2px solid variables.$button-yellow;
-      border-top: 2px solid transparent;
+      border: 3px solid variables.$button-yellow;
+      border-top: 3px solid transparent;
     }
   }
   &--black {
@@ -112,8 +132,8 @@
       fill: variables.$font;
     }
     .loader {
-      border: 2px solid variables.$font;
-      border-top: 2px solid transparent;
+      border: 3px solid variables.$font;
+      border-top: 3px solid transparent;
     }
     &:hover {
       color: variables.$background-dark;

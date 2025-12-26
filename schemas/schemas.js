@@ -19,9 +19,8 @@ export const createUserSchema = z
     firstName: z.string().min(1, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
     lastName: z.string().min(1, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
     email: z
-      .string()
-      .min(1, MISSING_EMAIL)
       .email(INVALID_EMAIL)
+      .min(1, MISSING_EMAIL)
       .max(50, CHARACTER_LIMIT_50),
     password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
     confirmPassword: z
@@ -37,9 +36,8 @@ export const createUserSchema = z
 
 export const emailAddressSchema = z.object({
   email: z
-    .string()
-    .min(1, MISSING_EMAIL)
     .email(INVALID_EMAIL)
+    .min(1, MISSING_EMAIL)
     .max(50, CHARACTER_LIMIT_50),
 });
 
@@ -54,9 +52,8 @@ export const createRoomSchema = z.object({
 
 export const loginSchema = z.object({
   email: z
-    .string()
-    .min(1, MISSING_EMAIL)
     .email(INVALID_EMAIL)
+    .min(1, MISSING_EMAIL)
     .max(50, CHARACTER_LIMIT_50),
   password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
   verification: z.string().max(6, TWO_FACTOR_CODE_LIMIT).optional(),

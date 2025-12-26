@@ -178,8 +178,8 @@ const InvitationForm = () => {
           />
           <CTA
             text='Create Account'
-            className='cta-button cta-button--large cta-button--full cta-button--purple'
-            ariaLabel='Create your Planning Poker account'
+            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
+            ariaLabel='Create your Agile Story Planning Poker account'
             btnType='submit'
             showSpinner={isAwaitingResponse}
           />
