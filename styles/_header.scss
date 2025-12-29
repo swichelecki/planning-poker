@@ -1,7 +1,7 @@
 @use '../styles/variables';
 
 .header {
-  background-color: variables.$background;
+  background-color: variables.$background-dark;
   border-bottom: 1px solid variables.$border;
   &__inner-wrapper {
     display: flex;

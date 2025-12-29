@@ -22,6 +22,7 @@ const Header = () => {
           onClick={() => {
             if (!userId) return;
             socket.disconnect();
+            socket.connect();
           }}
         >
           <PlayingCards />

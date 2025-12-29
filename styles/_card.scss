@@ -10,18 +10,10 @@
     padding: 16px;
     border-radius: 8px;
     font-size: 2.25rem; // 36px
-    //border: 1px solid variables.$border;
     border: 1px solid variables.$border;
     background-color: variables.$background-light;
-    transition: border 200ms ease-in;
     color: variables.$font;
-    /*     &:hover {
-      border: 1px solid variables.$font-light;
-      & > div {
-        color: variables.$font-light;
-        transition: color 200ms ease-in;
-      }
-    } */
+    font-weight: 700;
     &--1 {
       grid-column: 2 / span 2;
       grid-row: 1;
@@ -80,7 +72,6 @@
   &__symbol-bottom-left,
   &__symbol-bottom-right {
     font-size: 1.125rem; // 18px
-    //color: variables.$border;
     color: variables.$font-muted;
     font-weight: 700;
   }

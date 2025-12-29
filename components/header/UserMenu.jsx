@@ -78,6 +78,7 @@ const UserMenu = ({ isAdmin }) => {
               href='/login'
               onClick={() => {
                 socket.disconnect();
+                socket.connect();
               }}
               prefetch={false}
             >
@@ -92,6 +93,7 @@ const UserMenu = ({ isAdmin }) => {
               onClick={() => {
                 socket.disconnect();
                 alert('Coming soon');
+                socket.connect();
               }}
             >
               <MdManageAccounts />
@@ -105,6 +107,7 @@ const UserMenu = ({ isAdmin }) => {
               onClick={() => {
                 socket.disconnect();
                 alert('Coming soon');
+                socket.connect();
               }}
             >
               <MdMessage />
@@ -117,6 +120,7 @@ const UserMenu = ({ isAdmin }) => {
                 href='/admin'
                 onClick={() => {
                   socket.disconnect();
+                  socket.connect();
                 }}
                 prefetch={false}
               >
