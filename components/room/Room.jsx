@@ -5,12 +5,14 @@ import { useSearchParams } from 'next/navigation';
 import { useAppContext } from '../../context';
 import { socket } from '../../lib/socketClient';
 import { Teammates, Votes, Card, Indicator, Modal } from '../../components';
+import { useScrollToTop } from '../../hooks';
 import { CARDS } from '../../constants';
 
 const Room = ({ user }) => {
   const { userId, isAdmin } = user;
   const { setShowModal, setUserId, setIsAdmin } = useAppContext();
   const searchParams = useSearchParams();
+  useScrollToTop();
 
   const hasEmittedJoinRef = useRef(false);
 

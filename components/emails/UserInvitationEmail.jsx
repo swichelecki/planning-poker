@@ -21,11 +21,11 @@ const UserInvitationEmail = ({
               : `${process.env.NEXT_PUBLIC_URL}/invitation?room=${encodedRoomInfo}&email=${email}`
           }
           target='blank'
-          aria-label='Click to create your Agile Story Planning Poker account'
+          aria-label={`Click to join ${team} at Agile Story Planning Poker`}
         >
           here
         </a>{' '}
-        to create your account.
+        join {team} at Agile Story Planning Poker.
       </p>
     </div>
   );

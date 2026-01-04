@@ -1,13 +1,10 @@
 'use client';
 
 import { useAppContext } from '../context';
-import { useScrollToTop } from '../hooks';
 import { Header } from '../components';
 
 const Layout = ({ children }) => {
   const { modal, toast } = useAppContext();
-
-  useScrollToTop();
 
   return (
     <>

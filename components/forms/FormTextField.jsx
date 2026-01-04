@@ -1,7 +1,6 @@
 'use client';
 
 import { FormErrorMessage } from '../';
-//import moment from 'moment-timezone';
 
 const FormTextField = ({
   label = '',
@@ -13,7 +12,6 @@ const FormTextField = ({
   onChangeHandler,
   errorMessage,
   disabled = false,
-  timezone = '',
   showSpinner = false,
 }) => {
   return (
@@ -24,13 +22,7 @@ const FormTextField = ({
         type={type}
         id={id}
         name={name}
-        value={
-          type === 'date'
-            ? value?.split('T')[0]
-            : type === 'datetime-local'
-            ? moment(value).tz(timezone).format('yyyy-MM-DDTHH:mm')
-            : value
-        }
+        value={value}
         onChange={onChangeHandler}
         disabled={disabled}
       />

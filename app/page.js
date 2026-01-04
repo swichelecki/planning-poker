@@ -5,10 +5,10 @@ export default function Home() {
     <div className='homepage__wrapper'>
       <section className='homepage__hero'>
         <div className='homepage__hero-left'>
-          <h1>Lorem ipsum dolor sit amet</h1>
+          <h1>Online Agile Story Planning Poker</h1>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Invite your teammates to custom planning poker rooms for easy, fun
+            and free online user story point estimation.
           </p>
           <CTA
             text='Get Started'
@@ -23,10 +23,11 @@ export default function Home() {
         </div>
       </section>
       <section className='homepage__video'>
-        <h2 className='h1'>Lorem ipsum dolor sit amet</h2>
+        <h2 className='h1'>Simple User Story Estimation Interface</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Join a call on your favorite online meeting app and encourage
+          collaboration and discussion among your scrum team with the
+          easy-to-use user story point planning interface.
         </p>
         <video
           controls
@@ -35,13 +36,13 @@ export default function Home() {
           poster='https://dummyimage.com/1024x576/999999/ffffff.jpg'
         >
           <source
-            src='https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4'
+            // src='https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4'
             type='video/mp4'
           />
         </video>
       </section>
       <section className='homepage__direct-cta'>
-        <h2 className='h1'>Lorem ipsum dolor sit amet</h2>
+        <h2 className='h1'>Get started today!</h2>
         <CTA
           text='Get Started'
           type='anchor'

@@ -16,40 +16,31 @@ export const metadata = {
   title: {
     template: '%s | Agile Story Planning Poker',
     default:
-      'Agile Story Planning Poker | Free Agile Story Planning Estimation App',
+      'Online Agile Story Planning Poker | Free Online User Story Point Estimation',
   },
-  /* description:
-    'Saturday is your super simple, no-AI daily planner. Manage all of your everyday tasks and obligations with Saturday’s customizable interface designed to simplify your life.',
-  keywords: [
-    'daily planner',
-    'daily organizer',
-    'task manager',
-    'todo list',
-    'notes',
-    'no AI',
-  ],
+  description:
+    'Invite your teammates to custom planning poker rooms for easy, fun and free online user story point estimation.',
+  keywords: ['planning poker', 'agile', 'scrum', 'user story'],
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
   openGraph: {
     url: process.env.NEXT_PUBLIC_URL,
-    siteName: 'Saturday',
-    images: '/saturday-homepage-no-ai-no-prob.webp',
+    siteName: 'Agile Story Planning Poker',
+    //images: '/saturday-homepage-no-ai-no-prob.webp',
     locale: 'en_US',
     type: 'website',
   },
   appleWebApp: {
-    title: 'Saturday',
-    statusBarStyle: 'black-translucent',
+    title: 'Agile Story Planning Poker',
   },
   icons: {
-    icon: '/favicon-32x32.png',
-    apple: '/apple-touch-icon.png',
-  }, */
+    //icon: '/favicon-32x32.png',
+    //apple: '/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
-      {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <body className={`${tikTokSans.variable}`}>
         <GloablContext>
           <Layout>{children}</Layout>

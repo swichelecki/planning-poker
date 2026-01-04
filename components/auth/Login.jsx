@@ -2,28 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import {
-  request2FactorAuthentication,
-  loginUser,
-  createRoom,
-} from '../../actions';
+import { request2FactorAuthentication } from '../../actions';
 import { useAppContext } from '../../context';
 import { z } from 'zod';
 import {
   FormTextField,
   FormSelectField,
-  FormAddTextField,
+  Form2FactorAuth,
+  FormCreateRoom,
   CTA,
   Toast,
 } from '../../components';
-import {
-  loginSchema,
-  chooseRoomSchema,
-  createRoomSchema,
-  emailAddressSchema,
-} from '../../schemas/schemas';
+import { useScrollToTop } from '../../hooks';
+import { loginSchema, chooseRoomSchema } from '../../schemas/schemas';
 import { INCORRECT_EMAIL_PASSWORD } from '../../constants';
-import { MdAddCircle } from 'react-icons/md';
 
 const Login = ({ user }) => {
   const { _id: userId, rooms, isAdmin, firstName, lastName } = user;
@@ -33,23 +25,18 @@ const Login = ({ user }) => {
   const room = searchParams.get('room');
   const decodedRoom = decodeURI(room);
 
+  useScrollToTop();
   const { setShowToast, setUserId, setIsAdmin } = useAppContext();
 
   const [form, setForm] = useState({
     email: '',
     password: '',
     verification: '',
-  });
-  const [selectRoomForm, setSelectRoomForm] = useState({
     userId: userId ?? '',
-    username: `${firstName} ${lastName}` ?? '',
-    selectedRoom: '',
-  });
-  const [createRoomForm, setCreateRoomForm] = useState({
-    userId: userId ?? '',
-    username: `${firstName} ${lastName}` ?? '',
+    username: userId ? `${firstName} ${lastName}` : '',
     team: '',
     teammates: [],
+    selectedRoom: '',
   });
   const [errorMessage, setErrorMessage] = useState({
     email: '',
@@ -64,8 +51,6 @@ const Login = ({ user }) => {
   const [showCreateNewRoom, setshowCreateNewRoom] = useState(false);
   const [userRooms, setUserRooms] = useState([]);
   const [emailAddress, setEmailAddress] = useState('');
-  const [addTeammateAndCreateRoom, setAddTeammateAndCreateRoom] =
-    useState(false);
   const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
 
   // if already logged in skip first step of form and set global state
@@ -78,69 +63,16 @@ const Login = ({ user }) => {
     }
   }, [userId, rooms, isAdmin]);
 
-  // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
+  // if existing user invited via email to new room go directly to room
   useEffect(() => {
-    if (addTeammateAndCreateRoom) handleCreateRoom();
-  }, [addTeammateAndCreateRoom]);
+    if (showChooseRoom && decodedRoom !== 'null') {
+      const params = new URLSearchParams();
+      params.append('username', `${firstName} ${lastName}`);
+      params.append('room', decodedRoom);
 
-  // when 6-digit 2-factor authentication code added to form log in user
-  useEffect(() => {
-    if (form.verification.length >= 6) {
-      handleUserLoginAfter2FactorVerification();
+      router.push(`/room?${params.toString()}`);
     }
-  }, [form.verification]);
-
-  // log in user and show create-room UI
-  const handleUserLoginAfter2FactorVerification = async () => {
-    const zodValidationResults = loginSchema.safeParse(form);
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { verification } = properties;
-      return setErrorMessage({ verification: verification?.errors[0] });
-    }
-
-    setIsAwaitingResponse(true);
-    const response = await loginUser(zodFormData);
-    if (response.status === 200) {
-      if (decodedRoom !== 'null') {
-        // if existing user invited via email to new room go directly to room
-        const params = new URLSearchParams();
-        params.append(
-          'username',
-          `${response.user.firstName} ${response.user.lastName}`
-        );
-        params.append('room', decodedRoom);
-
-        router.push(`/room?${params.toString()}`);
-      } else {
-        // go to choose or create room UI
-        setIsAwaitingResponse(false);
-        setShow2FactorAuthField(false);
-        setShowChooseRoom(true);
-        setCreateRoomForm({
-          ...createRoomForm,
-          userId: response.user._id,
-          username: `${response.user.firstName} ${response.user.lastName}`,
-        });
-        setSelectRoomForm({
-          ...selectRoomForm,
-          userId: response.user._id,
-          username: `${response.user.firstName} ${response.user.lastName}`,
-        });
-        setUserRooms(response.user.rooms);
-      }
-    } else if (response.status === 403 || response.status === 410) {
-      setIsAwaitingResponse(false);
-      setErrorMessage({
-        ...errorMessage,
-        verification: response.error,
-      });
-    } else {
-      setShowToast(<Toast serverError={response} />);
-      setIsAwaitingResponse(false);
-    }
-  };
+  }, [showChooseRoom]);
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -151,7 +83,7 @@ const Login = ({ user }) => {
   };
 
   const handleFormSelectField = (optionName, optionValue) => {
-    setSelectRoomForm({ ...selectRoomForm, [optionName]: optionValue });
+    setForm({ ...form, [optionName]: optionValue });
 
     if (errorMessage[optionName]) {
       setErrorMessage({ ...errorMessage, [optionName]: '' });
@@ -195,7 +127,7 @@ const Login = ({ user }) => {
   const handleChooseRoom = async (e) => {
     e.preventDefault();
 
-    const zodValidationResults = chooseRoomSchema.safeParse(selectRoomForm);
+    const zodValidationResults = chooseRoomSchema.safeParse(form);
     const { success, error } = zodValidationResults;
     if (!success) {
       const { properties } = z.treeifyError(error);
@@ -219,97 +151,17 @@ const Login = ({ user }) => {
 
     setIsAwaitingResponse(true);
     const params = new URLSearchParams();
-    params.append('username', selectRoomForm.username);
-    params.append('room', selectRoomForm.selectedRoom);
+    params.append('username', form.username);
+    params.append('room', form.selectedRoom);
 
     router.push(`/room?${params.toString()}`);
   };
 
-  // add teammate email
-  const handleAddTeammate = () => {
-    const zodValidationResults = emailAddressSchema.safeParse({
-      email: emailAddress,
-    });
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { email } = properties;
-      return setErrorMessage({ ...errorMessage, teammates: email?.errors[0] });
-    }
-
-    setCreateRoomForm((current) => {
-      return {
-        ...current,
-        teammates: [...current.teammates, zodFormData?.email],
-      };
-    });
-    setEmailAddress('');
-  };
-
-  // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
-  const handleAddTeammateAndCreateRoom = (e) => {
-    e.preventDefault();
-    const zodValidationResults = emailAddressSchema.safeParse({
-      email: emailAddress,
-    });
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { email } = properties;
-      return setErrorMessage({ ...errorMessage, teammates: email?.errors[0] });
-    }
-
-    setCreateRoomForm((current) => {
-      return {
-        ...current,
-        teammates: [...current.teammates, zodFormData?.email],
-      };
-    });
-    setAddTeammateAndCreateRoom(true);
-  };
-
-  // create room and invite teammates
-  const handleCreateRoom = async (e = null) => {
-    e?.preventDefault();
-    const zodValidationResults = createRoomSchema.safeParse(createRoomForm);
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { team, teammates } = properties;
-
-      if (!team && !teammates) {
-        const serverError = {
-          status: 400,
-          error: 'Zod validation failed. Check console.',
-        };
-        setShowToast(<Toast serverError={serverError} />);
-        console.error(error);
-        return;
-      }
-
-      return setErrorMessage({
-        ...errorMessage,
-        team: team?.errors[0],
-        teammates: teammates?.errors[0],
-      });
-    }
-
-    setIsAwaitingResponse(true);
-    const response = await createRoom(zodFormData);
-    if (response.status === 200) {
-      const params = new URLSearchParams();
-      params.append('username', `${firstName} ${lastName}`);
-      params.append('room', response.roomNameUnique);
-
-      router.push(`/room?${params.toString()}`);
-    } else {
-      setShowToast(<Toast serverError={response} />);
-      setIsAwaitingResponse(false);
-    }
-  };
-
   // if user don't show ui until state set so step 1 skipped
-  if (userId && !showChooseRoom) {
+  if (
+    (userId && !showChooseRoom) ||
+    (userId && showChooseRoom && decodedRoom !== 'null')
+  ) {
     return <></>;
   }
 
@@ -320,9 +172,7 @@ const Login = ({ user }) => {
           ? handleBeginLoginProcess
           : showChooseRoom && !showCreateNewRoom
             ? handleChooseRoom
-            : emailAddress && showCreateNewRoom
-              ? handleAddTeammateAndCreateRoom
-              : handleCreateRoom
+            : null
       }
       className='auth-form__form'
     >
@@ -372,16 +222,19 @@ const Login = ({ user }) => {
       )}
       {/* step 2: enter 2-factor authentication */}
       {show2FactorAuthField && (
-        <FormTextField
-          label='Verification Code'
-          subLabel='Check your email and enter 6-digit verification code'
-          type='text'
-          id='verification'
-          name='verification'
-          value={form?.verification}
-          onChangeHandler={handleForm}
-          errorMessage={errorMessage.verification}
-          showSpinner={isAwaitingResponse}
+        <Form2FactorAuth
+          form={form}
+          setForm={setForm}
+          handleForm={handleForm}
+          errorMessage={errorMessage}
+          isAwaitingResponse={isAwaitingResponse}
+          setErrorMessage={setErrorMessage}
+          setIsAwaitingResponse={setIsAwaitingResponse}
+          setShow2FactorAuthField={setShow2FactorAuthField}
+          decodedRoom={decodedRoom}
+          setShowChooseRoom={setShowChooseRoom}
+          setUserRooms={setUserRooms}
+          setShowToast={setShowToast}
         />
       )}
       {/* step 3: enter room or create new room */}
@@ -391,7 +244,7 @@ const Login = ({ user }) => {
             label='Select Team'
             id='selectPlanningPokerRoom'
             name='selectedRoom'
-            value={selectRoomForm?.selectedRoom}
+            value={form?.selectedRoom}
             onChangeHandler={handleFormSelectField}
             options={userRooms}
             errorMessage={errorMessage.selectedRoom}
@@ -419,64 +272,19 @@ const Login = ({ user }) => {
       )}
       {/* optional step 4: create new room */}
       {showCreateNewRoom && (
-        <>
-          <FormTextField
-            label='Team Name'
-            type='text'
-            id='team'
-            name='team'
-            value={setCreateRoomForm?.team}
-            onChangeHandler={(e) => {
-              setCreateRoomForm({ ...createRoomForm, team: e.target.value });
-              if (errorMessage[e.target.name]) {
-                setErrorMessage({ ...errorMessage, [e.target.name]: '' });
-              }
-            }}
-            errorMessage={errorMessage.team}
-          />
-          {createRoomForm?.teammates?.length > 0 &&
-            createRoomForm?.teammates?.map((item, index) => (
-              <FormAddTextField
-                key={`form-add-text-field__${index}`}
-                setForm={setCreateRoomForm}
-                emailAddressItem={item}
-              />
-            ))}
-          {!isAwaitingResponse && (
-            <FormAddTextField
-              setForm={setCreateRoomForm}
-              emailAddress={emailAddress}
-              setEmailAddress={setEmailAddress}
-              errorMessage={errorMessage}
-              setErrorMessage={setErrorMessage}
-            />
-          )}
-          <CTA
-            icon={<MdAddCircle />}
-            text='Add Another Email Address'
-            className='cta-button cta-button--icon cta-button--icon-green'
-            ariaLabel='Add Teammate Email'
-            btnType='button'
-            handleClick={handleAddTeammate}
-          />
-          <CTA
-            text='Create Room'
-            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
-            ariaLabel='Create Room & Invite Teammatess'
-            btnType='submit'
-            id='createRoomBtn'
-            showSpinner={isAwaitingResponse}
-          />
-          <CTA
-            text='Go Back'
-            className='cta-button cta-text-link'
-            ariaLabel='Go Back to Choose Room or Create Room'
-            btnType='button'
-            handleClick={() => {
-              setshowCreateNewRoom(false);
-            }}
-          />
-        </>
+        <FormCreateRoom
+          form={form}
+          setForm={setForm}
+          handleForm={handleForm}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          isAwaitingResponse={isAwaitingResponse}
+          setIsAwaitingResponse={setIsAwaitingResponse}
+          emailAddress={emailAddress}
+          setEmailAddress={setEmailAddress}
+          isLogin={true}
+          setshowCreateNewRoom={setshowCreateNewRoom}
+        />
       )}
     </form>
   );
