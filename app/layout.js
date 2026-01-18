@@ -6,6 +6,7 @@ import '../styles/styles.scss';
 const tikTokSans = TikTok_Sans({
   weight: ['400', '700'],
   subsets: ['latin'],
+  adjustFontFallback: false,
 });
 
 export const metadata = {
