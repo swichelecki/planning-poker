@@ -51,6 +51,40 @@
     video {
       width: 100%;
       aspect-ratio: 16/9;
+      border: 1px solid variables.$border-muted;
+    }
+  }
+  &__video-wrapper {
+    position: relative;
+  }
+  &__play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    &:before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      width: 50px;
+      height: 50px;
+      background-color: variables.$button-purple-dark;
+      transition: all 0.3s;
+    }
+    svg {
+      fill: variables.$button-purple;
+      font-size: 8rem;
+      position: relative;
+      transition: all 0.3s;
+    }
+    &:hover {
+      &:before {
+        background-color: variables.$button-purple;
+      }
+      svg {
+        fill: variables.$button-purple-dark;
+      }
     }
   }
   &__direct-cta {

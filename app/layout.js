@@ -25,7 +25,7 @@ export const metadata = {
   openGraph: {
     url: process.env.NEXT_PUBLIC_URL,
     siteName: 'Agile Story Planning Poker',
-    //images: '/saturday-homepage-no-ai-no-prob.webp',
+    images: '/images/planning_poker_1200_630.webp',
     locale: 'en_US',
     type: 'website',
   },
@@ -33,8 +33,8 @@ export const metadata = {
     title: 'Agile Story Planning Poker',
   },
   icons: {
-    //icon: '/favicon-32x32.png',
-    //apple: '/apple-touch-icon.png',
+    icon: '/images/favicon-32x32.png',
+    apple: '/images/apple-icon-180x180.png',
   },
 };
 

@@ -49,7 +49,7 @@ export default async function request2FactorAuthentication(formData) {
       const salt = await bcrypt.genSalt(10);
       const hashedtwoFactorAuthCode = await bcrypt.hash(
         twoFactorAuthCode.toString(),
-        salt
+        salt,
       );
 
       await User.updateOne(
@@ -57,15 +57,18 @@ export default async function request2FactorAuthentication(formData) {
         {
           updatedAt: dateToISO,
           twoFactorAuthCode: hashedtwoFactorAuthCode,
-        }
+        },
       );
 
       // send verification code email
       const resend = new Resend(resendApiKey);
 
       const { error } = await resend.emails.send({
-        from: 'Agile Story Planning Poker <onboarding@resend.dev>',
-        to: email,
+        // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
+        from: 'Planning Poker <onboarding@resend.dev>',
+        to: 'swichelecki@gmail.com',
+        // TODO: switch when domain verified
+        //to: email,
         subject: `Agile Story Planning Poker Verification Code: ${twoFactorAuthCode}`,
         react: User2FactorAuthEmail({
           twoFactorAuthCode,

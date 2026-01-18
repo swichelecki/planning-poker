@@ -24,6 +24,8 @@ const Login = ({ user }) => {
   const searchParams = useSearchParams();
   const room = searchParams.get('room');
   const decodedRoom = decodeURI(room);
+  const username = searchParams.get('username');
+  const decodedUsername = decodeURI(username);
 
   useScrollToTop();
   const { setShowToast, setUserId, setIsAdmin } = useAppContext();
@@ -67,7 +69,7 @@ const Login = ({ user }) => {
   useEffect(() => {
     if (showChooseRoom && decodedRoom !== 'null') {
       const params = new URLSearchParams();
-      params.append('username', `${firstName} ${lastName}`);
+      params.append('username', decodedUsername);
       params.append('room', decodedRoom);
 
       router.push(`/room?${params.toString()}`);
@@ -160,7 +162,7 @@ const Login = ({ user }) => {
   // if user don't show ui until state set so step 1 skipped
   if (
     (userId && !showChooseRoom) ||
-    (userId && showChooseRoom && decodedRoom !== 'null')
+    (showChooseRoom && decodedRoom !== 'null')
   ) {
     return <></>;
   }

@@ -3,9 +3,10 @@
 import connectDB from '../../config/db';
 import User from '../../models/User';
 import bcrypt from 'bcryptjs';
-import { handleServerError, getRandom6DigitNumber } from '../../utilities';
+import { request2FactorAuthentication } from '../../actions';
+import { handleServerError } from '../../utilities';
 import { Resend } from 'resend';
-import { UserCreatedEmail, User2FactorAuthEmail } from '../../components';
+import { UserCreatedEmail } from '../../components';
 import { createUserSchema } from '../../schemas/schemas';
 const resendApiKey = process.env.RESEND_API_KEY;
 
@@ -45,16 +46,6 @@ export default async function createUser(formData, acceptInvitation) {
     if ((acceptInvitation && !team) || (acceptInvitation && !teamNameUnique))
       return { status: 400, error: 'Missing room information.' };
 
-    // encrypt 2-factor auth verification code
-    const twoFactorAuthCode = getRandom6DigitNumber();
-    // TODO: DELETE BELOW LINE
-    console.log('Verification code: ', twoFactorAuthCode);
-    const twoFactorAuthSalt = await bcrypt.genSalt(10);
-    const hashedtwoFactorAuthCode = await bcrypt.hash(
-      twoFactorAuthCode.toString(),
-      twoFactorAuthSalt
-    );
-
     const passwordSsalt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, passwordSsalt);
 
@@ -70,14 +61,16 @@ export default async function createUser(formData, acceptInvitation) {
       lastName,
       email,
       password: hashedPassword,
-      twoFactorAuthCode: hashedtwoFactorAuthCode,
       ...(Object.keys(room).length > 0 && { rooms: room }),
     });
+
+    await request2FactorAuthentication(formData);
 
     // send new-user email to admin
     const resend = new Resend(resendApiKey);
 
     const { error: errorNewUserLogin } = await resend.emails.send({
+      // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
       from: 'Planning Poker <onboarding@resend.dev>',
       to: 'swichelecki@gmail.com',
       subject: 'Agile Story Planning Poker User Account Created',
@@ -89,18 +82,6 @@ export default async function createUser(formData, acceptInvitation) {
     });
 
     if (errorNewUserLogin) console.error('Resend error: ', errorNewUserLogin);
-
-    // send verification code email
-    const { error: errorNotifyAdmin } = await resend.emails.send({
-      from: 'Agile Story Planning Poker <onboarding@resend.dev>',
-      to: email,
-      subject: `Agile Story Planning Poker Verification Code: ${twoFactorAuthCode}`,
-      react: User2FactorAuthEmail({
-        twoFactorAuthCode,
-      }),
-    });
-
-    if (errorNotifyAdmin) console.error('Resend error: ', errorNotifyAdmin);
 
     return { status: 200, userId: user._id.toString() };
   } catch (error) {

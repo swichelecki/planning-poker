@@ -2,7 +2,7 @@ const UserInvitationEmail = ({
   firstName,
   lastName,
   team,
-  encodedRoomInfo,
+  roomNameUnique,
   email,
   userExists,
 }) => {
@@ -15,11 +15,11 @@ const UserInvitationEmail = ({
       <p>
         Click{' '}
         <a
-          href={
+          href={encodeURI(
             userExists
-              ? `${process.env.NEXT_PUBLIC_URL}/login?room=${encodedRoomInfo}`
-              : `${process.env.NEXT_PUBLIC_URL}/invitation?room=${encodedRoomInfo}&email=${email}`
-          }
+              ? `${process.env.NEXT_PUBLIC_URL}/login?username=${userExists?.firstName}+${userExists?.lastName}&room=${roomNameUnique}`
+              : `${process.env.NEXT_PUBLIC_URL}/invitation?room=${roomNameUnique}&email=${email}`,
+          )}
           target='blank'
           aria-label={`Click to join ${team} at Agile Story Planning Poker`}
         >

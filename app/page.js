@@ -1,4 +1,4 @@
-import { CTA, PlayingCards } from '../components';
+import { CTA, PlayingCards, VideoPlayBtn } from '../components';
 
 export default function Home() {
   return (
@@ -29,17 +29,19 @@ export default function Home() {
           collaboration and discussion among your scrum team with the
           easy-to-use user story point planning interface.
         </p>
-        <video
-          controls
-          loop
-          preload='none'
-          poster='https://dummyimage.com/1024x576/999999/ffffff.jpg'
-        >
-          <source
-            // src='https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4'
-            type='video/mp4'
-          />
-        </video>
+        <div className='homepage__video-wrapper'>
+          <video
+            controls
+            loop
+            muted
+            preload='none'
+            poster='/images/planning_poker_1500_844.webp'
+            id='homeVideo'
+          >
+            <source src='/video/planning_poker_demo.mp4' type='video/mp4' />
+          </video>
+          <VideoPlayBtn />
+        </div>
       </section>
       <section className='homepage__direct-cta'>
         <h2 className='h1'>Get started today!</h2>

@@ -23,3 +23,4 @@ export { default as Modal } from './shared/Modal';
 export { default as UserCreatedEmail } from './emails/UserCreatedEmail';
 export { default as User2FactorAuthEmail } from './emails/User2FactorAuthEmail';
 export { default as UserInvitationEmail } from './emails/UserInvitationEmail';
+export { default as VideoPlayBtn } from './home/VideoPlayBtn';

@@ -66,12 +66,11 @@ export default async function createRoom(formData) {
       },
       {
         $push: { rooms: room },
-      }
+      },
     );
 
     const firstName = user.firstName;
     const lastName = user.lastName;
-    const encodedRoomInfo = encodeURI(roomNameUnique);
 
     const resend = new Resend(resendApiKey);
     // send invitation emails to teammates
@@ -86,16 +85,16 @@ export default async function createRoom(formData) {
           },
           {
             $push: { rooms: room },
-          }
+          },
         );
       }
 
       const { error } = await resend.emails.send({
+        // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
         from: 'Planning Poker <onboarding@resend.dev>',
-        // TODO: take out my email
         to: 'swichelecki@gmail.com',
+        // TODO: switch when domain verified
         //to: email,
-        //to: 'onboarding@resend.dev',
         subject: userExists
           ? `${firstName} ${lastName} Has Invited You to a New Agile Story Planning Poker Team`
           : `${firstName} ${lastName} Has Invited You to Agile Story Planning Poker`,
@@ -103,7 +102,7 @@ export default async function createRoom(formData) {
           firstName,
           lastName,
           team,
-          encodedRoomInfo,
+          roomNameUnique,
           email,
           userExists,
         }),
