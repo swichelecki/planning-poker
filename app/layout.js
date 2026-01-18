@@ -7,7 +7,7 @@ const tikTokSans = TikTok_Sans({
   weight: ['400', '700'],
   variable: '--font-tiktok-sans',
   subsets: ['latin'],
-  fallback: ['sans-serif'],
+  fallback: ['Arial', 'sans-serif'],
 });
 
 export const metadata = {
