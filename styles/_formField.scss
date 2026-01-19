@@ -5,13 +5,11 @@
   flex-direction: column;
   position: relative;
   width: 100%;
-  //margin-bottom: 32px;
   label {
     display: flex;
     align-self: flex-start;
     margin-bottom: 4px;
     font-weight: 700;
-    //font-size: 1.125rem; // 18px
     color: variables.$font-muted;
     cursor: pointer;
   }
@@ -21,11 +19,9 @@
     font: inherit;
     border-radius: 9px;
     width: 100%;
-    //background-color: $background-light;
     color: variables.$font;
     border: 1px solid variables.$border-muted;
     background-color: variables.$background-light;
-    //color-scheme: dark;
   }
   &__sublabel {
     margin-bottom: 8px;
@@ -33,7 +29,6 @@
     line-height: 1.6;
     font-size: 0.875rem; // 14px;
     color: variables.$font-muted;
-    //color: $color-list-item-svg;
   }
   &__select-wrapper {
     position: relative;
@@ -58,14 +53,6 @@
       border-top: 6px solid variables.$font;
     }
   }
-  /*   &__quill-wrapper {
-    &--toolbar {
-      min-height: 241px;
-    }
-    &--no-toolbar {
-      min-height: 198px;
-    }
-  } */
   .loader {
     position: absolute;
     bottom: 18px;

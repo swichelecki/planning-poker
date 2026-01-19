@@ -51,11 +51,11 @@
     video {
       width: 100%;
       aspect-ratio: 16/9;
-      border: 1px solid variables.$border-muted;
     }
   }
   &__video-wrapper {
     position: relative;
+    box-shadow: 0 10px 60px variables.$button-purple-dark;
   }
   &__play-button {
     position: absolute;

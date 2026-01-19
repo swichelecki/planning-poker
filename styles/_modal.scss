@@ -30,46 +30,6 @@ dialog {
       right: 18px;
     }
   }
-  /*   h2 {
-    margin-bottom: 24px;
-    text-align: center;
-    font-size: 1.5rem; // 24px;
-  }
-  &__modal-button-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 24px;
-  }
-  &__form-modal--large,
-  &__form-modal--small {
-    max-width: 500px;
-    width: 100%;
-    h2 {
-      text-align: left;
-    }
-  } */
-  /*   &__image-modal {
-    max-width: 1000px;
-    width: 100%;
-    border: unset;
-    max-height: 563px;
-    .modal__inner-wrapper {
-      padding: 0;
-    }
-    & > button {
-      top: -12px;
-      right: -12px;
-    }
-    img {
-      border-radius: 12px;
-      pointer-events: none;
-      user-select: none;
-    }
-  }
-  &__subscription-modal {
-    background-color: $color-background-dark;
-  } */
 }
 
 /* @media screen and (max-width: 1080px) {
