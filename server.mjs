@@ -4,10 +4,9 @@ import next from 'next';
 import { Server } from 'socket.io';
 
 const dev = process.env.NODE_ENV !== 'production';
-const host = process.env.HOST || '0.0.0.0';
 const port = parseInt(process.env.PORT || '3000', 10);
 
-const app = next({ dev, host, port });
+const app = next({ dev });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
@@ -18,9 +17,9 @@ app.prepare().then(() => {
   const rooms = {};
 
   io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.id}`);
-
     socket.on('join-room', ({ room, username }) => {
+      if (!room || !username) return;
+
       socket.join(room);
 
       if (teammates[room]) {
@@ -47,16 +46,12 @@ app.prepare().then(() => {
 
     // clean up in-memory state when user disconnects
     socket.on('disconnect', () => {
-      console.log(`User disconnected ${socket.id}`);
-      console.log('teammates before deletion ', teammates);
-      console.log('rooms before deletion ', rooms);
-
       if (Object.keys(teammates).length <= 0 && Object.keys(rooms).length <= 0)
         return;
 
       for (let i = teammates[rooms[socket.id]].length - 1; i >= 0; i--) {
         if (teammates[rooms[socket.id]][i].socket === socket.id) {
-          teammates[rooms[socket.id]].splice([i], 1);
+          teammates[rooms[socket.id]].splice(i, 1);
         }
       }
 
@@ -66,16 +61,13 @@ app.prepare().then(() => {
 
       socket
         .to([rooms[socket.id]])
-        .emit('teammate_left_room', teammates[rooms[socket.id]]);
+        .emit('teammate_left_room', teammates[rooms[socket.id]] ?? []);
 
       delete rooms[socket.id];
-
-      console.log('teammates after deletion ', teammates);
-      console.log('rooms after deletion ', rooms);
     });
   });
 
   httpServer.listen(port, () => {
-    console.log(`Server running on http://${host}:${port}`);
+    console.log(`Socket.IO Server running on port ${port}`);
   });
 });

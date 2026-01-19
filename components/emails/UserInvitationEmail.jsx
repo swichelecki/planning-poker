@@ -6,6 +6,12 @@ const UserInvitationEmail = ({
   email,
   userExists,
 }) => {
+  const roomName = encodeURIComponent(roomNameUnique) ?? '';
+  const inviteEmail = encodeURIComponent(email) ?? '';
+  const userName =
+    encodeURIComponent(`${userExists?.firstName}+${userExists?.lastName}`) ??
+    '';
+
   return (
     <div>
       <p>
@@ -15,11 +21,11 @@ const UserInvitationEmail = ({
       <p>
         Click{' '}
         <a
-          href={encodeURI(
+          href={
             userExists
-              ? `${process.env.NEXT_PUBLIC_URL}/login?username=${userExists?.firstName}+${userExists?.lastName}&room=${roomNameUnique}`
-              : `${process.env.NEXT_PUBLIC_URL}/invitation?room=${roomNameUnique}&email=${email}`,
-          )}
+              ? `${process.env.NEXT_PUBLIC_URL}/login?username=${userName}&room=${roomName}`
+              : `${process.env.NEXT_PUBLIC_URL}/invitation?room=${roomName}&email=${inviteEmail}`
+          }
           target='blank'
           aria-label={`Click to join ${team} at Agile Story Planning Poker`}
         >

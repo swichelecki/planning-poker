@@ -16,8 +16,10 @@ const Room = ({ user }) => {
 
   const hasEmittedJoinRef = useRef(false);
 
-  const username = searchParams.get('username');
-  const room = searchParams.get('room');
+  const userNamencoded = searchParams.get('username');
+  const username = decodeURI(userNamencoded);
+  const roomEncoded = searchParams.get('room');
+  const room = decodeURI(roomEncoded);
 
   const [teammates, setTeammates] = useState([]);
   const [votes, setVotes] = useState([]);
@@ -37,7 +39,7 @@ const Room = ({ user }) => {
       setVotes(
         teammates.map((item) => {
           return { symbol: '', username: item.username };
-        })
+        }),
       );
     });
 
@@ -49,7 +51,7 @@ const Room = ({ user }) => {
           } else {
             return vote;
           }
-        })
+        }),
       );
     });
 
@@ -60,7 +62,7 @@ const Room = ({ user }) => {
       setVotes(
         votes.map((item) => {
           return { symbol: '', username: item.username };
-        })
+        }),
       );
     });
 
@@ -89,7 +91,7 @@ const Room = ({ user }) => {
     setShowModal(
       <Modal setVotes={setVotes} setHasVoted={setHasVoted} room={room}>
         <Votes votes={votes} isVoteComplete={isVoteComplete} />
-      </Modal>
+      </Modal>,
     );
   }, [hasVoted, votes, isVoteComplete]);
 
