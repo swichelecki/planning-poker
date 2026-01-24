@@ -45,8 +45,6 @@ export default async function request2FactorAuthentication(formData) {
 
       // encrypt 2-factor auth verification code
       const twoFactorAuthCode = getRandom6DigitNumber();
-      // TODO: for testing - DELETE!
-      console.log('auth code ', twoFactorAuthCode);
       const salt = await bcrypt.genSalt(10);
       const hashedtwoFactorAuthCode = await bcrypt.hash(
         twoFactorAuthCode.toString(),
@@ -65,11 +63,8 @@ export default async function request2FactorAuthentication(formData) {
       const resend = new Resend(resendApiKey);
 
       const { error } = await resend.emails.send({
-        // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
-        from: 'Planning Poker <onboarding@resend.dev>',
-        to: supportEmail,
-        // TODO: switch when domain verified
-        //to: email,
+        from: 'Planning Poker <support@agilestoryplanningpoker.com>',
+        to: email,
         subject: `Agile Story Planning Poker Verification Code: ${twoFactorAuthCode}`,
         react: User2FactorAuthEmail({
           twoFactorAuthCode,

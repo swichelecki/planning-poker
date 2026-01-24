@@ -91,11 +91,8 @@ export default async function createRoom(formData) {
       }
 
       const { error } = await resend.emails.send({
-        // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
-        from: 'Planning Poker <onboarding@resend.dev>',
-        to: supportEmail,
-        // TODO: switch when domain verified
-        //to: email,
+        from: 'Planning Poker <support@agilestoryplanningpoker.com>',
+        to: email,
         subject: userExists
           ? `${firstName} ${lastName} Has Invited You to a New Agile Story Planning Poker Team`
           : `${firstName} ${lastName} Has Invited You to Agile Story Planning Poker`,

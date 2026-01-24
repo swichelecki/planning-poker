@@ -71,8 +71,7 @@ export default async function createUser(formData, acceptInvitation) {
     const resend = new Resend(resendApiKey);
 
     const { error: errorNewUserLogin } = await resend.emails.send({
-      // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
-      from: 'Planning Poker <onboarding@resend.dev>',
+      from: 'Planning Poker <support@agilestoryplanningpoker.com>',
       to: supportEmail,
       subject: 'Agile Story Planning Poker User Account Created',
       react: UserCreatedEmail({
