@@ -7,6 +7,7 @@ import { Resend } from 'resend';
 import { UserInvitationEmail } from '../../components';
 import { createRoomSchema } from '../../schemas/schemas';
 const resendApiKey = process.env.RESEND_API_KEY;
+const supportEmail = process.env.SUPPORT_EMAIL;
 
 export default async function createRoom(formData) {
   if (!(formData instanceof Object)) {
@@ -92,7 +93,7 @@ export default async function createRoom(formData) {
       const { error } = await resend.emails.send({
         // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
         from: 'Planning Poker <onboarding@resend.dev>',
-        to: 'swichelecki@gmail.com',
+        to: supportEmail,
         // TODO: switch when domain verified
         //to: email,
         subject: userExists

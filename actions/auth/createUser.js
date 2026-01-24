@@ -9,6 +9,7 @@ import { Resend } from 'resend';
 import { UserCreatedEmail } from '../../components';
 import { createUserSchema } from '../../schemas/schemas';
 const resendApiKey = process.env.RESEND_API_KEY;
+const supportEmail = process.env.SUPPORT_EMAIL;
 
 export default async function createUser(formData, acceptInvitation) {
   if (!(formData instanceof Object)) {
@@ -72,7 +73,7 @@ export default async function createUser(formData, acceptInvitation) {
     const { error: errorNewUserLogin } = await resend.emails.send({
       // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
       from: 'Planning Poker <onboarding@resend.dev>',
-      to: 'swichelecki@gmail.com',
+      to: supportEmail,
       subject: 'Agile Story Planning Poker User Account Created',
       react: UserCreatedEmail({
         firstName,

@@ -32,8 +32,6 @@ app.prepare().then(() => {
       }
 
       io.to(room).emit('user_joined', teammates[room]);
-
-      console.log(`User ${username} joined room ${room}`);
     });
 
     socket.on('new-vote', ({ room, vote }) => {

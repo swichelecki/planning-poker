@@ -8,6 +8,7 @@ import { User2FactorAuthEmail } from '../../components';
 import { handleServerError, getRandom6DigitNumber } from '../../utilities';
 import { loginSchema } from '../../schemas/schemas';
 const resendApiKey = process.env.RESEND_API_KEY;
+const supportEmail = process.env.SUPPORT_EMAIL;
 
 export default async function request2FactorAuthentication(formData) {
   if (!(formData instanceof Object)) {
@@ -66,7 +67,7 @@ export default async function request2FactorAuthentication(formData) {
       const { error } = await resend.emails.send({
         // TODO: replace onboarding@resend.dev with contact@DOMAIN.com
         from: 'Planning Poker <onboarding@resend.dev>',
-        to: 'swichelecki@gmail.com',
+        to: supportEmail,
         // TODO: switch when domain verified
         //to: email,
         subject: `Agile Story Planning Poker Verification Code: ${twoFactorAuthCode}`,
