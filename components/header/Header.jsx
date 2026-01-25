@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import { socket } from '../../lib/socketClient';
 import { useAppContext } from '../../context';
 import { PlayingCards } from '../../components';
 const UserMenu = dynamic(() => import('../../components/header/UserMenu'));
@@ -16,15 +15,7 @@ const Header = () => {
   return (
     <header className='header'>
       <div className='header__inner-wrapper'>
-        <Link
-          href='/'
-          prefetch={false}
-          onClick={() => {
-            if (!userId) return;
-            socket.disconnect();
-            socket.connect();
-          }}
-        >
+        <Link href='/' prefetch={false}>
           <PlayingCards />
           <span>Agile Story Planning Poker</span>
         </Link>

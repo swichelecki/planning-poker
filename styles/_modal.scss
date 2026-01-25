@@ -32,36 +32,8 @@ dialog {
   }
 }
 
-/* @media screen and (max-width: 1080px) {
-  dialog.modal.modal__image-modal {
-    & > button {
-      top: 18px;
-      right: 18px;
-    }
-  }
-}
-
-@media screen and (max-height: 966px) {
-  dialog.modal.modal__form-modal--large {
-    display: flex;
-    flex-direction: column;
-    margin: 16px auto;
-    max-height: unset;
-  }
-}
-
-@media screen and (max-height: 666px) {
-  dialog.modal.modal__form-modal--small {
-    display: flex;
-    flex-direction: column;
-    margin: 16px auto;
-    max-height: unset;
-  }
-}
-
 @media screen and (max-width: 600px) {
-  dialog.modal.modal__form-modal--large,
-  dialog.modal.modal__form-modal--small {
+  dialog.modal {
     width: 90%;
   }
-} */
+}

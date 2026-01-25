@@ -1,10 +1,11 @@
-import { socket } from '../../lib/socketClient';
 import { CTA } from '../../components';
 import { TbPlayCard2Filled } from 'react-icons/tb';
 
-const Indicator = ({ room }) => {
+const Indicator = ({ room, socket }) => {
   const handleCloseModal = () => {
-    socket.emit('clear-votes', { room });
+    if (socket) {
+      socket.emit('clear-votes', { room });
+    }
   };
 
   return (

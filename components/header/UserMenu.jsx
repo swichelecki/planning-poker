@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAppContext } from '../../context';
 import { logoutUser } from '../../actions';
-import { socket } from '../../lib/socketClient';
 import { Toast } from '../../components';
 import { FaUser } from 'react-icons/fa';
 import {
@@ -49,7 +48,6 @@ const UserMenu = ({ isAdmin }) => {
   const handleUserLogOut = async () => {
     const response = await logoutUser();
     if (response.status === 200) {
-      socket.disconnect();
       setUserId('');
       setIsAdmin(false);
       router.push('/');
@@ -74,14 +72,7 @@ const UserMenu = ({ isAdmin }) => {
       <nav ref={menuRef} className='user-menu__nav'>
         <ul>
           <li>
-            <Link
-              href='/login'
-              onClick={() => {
-                socket.disconnect();
-                socket.connect();
-              }}
-              prefetch={false}
-            >
+            <Link href='/login' prefetch={false}>
               <TbPlayCard2Filled />
               Rooms
             </Link>
@@ -91,9 +82,7 @@ const UserMenu = ({ isAdmin }) => {
               href='/account'
               prefetch={false}
               onClick={() => {
-                socket.disconnect();
                 alert('Coming soon');
-                socket.connect();
               }}
             >
               <MdManageAccounts />
@@ -105,9 +94,7 @@ const UserMenu = ({ isAdmin }) => {
               href='/contact'
               prefetch={false}
               onClick={() => {
-                socket.disconnect();
                 alert('Coming soon');
-                socket.connect();
               }}
             >
               <MdMessage />
@@ -116,14 +103,7 @@ const UserMenu = ({ isAdmin }) => {
           </li>
           {isAdmin && (
             <li>
-              <Link
-                href='/admin'
-                onClick={() => {
-                  socket.disconnect();
-                  socket.connect();
-                }}
-                prefetch={false}
-              >
+              <Link href='/admin' prefetch={false}>
                 <MdAdminPanelSettings />
                 Admin
               </Link>

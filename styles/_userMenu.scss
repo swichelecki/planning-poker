@@ -50,15 +50,12 @@
             color: variables.$font;
           }
         }
-        /* &:hover {
-          background-color: variables.$background;
-        } */
       }
     }
   }
 }
 
-/* @media screen and (max-width: 800px) {
+@media screen and (max-width: 800px) {
   .user-menu {
     &__nav {
       right: 24px;
@@ -70,7 +67,7 @@
   .user-menu {
     &__nav {
       top: 43px;
+      right: 16px;
     }
   }
 }
- */

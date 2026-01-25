@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAppContext } from '../../context';
-import { socket } from '../../lib/socketClient';
+import { getSocket } from '../../lib/socketClient';
 import { Teammates, Votes, Card, Indicator, Modal } from '../../components';
 import { useScrollToTop } from '../../hooks';
 import { CARDS } from '../../constants';
@@ -15,6 +15,7 @@ const Room = ({ user }) => {
   useScrollToTop();
 
   const hasEmittedJoinRef = useRef(false);
+  const socketRef = useRef(null);
 
   const userNamencoded = searchParams.get('username');
   const username = decodeURI(userNamencoded);
@@ -26,6 +27,20 @@ const Room = ({ user }) => {
   const [hasVoted, setHasVoted] = useState(false);
   const [isVoteComplete, setIsVoteComplete] = useState(false);
 
+  // initialize socket only in this component
+  useEffect(() => {
+    socketRef.current = getSocket();
+    if (!socketRef.current.connected) {
+      socketRef.current.connect();
+    }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
+
   //  set global state
   useEffect(() => {
     setUserId(userId);
@@ -34,7 +49,7 @@ const Room = ({ user }) => {
 
   // web sockets ui updates
   useEffect(() => {
-    socket.on('user_joined', (teammates) => {
+    socketRef.current.on('user_joined', (teammates) => {
       setTeammates(teammates);
       setVotes(
         teammates.map((item) => {
@@ -43,7 +58,7 @@ const Room = ({ user }) => {
       );
     });
 
-    socket.on('new_vote', (vote) => {
+    socketRef.current.on('new_vote', (vote) => {
       setVotes(
         votes.map((item) => {
           if (item.username !== vote.username) {
@@ -55,7 +70,7 @@ const Room = ({ user }) => {
       );
     });
 
-    socket.on('clear_votes', () => {
+    socketRef.current.on('clear_votes', () => {
       setShowModal(null);
       setHasVoted(false);
       setIsVoteComplete(false);
@@ -66,30 +81,35 @@ const Room = ({ user }) => {
       );
     });
 
-    socket.on('teammate_left_room', (teammates) => {
+    socketRef.current.on('teammate_left_room', (teammates) => {
       setTeammates(teammates);
     });
 
     return () => {
-      socket.off('user_joined');
-      socket.off('new_vote');
-      socket.off('clear_votes');
+      socketRef.current.off('user_joined');
+      socketRef.current.off('new_vote');
+      socketRef.current.off('clear_votes');
     };
   }, [votes]);
 
   // handle join room
   useEffect(() => {
-    if (room && username && !hasEmittedJoinRef.current) {
+    if (room && username && !hasEmittedJoinRef.current && socketRef.current) {
       hasEmittedJoinRef.current = true;
-      socket.emit('join-room', { room, username });
+      socketRef.current.emit('join-room', { room, username });
     }
-  }, []);
+  }, [socketRef.current]);
 
   // show modal after voting
   useEffect(() => {
     if (!hasVoted) return;
     setShowModal(
-      <Modal setVotes={setVotes} setHasVoted={setHasVoted} room={room}>
+      <Modal
+        setVotes={setVotes}
+        setHasVoted={setHasVoted}
+        room={room}
+        socket={socketRef.current}
+      >
         <Votes votes={votes} isVoteComplete={isVoteComplete} />
       </Modal>,
     );
@@ -105,7 +125,7 @@ const Room = ({ user }) => {
   const handleVote = (symbol, username) => {
     const vote = { symbol, username };
     setHasVoted(true);
-    socket.emit('new-vote', { room, vote });
+    socketRef.current.emit('new-vote', { room, vote });
   };
 
   return (
@@ -125,7 +145,7 @@ const Room = ({ user }) => {
           ))}
         </section>
         {!hasVoted && votes.some((item) => item.symbol.length > 0) && (
-          <Indicator room={room} />
+          <Indicator room={room} socket={socketRef.current} />
         )}
       </div>
     </>

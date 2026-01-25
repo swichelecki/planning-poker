@@ -32,3 +32,17 @@
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  .playing-cards {
+    &--large {
+      font-size: 16rem;
+      svg:first-of-type {
+        left: 60px;
+      }
+      svg:last-of-type {
+        right: 80px;
+      }
+    }
+  }
+}

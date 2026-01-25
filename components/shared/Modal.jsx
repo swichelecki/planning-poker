@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { socket } from '../../lib/socketClient';
 import { CTA } from '../../components';
 
-const Modal = ({ children, room }) => {
+const Modal = ({ children, room, socket }) => {
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +23,9 @@ const Modal = ({ children, room }) => {
   }, []);
 
   const handleCloseModal = () => {
-    socket.emit('clear-votes', { room });
+    if (socket) {
+      socket.emit('clear-votes', { room });
+    }
   };
 
   return (

@@ -75,6 +75,7 @@ export default async function createRoom(formData) {
 
     const resend = new Resend(resendApiKey);
     // send invitation emails to teammates
+    const emailRecipients = [];
     for (const email of teammates) {
       // if user exists already add room to user data record
       const userExists = await User.findOne({ email });
@@ -90,7 +91,7 @@ export default async function createRoom(formData) {
         );
       }
 
-      const { error } = await resend.emails.send({
+      emailRecipients.push({
         from: 'Planning Poker <support@agilestoryplanningpoker.com>',
         to: email,
         subject: userExists
@@ -105,9 +106,11 @@ export default async function createRoom(formData) {
           userExists,
         }),
       });
-
-      if (error) console.error('Resend error: ', error);
     }
+
+    const { error } = await resend.batch.send(emailRecipients);
+
+    if (error) console.error('Resend error: ', error);
 
     return { status: 200, roomNameUnique };
   } catch (error) {

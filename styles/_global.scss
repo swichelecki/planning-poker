@@ -73,18 +73,14 @@ select:disabled {
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1200px) {
   .container {
     padding: 24px;
   }
 }
 
 @media screen and (max-width: 600px) {
-  /*   body {
-    font-size: 1.125rem; // 18px
-  }
- */
   .container {
-    padding: 0;
+    padding: 24px 16px;
   }
 }

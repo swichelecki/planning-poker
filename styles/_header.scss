@@ -11,7 +11,7 @@
     margin: 0 auto;
     max-width: 1296px;
     width: 100%;
-    padding: 14px 48px;
+    padding: 14px 48px 14px 38px;
     & > a {
       display: flex;
       align-items: center;
@@ -23,29 +23,21 @@
   &__content-right {
     display: flex;
     align-items: center;
-    min-height: 24px;
   }
 }
 
-/* @media screen and (max-width: 800px) {
+@media screen and (max-width: 1200px) {
   .header {
     &__inner-wrapper {
-      padding: 20px 24px;
-    }
-    &__content-right {
-      min-height: 40px;
+      padding: 14px 24px 14px 14px;
     }
   }
 }
 
 @media screen and (max-width: 600px) {
   .header {
-    border: 0;
     &__inner-wrapper {
-      padding: 12px 16px;
-    }
-    &__content-right {
-      min-height: auto;
+      padding: 14px 16px 14px 6px;
     }
   }
-} */
+}

@@ -5,24 +5,23 @@ h1,
   font-size: 2.25rem; // 36px
 }
 
-h2,
+/* h2,
 .h2 {
   margin: 0;
-  //font-size: 1.125rem; // 18px
-  //font-weight: 600;
-}
+  font-size: 1.125rem; // 18px
+} */
 
 p {
   margin: 0;
 }
 
-/* @media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) {
   h1,
   .h1 {
     font-size: 1.875rem; // 30px
   }
-  h2,
+  /*   h2,
   .h2 {
     font-size: 1.25rem; // 20px;
-  }
-} */
+  } */
+}

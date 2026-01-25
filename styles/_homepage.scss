@@ -98,7 +98,7 @@
   }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1200px) {
   .homepage {
     &__wrapper {
       padding-top: 25px;
@@ -126,7 +126,15 @@
 @media screen and (max-width: 600px) {
   .homepage {
     &__wrapper {
-      padding: 24px 16px;
+      padding: 0;
+    }
+    &__hero {
+      gap: 32px;
+    }
+    &__play-button {
+      svg {
+        font-size: 6rem;
+      }
     }
   }
 }

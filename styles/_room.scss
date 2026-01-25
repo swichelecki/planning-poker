@@ -11,9 +11,38 @@
   }
   &__card-wrapper {
     display: grid;
+    justify-content: center;
+    width: 100%;
     grid-template-columns: repeat(14, 1fr);
     grid-template-rows: auto;
-    padding: 16px;
     gap: 16px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .room {
+    &__room-wrapper {
+      height: auto;
+      padding-top: 10%;
+    }
+    &__card-wrapper {
+      grid-template-columns: repeat(auto-fit, 157px);
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .room {
+    &__card-wrapper {
+      grid-template-columns: repeat(auto-fit, 125px);
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .room {
+    &__card-wrapper {
+      grid-template-columns: repeat(auto-fit, 70px);
+    }
   }
 }
