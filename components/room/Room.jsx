@@ -27,6 +27,12 @@ const Room = ({ user }) => {
   const [hasVoted, setHasVoted] = useState(false);
   const [isVoteComplete, setIsVoteComplete] = useState(false);
 
+  // set global state
+  useEffect(() => {
+    setUserId(userId);
+    setIsAdmin(isAdmin);
+  }, [userId, isAdmin]);
+
   // initialize socket only in this component
   useEffect(() => {
     socketRef.current = getSocket();
@@ -41,14 +47,18 @@ const Room = ({ user }) => {
     };
   }, []);
 
-  //  set global state
+  // handle join room
   useEffect(() => {
-    setUserId(userId);
-    setIsAdmin(isAdmin);
-  }, [userId, isAdmin]);
+    if (room && username && !hasEmittedJoinRef.current && socketRef.current) {
+      hasEmittedJoinRef.current = true;
+      socketRef.current.emit('join-room', { room, username });
+    }
+  }, [room, username]);
 
   // web sockets ui updates
   useEffect(() => {
+    if (!socketRef.current) return;
+
     socketRef.current.on('user_joined', (teammates) => {
       setTeammates(teammates);
       setVotes(
@@ -59,8 +69,8 @@ const Room = ({ user }) => {
     });
 
     socketRef.current.on('new_vote', (vote) => {
-      setVotes(
-        votes.map((item) => {
+      setVotes((prevVotes) =>
+        prevVotes.map((item) => {
           if (item.username !== vote.username) {
             return item;
           } else {
@@ -74,8 +84,8 @@ const Room = ({ user }) => {
       setShowModal(null);
       setHasVoted(false);
       setIsVoteComplete(false);
-      setVotes(
-        votes.map((item) => {
+      setVotes((prevVotes) =>
+        prevVotes.map((item) => {
           return { symbol: '', username: item.username };
         }),
       );
@@ -86,19 +96,14 @@ const Room = ({ user }) => {
     });
 
     return () => {
-      socketRef.current.off('user_joined');
-      socketRef.current.off('new_vote');
-      socketRef.current.off('clear_votes');
+      if (socketRef.current) {
+        socketRef.current.off('user_joined');
+        socketRef.current.off('new_vote');
+        socketRef.current.off('clear_votes');
+        socketRef.current.off('teammate_left_room');
+      }
     };
-  }, [votes]);
-
-  // handle join room
-  useEffect(() => {
-    if (room && username && !hasEmittedJoinRef.current && socketRef.current) {
-      hasEmittedJoinRef.current = true;
-      socketRef.current.emit('join-room', { room, username });
-    }
-  }, [socketRef.current]);
+  }, []);
 
   // show modal after voting
   useEffect(() => {
