@@ -15,6 +15,7 @@ const Teammates = ({ teammates, room }) => {
   // close teammates list when clicking someplace other than 'room info' button
   useEffect(() => {
     const handleCloseTeammatesListWhenClickingOff = (e) => {
+      if (!isHideTeamList) return;
       if (!e.target.classList.contains('teammates__cta')) {
         teammatesListRef.current.classList.add('teammates__list--hide');
       }
@@ -33,7 +34,7 @@ const Teammates = ({ teammates, room }) => {
         );
       };
     }
-  }, []);
+  }, [isHideTeamList]);
 
   const handleOpenCloseTeamList = () => {
     if (teammatesListRef) {
