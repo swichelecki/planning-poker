@@ -11,12 +11,10 @@ export const dynamic = 'force-dynamic';
 
 async function getUser() {
   try {
-    await connectDB();
-
     const { userId } = await getUserFromCookie();
 
     if (!userId) return;
-
+    await connectDB();
     const userRaw = await User.findOne({ _id: userId });
     const user = JSON.parse(JSON.stringify(userRaw));
 

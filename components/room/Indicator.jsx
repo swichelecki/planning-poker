@@ -9,7 +9,7 @@ const Indicator = ({ room, socket }) => {
   };
 
   return (
-    <section className='indicator'>
+    <div className='indicator'>
       <CTA
         handleClick={handleCloseModal}
         btnType='button'
@@ -26,7 +26,7 @@ const Indicator = ({ room, socket }) => {
         </svg>
         <TbPlayCard2Filled />
       </div>
-    </section>
+    </div>
   );
 };
 

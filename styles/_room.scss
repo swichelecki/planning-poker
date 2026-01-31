@@ -41,6 +41,9 @@
 
 @media screen and (max-width: 600px) {
   .room {
+    &__room-wrapper {
+      padding-top: 48px;
+    }
     &__card-wrapper {
       grid-template-columns: repeat(auto-fit, 70px);
     }

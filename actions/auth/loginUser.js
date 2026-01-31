@@ -39,18 +39,28 @@ export default async function loginUser(formData) {
     const user = await User.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      // check that 5 minutes has not passed after 2-factor auth verification code email sent
-      const updatedAtDateObj = new Date(user.updatedAt);
-      const updatedAtMsec = updatedAtDateObj.getTime();
-      const date = new Date();
-      const currentTimeMsc = date.getTime();
-      const fiveMinutesMsc = 300000;
-      if (currentTimeMsc > updatedAtMsec + fiveMinutesMsc)
-        return { status: 410, error: VERIFICATION_EXPIRED };
+      // verify new user account
+      if (!user.isVerified) {
+        // if on log in page but account is not yet verified request verification
+        if (!verification) {
+          return { status: 401 };
+        }
 
-      // check that 2-factor auth verification code matches
-      if (!(await bcrypt.compare(verification, user.twoFactorAuthCode))) {
-        return { status: 403, error: VERIFICATION_INCORRECT };
+        // check that 5 minutes has not passed after 2-factor auth verification code email sent
+        const updatedAtDateObj = new Date(user.updatedAt);
+        const updatedAtMsec = updatedAtDateObj.getTime();
+        const date = new Date();
+        const currentTimeMsc = date.getTime();
+        const fiveMinutesMsc = 300000;
+        if (currentTimeMsc > updatedAtMsec + fiveMinutesMsc)
+          return { status: 410, error: VERIFICATION_EXPIRED };
+
+        // check that 2-factor auth verification code matches
+        if (!(await bcrypt.compare(verification, user.twoFactorAuthCode))) {
+          return { status: 403, error: VERIFICATION_INCORRECT };
+        }
+
+        await User.updateOne({ _id: user.id }, { isVerified: true });
       }
 
       // create cookie with jwt

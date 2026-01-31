@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { request2FactorAuthentication } from '../../actions';
+import { loginUser, request2FactorAuthentication } from '../../actions';
 import { useAppContext } from '../../context';
 import { z } from 'zod';
 import {
@@ -92,8 +92,8 @@ const Login = ({ user }) => {
     }
   };
 
-  // send user 2-factor authentication code in email on Log In button click
-  const handleBeginLoginProcess = async (e) => {
+  // log in user or send user 2-factor authentication code in email to non-verified user
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     const zodValidationResults = loginSchema.safeParse(form);
@@ -109,17 +109,46 @@ const Login = ({ user }) => {
     }
 
     setIsAwaitingResponse(true);
-    const response = await request2FactorAuthentication(zodFormData);
+    const response = await loginUser(zodFormData);
     if (response.status === 200) {
-      setShow2FactorAuthField(true);
+      setShowChooseRoom(true);
       setIsAwaitingResponse(false);
-    } else if (response.status === 403) {
+      setForm((curr) => {
+        return {
+          ...curr,
+          userId: response.user._id,
+          username: `${response.user.firstName} ${response.user.lastName}`,
+        };
+      });
+      setUserRooms(response.user.rooms);
+    }
+
+    // forbidden - user not found
+    if (response.status === 403) {
       setIsAwaitingResponse(false);
       setErrorMessage({
         email: INCORRECT_EMAIL_PASSWORD,
         password: INCORRECT_EMAIL_PASSWORD,
       });
-    } else {
+    }
+
+    // unauthorized - user found but not verified - request verification
+    if (response.status === 401) {
+      const response = await request2FactorAuthentication(zodFormData);
+      if (response.status === 200) {
+        setShow2FactorAuthField(true);
+        setIsAwaitingResponse(false);
+      } else {
+        setShowToast(<Toast serverError={response} />);
+        setIsAwaitingResponse(false);
+      }
+    }
+
+    if (
+      response.status !== 200 &&
+      response.status !== 403 &&
+      response.status !== 401
+    ) {
       setShowToast(<Toast serverError={response} />);
       setIsAwaitingResponse(false);
     }
@@ -171,7 +200,7 @@ const Login = ({ user }) => {
     <form
       onSubmit={
         !show2FactorAuthField && !showChooseRoom
-          ? handleBeginLoginProcess
+          ? handleLogin
           : showChooseRoom && !showCreateNewRoom
             ? handleChooseRoom
             : null
@@ -222,7 +251,7 @@ const Login = ({ user }) => {
           /> */}
         </>
       )}
-      {/* step 2: enter 2-factor authentication */}
+      {/* step 2: enter 2-factor authentication when user found but not yet verified */}
       {show2FactorAuthField && (
         <Form2FactorAuth
           form={form}

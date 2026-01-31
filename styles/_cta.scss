@@ -78,6 +78,18 @@
       border: 3px solid variables.$button-green;
       border-top: 3px solid transparent;
     }
+    &:hover,
+    &:active {
+      background-color: variables.$button-green;
+      color: variables.$button-green-dark;
+      svg {
+        fill: variables.$button-green-dark;
+      }
+      .loader {
+        border: 3px solid variables.$button-green-dark;
+        border-top: 3px solid transparent;
+      }
+    }
   }
   &--red {
     background-color: variables.$button-red-dark;

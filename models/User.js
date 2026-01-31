@@ -28,6 +28,11 @@ const UserSchema = new Schema(
     twoFactorAuthCode: {
       type: String,
     },
+    isVerified: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: true },
 );

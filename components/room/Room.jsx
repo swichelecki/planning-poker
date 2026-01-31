@@ -137,7 +137,7 @@ const Room = ({ user }) => {
     <>
       <Teammates teammates={teammates} room={room} />
       <div className='room__room-wrapper'>
-        <section className='room__card-wrapper'>
+        <div className='room__card-wrapper'>
           {CARDS.map((item, index) => (
             <Card
               key={`card_${item}`}
@@ -148,7 +148,7 @@ const Room = ({ user }) => {
               room={room}
             />
           ))}
-        </section>
+        </div>
         {!hasVoted && votes.some((item) => item.symbol.length > 0) && (
           <Indicator room={room} socket={socketRef.current} />
         )}

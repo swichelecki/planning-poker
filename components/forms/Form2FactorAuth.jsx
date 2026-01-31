@@ -80,7 +80,7 @@ const Form2FactorAuth = ({
 
   return (
     <FormTextField
-      label='Verification Code'
+      label='Verify Account'
       subLabel='Check your email and enter 6-digit verification code'
       type='text'
       id='verification'
