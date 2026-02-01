@@ -51,7 +51,7 @@ const Teammates = ({ teammates, room }) => {
           handleClick={handleOpenCloseTeamList}
           btnType='button'
           text='Room Info'
-          ariaLabel='View Room Information'
+          ariaLabel='View planning poker room information'
           className='cta-button cta-button--small cta-button--green cta-button--bold teammates__cta'
         />
       )}

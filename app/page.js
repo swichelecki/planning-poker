@@ -5,10 +5,11 @@ export default function Home() {
     <div className='homepage__wrapper'>
       <section className='homepage__hero'>
         <div className='homepage__hero-left'>
-          <h1>Online Agile Story Planning Poker</h1>
+          <h1>Agile Story Planning Poker</h1>
           <p>
-            Invite your teammates to custom planning poker rooms for easy, fun
-            and free online user story point estimation.
+            Free planning poker tool for remote scrum team story point
+            estimation. Create voting rooms and invite teammates for online
+            story point estimation.
           </p>
           <CTA
             text='Get Started'
@@ -23,11 +24,10 @@ export default function Home() {
         </div>
       </section>
       <section className='homepage__video'>
-        <h2 className='h1'>Simple User Story Estimation Interface</h2>
+        <h2 className='h1'>Remote Story Point Estimation</h2>
         <p>
-          Join a call on your favorite online meeting app and encourage
-          collaboration and discussion among your scrum team with the
-          easy-to-use user story point planning interface.
+          Join a call on your favorite online meeting app and facilitate story
+          point estimation with the easy-to-use planning poker interface.
         </p>
         <div className='homepage__video-wrapper'>
           <video
@@ -44,7 +44,7 @@ export default function Home() {
         </div>
       </section>
       <section className='homepage__direct-cta'>
-        <h2 className='h1'>Get started today!</h2>
+        <h2 className='h1'>Try Agile Story Planning Poker Today!</h2>
         <CTA
           text='Get Started'
           type='anchor'

@@ -14,12 +14,19 @@ export const metadata = {
   applicationName: 'Agile Story Planning Poker',
   title: {
     template: '%s | Agile Story Planning Poker',
-    default:
-      'Online Agile Story Planning Poker | Free Online User Story Point Estimation',
+    default: 'Agile Story Planning Poker | Free Story Point Estimation Tool',
   },
   description:
-    'Invite your teammates to custom planning poker rooms for easy, fun and free online user story point estimation.',
-  keywords: ['planning poker', 'agile', 'scrum', 'user story'],
+    'Free planning poker tool for remote scrum team story point estimation. Create voting rooms and invite teammates for online story point estimation.',
+  keywords: [
+    'planning poker',
+    'pointing poker',
+    'scrum poker',
+    'agile',
+    'scrum',
+    'user story',
+    'story point estimation',
+  ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
   openGraph: {
     url: process.env.NEXT_PUBLIC_URL,
@@ -41,6 +48,25 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body className={`${tikTokSans.variable}`}>
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: 'Agile Story Planning Poker',
+              url: process.env.NEXT_PUBLIC_URL,
+              description:
+                'Free planning poker tool for remote scrum team story point estimation. Create voting rooms and invite teammates for online story point estimation.',
+              applicationCategory: 'BusinessApplication',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+              },
+            }),
+          }}
+        />
         <GloablContext>
           <Layout>{children}</Layout>
         </GloablContext>
