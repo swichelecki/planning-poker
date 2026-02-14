@@ -363,13 +363,16 @@ const Login = ({ user }) => {
                     storyLinkItem={item}
                   />
                 ))}
-              <FormAddLinkField
-                setForm={setForm}
-                storyLink={storyLink}
-                setStoryLink={setStoryLink}
-                errorMessage={errorMessage}
-                setErrorMessage={setErrorMessage}
-              />
+              {(!isAwaitingResponse ||
+                (isAwaitingResponse && form?.storyLinks?.length <= 0)) && (
+                <FormAddLinkField
+                  setForm={setForm}
+                  storyLink={storyLink}
+                  setStoryLink={setStoryLink}
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
+                />
+              )}
               <CTA
                 icon={<MdAddCircle />}
                 text='Add Another Story Link'

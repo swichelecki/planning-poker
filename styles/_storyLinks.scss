@@ -35,23 +35,18 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
-  /*   .teammates {
-    &__list {
-      top: 85px;
-    }
-  } */
-}
-
 @media screen and (max-width: 600px) {
-  /*   .teammates {
-    &__cta {
-      top: 16px;
-      left: 16px;
+  .story-links {
+    &__current-link {
+      min-width: 0;
+      padding: 16px;
+      a {
+        display: block;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
-    &__list {
-      top: 69px;
-      left: 16px;
-    }
-  } */
+  }
 }

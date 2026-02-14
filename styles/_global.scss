@@ -51,8 +51,7 @@ input:disabled,
 select:disabled {
   cursor: not-allowed !important;
   background-color: variables.$border;
-  // TODO: find better color
-  color: gray;
+  color: variables.$font-muted;
 }
 
 .loader {

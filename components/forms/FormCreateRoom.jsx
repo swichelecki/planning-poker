@@ -138,13 +138,15 @@ const FormCreateRoom = ({
               emailAddressItem={item}
             />
           ))}
-        <FormAddTextField
-          setForm={setForm}
-          emailAddress={emailAddress}
-          setEmailAddress={setEmailAddress}
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-        />
+        {!isAwaitingResponse && (
+          <FormAddTextField
+            setForm={setForm}
+            emailAddress={emailAddress}
+            setEmailAddress={setEmailAddress}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+          />
+        )}
         <CTA
           icon={<MdAddCircle />}
           text='Add Another Email Address'
