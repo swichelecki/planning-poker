@@ -2,11 +2,23 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { useAppContext } from '../../context';
 import { getSocket } from '../../lib/socketClient';
-import { Teammates, Votes, Card, Indicator, Modal } from '../../components';
+import {
+  Teammates,
+  Votes,
+  Card,
+  Indicator,
+  Modal,
+  ModalStorySelect,
+} from '../../components';
 import { useScrollToTop } from '../../hooks';
 import { CARDS } from '../../constants';
+
+const StoryLinks = dynamic(() => import('../../components/room/StoryLinks'), {
+  ssr: false,
+});
 
 const Room = ({ user }) => {
   const { userId, isAdmin } = user;
@@ -26,6 +38,9 @@ const Room = ({ user }) => {
   const [votes, setVotes] = useState([]);
   const [hasVoted, setHasVoted] = useState(false);
   const [isVoteComplete, setIsVoteComplete] = useState(false);
+  const [storyLink, setStoryLink] = useState('');
+  const [storyIndex, setStoryIndex] = useState(0);
+  const [storyArrayLength, setStoryArrayLength] = useState(0);
 
   // set global state
   useEffect(() => {
@@ -51,7 +66,8 @@ const Room = ({ user }) => {
   useEffect(() => {
     if (room && username && !hasEmittedJoinRef.current && socketRef.current) {
       hasEmittedJoinRef.current = true;
-      socketRef.current.emit('join-room', { room, username });
+      const storyLinks = sessionStorage.getItem('storyLinks') ?? '';
+      socketRef.current.emit('join-room', { room, username, storyLinks });
     }
   }, [room, username]);
 
@@ -59,13 +75,16 @@ const Room = ({ user }) => {
   useEffect(() => {
     if (!socketRef.current) return;
 
-    socketRef.current.on('user_joined', (teammates) => {
+    socketRef.current.on('user_joined', (teammates, link, index, length) => {
       setTeammates(teammates);
       setVotes(
         teammates.map((item) => {
           return { symbol: '', username: item.username };
         }),
       );
+      link && setStoryLink(link);
+      index && setStoryIndex(index);
+      length && setStoryArrayLength(length);
     });
 
     socketRef.current.on('new_vote', (vote) => {
@@ -91,6 +110,11 @@ const Room = ({ user }) => {
       );
     });
 
+    socketRef.current.on('change_story', (link, index) => {
+      setStoryLink(link);
+      setStoryIndex(index);
+    });
+
     socketRef.current.on('teammate_left_room', (teammates) => {
       setTeammates(teammates);
     });
@@ -100,6 +124,7 @@ const Room = ({ user }) => {
         socketRef.current.off('user_joined');
         socketRef.current.off('new_vote');
         socketRef.current.off('clear_votes');
+        socketRef.current.off('change_story');
         socketRef.current.off('teammate_left_room');
       }
     };
@@ -116,9 +141,24 @@ const Room = ({ user }) => {
         socket={socketRef.current}
       >
         <Votes votes={votes} isVoteComplete={isVoteComplete} />
+        {storyLink && (
+          <ModalStorySelect
+            room={room}
+            socket={socketRef.current}
+            storyIndex={storyIndex}
+            storyArrayLength={storyArrayLength}
+          />
+        )}
       </Modal>,
     );
-  }, [hasVoted, votes, isVoteComplete]);
+  }, [
+    hasVoted,
+    votes,
+    isVoteComplete,
+    storyLink,
+    storyIndex,
+    storyArrayLength,
+  ]);
 
   // show green checkmark in modal while voting or votes when all have voted
   useEffect(() => {
@@ -137,6 +177,15 @@ const Room = ({ user }) => {
     <>
       <Teammates teammates={teammates} room={room} />
       <div className='room__room-wrapper'>
+        {storyLink && (
+          <StoryLinks
+            storyLink={storyLink}
+            room={room}
+            socket={socketRef.current}
+            storyIndex={storyIndex}
+            storyArrayLength={storyArrayLength}
+          />
+        )}
         <div className='room__card-wrapper'>
           {CARDS.map((item, index) => (
             <Card

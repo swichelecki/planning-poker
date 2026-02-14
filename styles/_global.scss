@@ -48,10 +48,10 @@ a {
 }
 
 input:disabled,
-button:disabled,
 select:disabled {
   cursor: not-allowed !important;
   background-color: variables.$border;
+  // TODO: find better color
   color: gray;
 }
 

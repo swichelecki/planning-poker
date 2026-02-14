@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useAppContext } from '../../context';
 import { logoutUser } from '../../actions';
-import { Toast } from '../../components';
 import { FaUser } from 'react-icons/fa';
 import {
   MdOutlineLogout,
@@ -14,6 +14,10 @@ import {
   MdAdminPanelSettings,
 } from 'react-icons/md';
 import { TbPlayCard2Filled } from 'react-icons/tb';
+
+const Toast = dynamic(() => import('../../components/shared/Toast'), {
+  ssr: false,
+});
 
 const UserMenu = ({ isAdmin }) => {
   const menuRef = useRef(null);

@@ -12,6 +12,8 @@ import {
   MISSING_TEAMMATES,
   TEAMMATES_LIMIT,
   MISSING_SELECTED_ROOM,
+  INVALID_URL,
+  MISSING_URL,
 } from '../constants';
 
 export const createUserSchema = z
@@ -39,6 +41,10 @@ export const emailAddressSchema = z.object({
     .email(INVALID_EMAIL)
     .min(1, MISSING_EMAIL)
     .max(50, CHARACTER_LIMIT_50),
+});
+
+export const storyLinkSchema = z.object({
+  storyLink: z.url(INVALID_URL).min(1, MISSING_URL).max(100),
 });
 
 export const createRoomSchema = z.object({

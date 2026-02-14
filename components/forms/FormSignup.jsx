@@ -1,10 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { createUser } from '../../actions';
-import { FormTextField, CTA, Toast } from '../../components';
+import { FormTextField, CTA } from '../../components';
 import { z } from 'zod';
 import { createUserSchema } from '../../schemas/schemas';
 import { USER_ALREADY_EXISTS } from '../../constants';
+
+const Toast = dynamic(() => import('../../components/shared/Toast'), {
+  ssr: false,
+});
 
 const FormSignup = ({
   form,
@@ -45,7 +50,7 @@ const FormSignup = ({
             team: form.team,
             teamNameUnique: form.teamNameUnique,
           },
-      isInvitation
+      isInvitation,
     );
     if (response.status === 200) {
       setShow2FactorAuthField(true);

@@ -2,11 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { createRoom } from '../../actions';
-import { FormTextField, FormAddTextField, CTA, Toast } from '../../components';
+import { FormTextField, FormAddTextField, CTA } from '../../components';
 import { z } from 'zod';
 import { createRoomSchema, emailAddressSchema } from '../../schemas/schemas';
 import { MdAddCircle } from 'react-icons/md';
+
+const Toast = dynamic(() => import('../../components/shared/Toast'), {
+  ssr: false,
+});
 
 const FormCreateRoom = ({
   form,
@@ -53,8 +58,7 @@ const FormCreateRoom = ({
   };
 
   // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
-  const handleAddTeammateAndCreateRoom = (e) => {
-    e.preventDefault();
+  const handleAddTeammateAndCreateRoom = () => {
     const zodValidationResults = emailAddressSchema.safeParse({
       email: emailAddress,
     });
@@ -124,15 +128,16 @@ const FormCreateRoom = ({
         onChangeHandler={handleForm}
         errorMessage={errorMessage.team}
       />
-      {form?.teammates?.length > 0 &&
-        form?.teammates?.map((item, index) => (
-          <FormAddTextField
-            key={`form-add-text-field__${index}`}
-            setForm={setForm}
-            emailAddressItem={item}
-          />
-        ))}
-      {!isAwaitingResponse && (
+      <div className='auth-form__form-field-with-cta-wrapper'>
+        <p>Teammate Email Address</p>
+        {form?.teammates?.length > 0 &&
+          form?.teammates?.map((item, index) => (
+            <FormAddTextField
+              key={`form-add-text-field__${index}`}
+              setForm={setForm}
+              emailAddressItem={item}
+            />
+          ))}
         <FormAddTextField
           setForm={setForm}
           emailAddress={emailAddress}
@@ -140,15 +145,15 @@ const FormCreateRoom = ({
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />
-      )}
-      <CTA
-        icon={<MdAddCircle />}
-        text='Add Another Email Address'
-        className='cta-button cta-button--icon cta-button--icon-green'
-        ariaLabel='Add Teammate Email'
-        btnType='button'
-        handleClick={handleAddTeammate}
-      />
+        <CTA
+          icon={<MdAddCircle />}
+          text='Add Another Email Address'
+          className='cta-button cta-button--icon cta-button--icon-green'
+          ariaLabel='Add Teammate Email'
+          btnType='button'
+          handleClick={handleAddTeammate}
+        />
+      </div>
       <CTA
         text='Create Room'
         className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'

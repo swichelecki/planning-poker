@@ -163,6 +163,17 @@
       fill: variables.$button-red;
     }
   }
+  &--icon-white {
+    svg {
+      fill: variables.$font;
+    }
+    &:disabled svg {
+      fill: variables.$font-muted;
+    }
+  }
+  &:disabled {
+    cursor: not-allowed !important;
+  }
 }
 
 .cta-text-link {

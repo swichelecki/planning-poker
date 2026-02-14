@@ -34,7 +34,6 @@ const FormAddTextField = ({
   return (
     <div className='auth-form__form-field-with-cta'>
       <FormTextField
-        label='Teammate Email Address'
         type='email novalidate'
         id='teammate'
         name='teammates'

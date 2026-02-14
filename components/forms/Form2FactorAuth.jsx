@@ -2,10 +2,15 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { loginUser } from '../../actions';
-import { FormTextField, Toast } from '../../components';
+import { FormTextField } from '../../components';
 import { z } from 'zod';
 import { loginSchema } from '../../schemas/schemas';
+
+const Toast = dynamic(() => import('../../components/shared/Toast'), {
+  ssr: false,
+});
 
 const Form2FactorAuth = ({
   form,

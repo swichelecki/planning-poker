@@ -1,0 +1,40 @@
+@use '../styles/variables';
+
+.modal-story-select {
+  padding-top: 42px;
+  &__wrapper {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    p {
+      font-weight: 700;
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  /*   .teammates {
+    &__list {
+      top: 85px;
+    }
+  } */
+}
+
+@media screen and (max-width: 600px) {
+  /*   .teammates {
+    &__cta {
+      top: 16px;
+      left: 16px;
+    }
+    &__list {
+      top: 69px;
+      left: 16px;
+    }
+  } */
+}

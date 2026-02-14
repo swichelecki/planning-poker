@@ -15,31 +15,52 @@ app.prepare().then(() => {
 
   const teammates = {};
   const rooms = {};
+  const links = {};
 
   io.on('connection', (socket) => {
-    socket.on('join-room', ({ room, username }) => {
+    // user joins room
+    socket.on('join-room', ({ room, username, storyLinks }) => {
       if (!room || !username) return;
-
       socket.join(room);
 
       if (teammates[room]) {
         teammates[room].push({ username, socket: socket.id });
         rooms[socket.id] = room;
+        if (storyLinks && !links[room])
+          links[room] = { linkArray: JSON.parse(storyLinks), currentIndex: 0 };
       } else {
         teammates[room] = [];
         teammates[room].push({ username, socket: socket.id });
         rooms[socket.id] = room;
+        if (storyLinks)
+          links[room] = { linkArray: JSON.parse(storyLinks), currentIndex: 0 };
       }
 
-      io.to(room).emit('user_joined', teammates[room]);
+      io.to(room).emit(
+        'user_joined',
+        teammates[room],
+        links[room]
+          ? links[room]['linkArray'][links[room]['currentIndex']]
+          : '',
+        links[room] ? links[room]['currentIndex'] : '',
+        links[room] ? links[room]['linkArray']?.length : '',
+      );
     });
 
+    // user votes by clicking card
     socket.on('new-vote', ({ room, vote }) => {
       io.to(room).emit('new_vote', vote);
     });
 
+    // clear all votes button click
     socket.on('clear-votes', ({ room }) => {
       io.to(room).emit('clear_votes', room);
+    });
+
+    // move to next or previous story
+    socket.on('change-story', ({ room, index }) => {
+      links[room]['currentIndex'] = index;
+      io.to(room).emit('change_story', links[room]['linkArray'][index], index);
     });
 
     // clean up in-memory state when user disconnects
@@ -47,20 +68,28 @@ app.prepare().then(() => {
       if (Object.keys(teammates).length <= 0 && Object.keys(rooms).length <= 0)
         return;
 
+      // teammate object - delete user from teammates array when user socket disconnects
       for (let i = teammates[rooms[socket.id]].length - 1; i >= 0; i--) {
         if (teammates[rooms[socket.id]][i].socket === socket.id) {
           teammates[rooms[socket.id]].splice(i, 1);
         }
       }
 
+      socket
+        .to([rooms[socket.id]])
+        .emit('teammate_left_room', teammates[rooms[socket.id]]);
+
+      // links object - when all teammates have left room delete related story links object key/value
+      if (links[rooms[socket.id]] && teammates[rooms[socket.id]].length <= 0) {
+        delete links[rooms[socket.id]];
+      }
+
+      // teammates object - when all teammates have left room delete related teammate object key/value
       if (teammates[rooms[socket.id]].length <= 0) {
         delete teammates[rooms[socket.id]];
       }
 
-      socket
-        .to([rooms[socket.id]])
-        .emit('teammate_left_room', teammates[rooms[socket.id]] ?? []);
-
+      // room object - delete user key/value from room object when user disconnects
       delete rooms[socket.id];
     });
   });

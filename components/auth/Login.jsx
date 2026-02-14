@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { loginUser, request2FactorAuthentication } from '../../actions';
 import { useAppContext } from '../../context';
 import { z } from 'zod';
@@ -9,13 +10,24 @@ import {
   FormTextField,
   FormSelectField,
   Form2FactorAuth,
+  FormAddLinkField,
   FormCreateRoom,
   CTA,
-  Toast,
+  Tooltip,
 } from '../../components';
 import { useScrollToTop } from '../../hooks';
-import { loginSchema, chooseRoomSchema } from '../../schemas/schemas';
+import {
+  loginSchema,
+  chooseRoomSchema,
+  storyLinkSchema,
+} from '../../schemas/schemas';
 import { INCORRECT_EMAIL_PASSWORD } from '../../constants';
+import { MdAddCircle } from 'react-icons/md';
+import { BsQuestionCircleFill } from 'react-icons/bs';
+
+const Toast = dynamic(() => import('../../components/shared/Toast'), {
+  ssr: false,
+});
 
 const Login = ({ user }) => {
   const { _id: userId, rooms, isAdmin, firstName, lastName } = user;
@@ -39,6 +51,7 @@ const Login = ({ user }) => {
     team: '',
     teammates: [],
     selectedRoom: '',
+    storyLinks: [],
   });
   const [errorMessage, setErrorMessage] = useState({
     email: '',
@@ -47,12 +60,16 @@ const Login = ({ user }) => {
     selectedRoom: '',
     team: '',
     teammates: '',
+    storyLink: '',
   });
   const [show2FactorAuthField, setShow2FactorAuthField] = useState(false);
   const [showChooseRoom, setShowChooseRoom] = useState(false);
   const [showCreateNewRoom, setshowCreateNewRoom] = useState(false);
   const [userRooms, setUserRooms] = useState([]);
   const [emailAddress, setEmailAddress] = useState('');
+  const [storyLink, setStoryLink] = useState('');
+  const [addStoryLinkAndEnterRoom, setAddStoryLinkAndEnterRoom] =
+    useState(false);
   const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
 
   // if already logged in skip first step of form and set global state
@@ -93,9 +110,7 @@ const Login = ({ user }) => {
   };
 
   // log in user or send user 2-factor authentication code in email to non-verified user
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     const zodValidationResults = loginSchema.safeParse(form);
     const { data: zodFormData, success, error } = zodValidationResults;
     if (!success) {
@@ -154,10 +169,61 @@ const Login = ({ user }) => {
     }
   };
 
-  // choose and join room
-  const handleChooseRoom = async (e) => {
-    e.preventDefault();
+  // when story link not yet in state and form is submitted, add to state and call handleChooseRoom on next render
+  useEffect(() => {
+    if (addStoryLinkAndEnterRoom) handleChooseRoom();
+  }, [addStoryLinkAndEnterRoom]);
 
+  // add story link
+  const handleAddStoryLink = () => {
+    const zodValidationResults = storyLinkSchema.safeParse({
+      storyLink,
+    });
+    const { data: zodFormData, success, error } = zodValidationResults;
+    if (!success) {
+      const { properties } = z.treeifyError(error);
+      const { storyLink } = properties;
+      return setErrorMessage({
+        ...errorMessage,
+        storyLink: storyLink?.errors[0],
+      });
+    }
+
+    setForm((current) => {
+      return {
+        ...current,
+        storyLinks: [...current.storyLinks, zodFormData?.storyLink],
+      };
+    });
+    setStoryLink('');
+  };
+
+  // when story link not yet in state and form is submitted, add to state and call handleChooseRoom on next render
+  const handleAddStoryLinkAndEnterRoom = () => {
+    const zodValidationResults = storyLinkSchema.safeParse({
+      storyLink,
+    });
+    const { data: zodFormData, success, error } = zodValidationResults;
+    if (!success) {
+      const { properties } = z.treeifyError(error);
+      const { storyLink } = properties;
+      return setErrorMessage({
+        ...errorMessage,
+        storyLink: storyLink?.errors[0],
+      });
+    }
+
+    setForm((current) => {
+      return {
+        ...current,
+        storyLinks: [...current.storyLinks, zodFormData?.storyLink],
+      };
+    });
+    setAddStoryLinkAndEnterRoom(true);
+  };
+
+  // choose and join room
+  const handleChooseRoom = () => {
     const zodValidationResults = chooseRoomSchema.safeParse(form);
     const { success, error } = zodValidationResults;
     if (!success) {
@@ -181,6 +247,11 @@ const Login = ({ user }) => {
     }
 
     setIsAwaitingResponse(true);
+
+    // add story links to session storage if any
+    if (form.storyLinks.length > 0)
+      sessionStorage.setItem('storyLinks', JSON.stringify(form.storyLinks));
+
     const params = new URLSearchParams();
     params.append('username', form.username);
     params.append('room', form.selectedRoom);
@@ -197,16 +268,7 @@ const Login = ({ user }) => {
   }
 
   return (
-    <form
-      onSubmit={
-        !show2FactorAuthField && !showChooseRoom
-          ? handleLogin
-          : showChooseRoom && !showCreateNewRoom
-            ? handleChooseRoom
-            : null
-      }
-      className='auth-form__form'
-    >
+    <form className='auth-form__form'>
       {/* step 1: enter user name and password */}
       {!show2FactorAuthField && !showChooseRoom && (
         <>
@@ -232,7 +294,8 @@ const Login = ({ user }) => {
             text='Log In'
             className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
             ariaLabel='Log in to Agile Story Planning Poker'
-            btnType='submit'
+            btnType='button'
+            handleClick={handleLogin}
             showSpinner={isAwaitingResponse}
           />
           <CTA
@@ -280,11 +343,51 @@ const Login = ({ user }) => {
             options={userRooms}
             errorMessage={errorMessage.selectedRoom}
           />
+          {form?.selectedRoom && (
+            <div className='auth-form__form-field-with-cta-wrapper'>
+              <p>Queue Story Links</p>
+              <div className='auth-form__tooltip-wrapper'>
+                <Tooltip icon={<BsQuestionCircleFill />}>
+                  <p className='auth-form__story-links-tooltip-message'>
+                    If you will be facilitating today’s meeting, you can queue
+                    user stories for discussion by pasting urls from project
+                    management platforms such as Jira.
+                  </p>
+                </Tooltip>
+              </div>
+              {form?.storyLinks?.length > 0 &&
+                form?.storyLinks?.map((item, index) => (
+                  <FormAddLinkField
+                    key={`form-add-link-field__${index}`}
+                    setForm={setForm}
+                    storyLinkItem={item}
+                  />
+                ))}
+              <FormAddLinkField
+                setForm={setForm}
+                storyLink={storyLink}
+                setStoryLink={setStoryLink}
+                errorMessage={errorMessage}
+                setErrorMessage={setErrorMessage}
+              />
+              <CTA
+                icon={<MdAddCircle />}
+                text='Add Another Story Link'
+                className='cta-button cta-button--icon cta-button--icon-green'
+                ariaLabel='Add Story Link'
+                btnType='button'
+                handleClick={handleAddStoryLink}
+              />
+            </div>
+          )}
           <CTA
             text='Enter Room'
             className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
             ariaLabel='Enter Agile Story Planning Poker Room'
-            btnType='submit'
+            btnType='button'
+            handleClick={
+              storyLink ? handleAddStoryLinkAndEnterRoom : handleChooseRoom
+            }
             showSpinner={isAwaitingResponse}
           />
           <p className='auth-form__message'>
