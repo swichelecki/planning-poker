@@ -71,26 +71,20 @@ export const chooseRoomSchema = z.object({
   selectedRoom: z.string().min(1, MISSING_SELECTED_ROOM),
 });
 
-/*
 export const requestPasswordResetSchema = z.object({
   email: z
-    .string()
-    .min(1, MISSING_EMAIL)
     .email(INVALID_EMAIL)
+    .min(1, MISSING_EMAIL)
     .max(50, CHARACTER_LIMIT_50),
 });
 
 export const resetPasswordSchema = z
   .object({
     email: z
-      .string()
-      .min(1, MISSING_EMAIL)
       .email(INVALID_EMAIL)
+      .min(1, MISSING_EMAIL)
       .max(50, CHARACTER_LIMIT_50),
-    password: z
-      .string()
-      .min(1, MISSING_PASSWORD)
-      .max(50, CHARACTER_LIMIT_50),
+    password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
     confirmPassword: z
       .string()
       .min(1, MISSING_CONFIRM_PASSWORD)
@@ -102,7 +96,7 @@ export const resetPasswordSchema = z
     path: ['confirmPassword'],
   });
 
-
+/*
 export const contactFormSchema = z
   .object({
     userId: z.string(),

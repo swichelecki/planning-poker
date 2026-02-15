@@ -124,13 +124,22 @@ const FormSignup = ({
         showSpinner={isAwaitingResponse}
       />
       {!isInvitation && (
-        <CTA
-          text='Log In'
-          type='anchor'
-          href='/login'
-          className='cta-text-link'
-          ariaLabel='Log in to Agile Story Planning Poker'
-        />
+        <div className='auth-form__cta-text-links-wrapper'>
+          <CTA
+            text='Log In'
+            type='anchor'
+            href='/login'
+            className='cta-text-link'
+            ariaLabel='Log in to Agile Story Planning Poker'
+          />
+          <CTA
+            text='Forgot Password'
+            type='anchor'
+            href='/reset'
+            className='cta-text-link'
+            ariaLabel='Reset password'
+          />
+        </div>
       )}
     </>
   );

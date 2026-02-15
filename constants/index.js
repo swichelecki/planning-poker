@@ -21,6 +21,7 @@ export const CHARACTER_LIMIT_50 = 'Limit 50 Characters';
 export const MISSING_NAME = 'Name Required';
 export const MISSING_EMAIL = 'Email Address Required';
 export const INVALID_EMAIL = 'Invalid Email Address';
+export const FORM_ERROR_USER_NOT_FOUND = 'User Not Found';
 export const USER_NOT_FOUND = 'User Not Found';
 export const MISSING_PASSWORD = 'Password Required';
 export const MISSING_CONFIRM_PASSWORD = 'Confirm Password Required';

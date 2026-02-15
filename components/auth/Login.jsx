@@ -298,20 +298,22 @@ const Login = ({ user }) => {
             handleClick={handleLogin}
             showSpinner={isAwaitingResponse}
           />
-          <CTA
-            text='Sign Up'
-            type='anchor'
-            href='/signup'
-            className='cta-text-link'
-            ariaLabel='Sign up for Agile Story Planning Poker'
-          />
-          {/*  <CTA
-            text='Forgot Password'
-            type='anchor'
-            href='/reset'
-            className='cta-text-link'
-            ariaLabel='Reset password'
-          /> */}
+          <div className='auth-form__cta-text-links-wrapper'>
+            <CTA
+              text='Sign Up'
+              type='anchor'
+              href='/signup'
+              className='cta-text-link'
+              ariaLabel='Sign up for Agile Story Planning Poker'
+            />
+            <CTA
+              text='Forgot Password'
+              type='anchor'
+              href='/reset'
+              className='cta-text-link'
+              ariaLabel='Reset password'
+            />
+          </div>
         </>
       )}
       {/* step 2: enter 2-factor authentication when user found but not yet verified */}
@@ -343,46 +345,44 @@ const Login = ({ user }) => {
             options={userRooms}
             errorMessage={errorMessage.selectedRoom}
           />
-          {form?.selectedRoom && (
-            <div className='auth-form__form-field-with-cta-wrapper'>
-              <p>Queue Story Links</p>
-              <div className='auth-form__tooltip-wrapper'>
-                <Tooltip icon={<BsQuestionCircleFill />}>
-                  <p className='auth-form__story-links-tooltip-message'>
-                    If you will be facilitating today’s meeting, you can queue
-                    user stories for discussion by pasting urls from project
-                    management platforms such as Jira.
-                  </p>
-                </Tooltip>
-              </div>
-              {form?.storyLinks?.length > 0 &&
-                form?.storyLinks?.map((item, index) => (
-                  <FormAddLinkField
-                    key={`form-add-link-field__${index}`}
-                    setForm={setForm}
-                    storyLinkItem={item}
-                  />
-                ))}
-              {(!isAwaitingResponse ||
-                (isAwaitingResponse && form?.storyLinks?.length <= 0)) && (
-                <FormAddLinkField
-                  setForm={setForm}
-                  storyLink={storyLink}
-                  setStoryLink={setStoryLink}
-                  errorMessage={errorMessage}
-                  setErrorMessage={setErrorMessage}
-                />
-              )}
-              <CTA
-                icon={<MdAddCircle />}
-                text='Add Another Story Link'
-                className='cta-button cta-button--icon cta-button--icon-green'
-                ariaLabel='Add Story Link'
-                btnType='button'
-                handleClick={handleAddStoryLink}
-              />
+          <div className='auth-form__form-field-with-cta-wrapper'>
+            <p>Queue Story Links</p>
+            <div className='auth-form__tooltip-wrapper'>
+              <Tooltip icon={<BsQuestionCircleFill />}>
+                <p className='auth-form__story-links-tooltip-message'>
+                  If you will be facilitating today’s meeting, you can queue
+                  user stories for discussion by pasting urls from project
+                  management platforms such as Jira.
+                </p>
+              </Tooltip>
             </div>
-          )}
+            {form?.storyLinks?.length > 0 &&
+              form?.storyLinks?.map((item, index) => (
+                <FormAddLinkField
+                  key={`form-add-link-field__${index}`}
+                  setForm={setForm}
+                  storyLinkItem={item}
+                />
+              ))}
+            {(!isAwaitingResponse ||
+              (isAwaitingResponse && form?.storyLinks?.length <= 0)) && (
+              <FormAddLinkField
+                setForm={setForm}
+                storyLink={storyLink}
+                setStoryLink={setStoryLink}
+                errorMessage={errorMessage}
+                setErrorMessage={setErrorMessage}
+              />
+            )}
+            <CTA
+              icon={<MdAddCircle />}
+              text='Add Another Story Link'
+              className='cta-button cta-button--icon cta-button--icon-green'
+              ariaLabel='Add Story Link'
+              btnType='button'
+              handleClick={handleAddStoryLink}
+            />
+          </div>
           <CTA
             text='Enter Room'
             className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'

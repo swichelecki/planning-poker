@@ -56,19 +56,19 @@
     width: 100%;
     display: block;
   }
+  &__cta-text-links-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 600px) {
   .auth-form {
     &__form {
       max-width: 345px;
       margin-top: 24px;
       padding: 48px 24px;
-    }
-    &__form-row {
-      &:last-of-type {
-        margin-bottom: 0;
-      }
     }
   }
 }
