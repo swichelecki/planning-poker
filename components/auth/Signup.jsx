@@ -45,7 +45,7 @@ const Signup = () => {
   };
 
   return (
-    <form className='auth-form__form'>
+    <div className='auth-form__form'>
       {/* step 1: create account */}
       {!show2FactorAuthField && !showCreateRoom && (
         <FormSignup
@@ -89,7 +89,7 @@ const Signup = () => {
           setEmailAddress={setEmailAddress}
         />
       )}
-    </form>
+    </div>
   );
 };
 

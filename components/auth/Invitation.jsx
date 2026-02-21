@@ -47,7 +47,7 @@ const InvitationForm = () => {
   };
 
   return (
-    <form className='auth-form__form'>
+    <div className='auth-form__form'>
       {/* step 1: create account */}
       {!show2FactorAuthField && (
         <FormSignup
@@ -77,7 +77,7 @@ const InvitationForm = () => {
           isInvitation={true}
         />
       )}
-    </form>
+    </div>
   );
 };
 

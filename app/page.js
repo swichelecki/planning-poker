@@ -15,7 +15,7 @@ export default function Home() {
             text='Get Started'
             type='anchor'
             href='/signup'
-            className='cta-button cta-button--medium cta-button--bold cta-button--purple'
+            className='cta-button cta-button--large cta-button--bold cta-button--purple'
             ariaLabel='Sign up for Agile Story Planning Poker'
           />
         </div>
@@ -49,7 +49,7 @@ export default function Home() {
           text='Get Started'
           type='anchor'
           href='/signup'
-          className='cta-button cta-button--medium cta-button--bold cta-button--purple'
+          className='cta-button cta-button--large cta-button--bold cta-button--purple'
           ariaLabel='Sign up for Agile Story Planning Poker'
         />
       </section>

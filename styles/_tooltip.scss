@@ -23,22 +23,11 @@
     background-color: variables.$background-light;
     border: 1px solid variables.$border;
     padding: 12px;
+    line-height: 1.6;
   }
   &:hover {
     .tooltip__tooltip-message {
       visibility: visible;
     }
   }
-}
-
-@media screen and (max-width: 800px) {
-  /*   .tooltip {
-    &__tooltip-message {
-      left: -16px;
-      text-align: left;
-      &:after {
-        left: 15%;
-      }
-    }
-  } */
 }

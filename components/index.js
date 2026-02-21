@@ -13,6 +13,7 @@ export { default as FormSelectField } from './forms/FormSelectField';
 export { default as Form2FactorAuth } from './forms/Form2FactorAuth';
 export { default as FormSignup } from './forms/FormSignup';
 export { default as FormCreateRoom } from './forms/FormCreateRoom';
+export { default as FormInviteToRoom } from './forms/FormInviteToRoom';
 export { default as Room } from './room/Room';
 export { default as Teammates } from './room/Teammates';
 export { default as Votes } from './room/Votes';

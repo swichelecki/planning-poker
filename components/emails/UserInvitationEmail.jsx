@@ -9,7 +9,7 @@ const UserInvitationEmail = ({
   const roomName = encodeURIComponent(roomNameUnique) ?? '';
   const inviteEmail = encodeURIComponent(email) ?? '';
   const userName =
-    encodeURIComponent(`${userExists?.firstName}+${userExists?.lastName}`) ??
+    encodeURIComponent(`${userExists?.firstName}%20${userExists?.lastName}`) ??
     '';
 
   return (

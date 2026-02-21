@@ -3,40 +3,40 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { createRoom } from '../../actions';
+import { inviteToRoom } from '../../actions';
 import { useAppContext } from '../../context';
-import { FormTextField, FormAddTextField, CTA } from '../../components';
+import { FormSelectField, FormAddTextField, CTA } from '../../components';
 import { z } from 'zod';
-import { createRoomSchema, emailAddressSchema } from '../../schemas/schemas';
+import { inviteToRoomSchema, emailAddressSchema } from '../../schemas/schemas';
 import { MdAddCircle } from 'react-icons/md';
 
 const Toast = dynamic(() => import('../../components/shared/Toast'), {
   ssr: false,
 });
 
-const FormCreateRoom = ({
+const FormInviteToRoom = ({
   form,
   setForm,
-  handleForm,
+  handleFormSelectField,
+  userRooms,
   errorMessage,
   setErrorMessage,
   isAwaitingResponse,
   setIsAwaitingResponse,
   emailAddress,
   setEmailAddress,
-  isLogin,
-  setShowCreateNewRoom,
+  setShowInviteTeammate,
 }) => {
   const router = useRouter();
   const { setShowToast } = useAppContext();
 
-  const [addTeammateAndCreateRoom, setAddTeammateAndCreateRoom] =
+  const [addTeammateAndInviteToRoom, setAddTeammateAndInviteToRoom] =
     useState(false);
 
-  // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
+  // when teammate email not yet in state and form is submitted, add to state and call handleInviteToRoom on next render
   useEffect(() => {
-    if (addTeammateAndCreateRoom) handleCreateRoom();
-  }, [addTeammateAndCreateRoom]);
+    if (addTeammateAndInviteToRoom) handleInviteToRoom();
+  }, [addTeammateAndInviteToRoom]);
 
   // add teammate email
   const handleAddTeammate = () => {
@@ -59,8 +59,8 @@ const FormCreateRoom = ({
     setEmailAddress('');
   };
 
-  // when teammate email not yet in state and form is submitted, add to state and call handleCreateRoom on next render
-  const handleAddTeammateAndCreateRoom = () => {
+  // when teammate email not yet in state and form is submitted, add to state and call handleInviteToRoom on next render
+  const handleAddTeammateAndInviteToRoom = () => {
     const zodValidationResults = emailAddressSchema.safeParse({
       email: emailAddress,
     });
@@ -77,18 +77,18 @@ const FormCreateRoom = ({
         teammates: [...current.teammates, zodFormData?.email],
       };
     });
-    setAddTeammateAndCreateRoom(true);
+    setAddTeammateAndInviteToRoom(true);
   };
 
-  // create room and invite teammates
-  const handleCreateRoom = async () => {
-    const zodValidationResults = createRoomSchema.safeParse(form);
+  // invite teammates to existing room
+  const handleInviteToRoom = async () => {
+    const zodValidationResults = inviteToRoomSchema.safeParse(form);
     const { data: zodFormData, success, error } = zodValidationResults;
     if (!success) {
       const { properties } = z.treeifyError(error);
-      const { team, teammates } = properties;
+      const { teammates, selectedRoom } = properties;
 
-      if (!team && !teammates) {
+      if (!teammates && !selectedRoom) {
         const serverError = {
           status: 400,
           error: 'Zod validation failed. Check console.',
@@ -100,13 +100,13 @@ const FormCreateRoom = ({
 
       return setErrorMessage({
         ...errorMessage,
-        team: team?.errors[0],
+        selectedRoom: selectedRoom?.errors[0],
         teammates: teammates?.errors[0],
       });
     }
 
     setIsAwaitingResponse(true);
-    const response = await createRoom(zodFormData);
+    const response = await inviteToRoom(zodFormData);
     if (response.status === 200) {
       const params = new URLSearchParams();
       params.append('username', form.username);
@@ -121,14 +121,14 @@ const FormCreateRoom = ({
 
   return (
     <>
-      <FormTextField
-        label='Room Name'
-        type='text'
-        id='team'
-        name='team'
-        value={form?.team}
-        onChangeHandler={handleForm}
-        errorMessage={errorMessage.team}
+      <FormSelectField
+        label='Select Room'
+        id='selectPlanningPokerRoom'
+        name='selectedRoom'
+        value={form?.selectedRoom}
+        onChangeHandler={handleFormSelectField}
+        options={userRooms}
+        errorMessage={errorMessage.selectedRoom}
       />
       <div className='auth-form__form-field-with-cta-wrapper'>
         <p>Teammate Email Address</p>
@@ -159,37 +159,34 @@ const FormCreateRoom = ({
         />
       </div>
       <CTA
-        text='Create Room'
+        text='Invite to Room'
         className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
-        ariaLabel='Create a New Agile Story Planning Poker Room and Invite Teammates'
+        ariaLabel='Invite Teammate to Existing Agile Story Planning Poker Room'
         btnType='button'
         handleClick={
-          emailAddress ? handleAddTeammateAndCreateRoom : handleCreateRoom
+          emailAddress ? handleAddTeammateAndInviteToRoom : handleInviteToRoom
         }
         id='createRoomBtn'
         showSpinner={isAwaitingResponse}
       />
-      {isLogin && (
-        <CTA
-          text='Go Back'
-          className='cta-button cta-text-link'
-          ariaLabel='Go Back to Choose Room, Create Room or Invite to Room'
-          btnType='button'
-          handleClick={() => {
-            setShowCreateNewRoom(false);
-            setForm((current) => {
-              return { ...current, team: '', teammates: [] };
-            });
-            setEmailAddress('');
-            setErrorMessage({
-              team: '',
-              teammates: '',
-            });
-          }}
-        />
-      )}
+      <CTA
+        text='Go Back'
+        className='cta-button cta-text-link'
+        ariaLabel='Go Back to Choose Room, Create Room or Invite to Room'
+        btnType='button'
+        handleClick={() => {
+          setShowInviteTeammate(false);
+          setForm((current) => {
+            return { ...current, selectedRoom: '', teammates: [] };
+          });
+          setErrorMessage({
+            selectedRoom: '',
+            teammates: '',
+          });
+        }}
+      />
     </>
   );
 };
 
-export default FormCreateRoom;
+export default FormInviteToRoom;

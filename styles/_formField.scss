@@ -50,7 +50,7 @@
       right: 12px;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 6px solid variables.$font;
+      border-top: 6px solid variables.$font-muted;
     }
   }
   .loader {
@@ -60,11 +60,10 @@
   }
 }
 
-/* @media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) {
   .form-field {
     &__sublabel {
       font-size: 1rem; // 16px
     }
   }
 }
- */

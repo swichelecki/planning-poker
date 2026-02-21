@@ -12,6 +12,7 @@ import {
   Form2FactorAuth,
   FormAddLinkField,
   FormCreateRoom,
+  FormInviteToRoom,
   CTA,
   Tooltip,
 } from '../../components';
@@ -64,7 +65,8 @@ const Login = ({ user }) => {
   });
   const [show2FactorAuthField, setShow2FactorAuthField] = useState(false);
   const [showChooseRoom, setShowChooseRoom] = useState(false);
-  const [showCreateNewRoom, setshowCreateNewRoom] = useState(false);
+  const [showCreateNewRoom, setShowCreateNewRoom] = useState(false);
+  const [showInviteTeammate, setShowInviteTeammate] = useState(false);
   const [userRooms, setUserRooms] = useState([]);
   const [emailAddress, setEmailAddress] = useState('');
   const [storyLink, setStoryLink] = useState('');
@@ -268,7 +270,7 @@ const Login = ({ user }) => {
   }
 
   return (
-    <form className='auth-form__form'>
+    <div className='auth-form__form'>
       {/* step 1: enter user name and password */}
       {!show2FactorAuthField && !showChooseRoom && (
         <>
@@ -333,11 +335,11 @@ const Login = ({ user }) => {
           setShowToast={setShowToast}
         />
       )}
-      {/* step 3: enter room or create new room */}
-      {showChooseRoom && !showCreateNewRoom && (
+      {/* step 3: enter room */}
+      {showChooseRoom && !showCreateNewRoom && !showInviteTeammate && (
         <>
           <FormSelectField
-            label='Select Team'
+            label='Select Room'
             id='selectPlanningPokerRoom'
             name='selectedRoom'
             value={form?.selectedRoom}
@@ -350,9 +352,11 @@ const Login = ({ user }) => {
             <div className='auth-form__tooltip-wrapper'>
               <Tooltip icon={<BsQuestionCircleFill />}>
                 <p className='auth-form__story-links-tooltip-message'>
-                  If you will be facilitating today’s meeting, you can queue
-                  user stories for discussion by pasting urls from project
-                  management platforms such as Jira.
+                  Optional: The facilitator of today’s meeting can queue user
+                  stories by pasting urls from a project management platform
+                  such as Jira. Links will display in the selected room and will
+                  persist for the duration of the facilitator's current tab
+                  session.
                 </p>
               </Tooltip>
             </div>
@@ -393,21 +397,70 @@ const Login = ({ user }) => {
             }
             showSpinner={isAwaitingResponse}
           />
-          <p className='auth-form__message'>
-            &mdash; Or Create a New Room &mdash;
-          </p>
-          <CTA
-            text='Create Room'
-            className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
-            ariaLabel='Create a New Agile Story Planning Poker Room and Invite Teammates'
-            btnType='button'
-            handleClick={() => {
-              setshowCreateNewRoom(true);
-            }}
-          />
+          <div>
+            <div className='auth-form__additional-options-heading'>
+              <p>Additional Options</p>
+              <p>
+                Invite new teammates to an existing room or create a new room
+                and invite teammates.
+              </p>
+            </div>
+            <div className='auth-form__additional-options'>
+              <CTA
+                text='Invite to Room'
+                className='cta-button cta-button--medium cta-button--full cta-button--bold cta-button--purple'
+                ariaLabel='Invite Teammate to Existing Agile Story Planning Poker Room'
+                btnType='button'
+                handleClick={() => {
+                  setShowInviteTeammate(true);
+                  setForm((current) => {
+                    return { ...current, selectedRoom: '', storyLinks: [] };
+                  });
+                  setStoryLink('');
+                  setErrorMessage({
+                    selectedRoom: '',
+                    storyLink: '',
+                  });
+                }}
+              />
+              <CTA
+                text='Create Room'
+                className='cta-button cta-button--medium cta-button--full cta-button--bold cta-button--purple'
+                ariaLabel='Create a New Agile Story Planning Poker Room and Invite Teammates'
+                btnType='button'
+                handleClick={() => {
+                  setShowCreateNewRoom(true);
+                  setForm((current) => {
+                    return { ...current, selectedRoom: '', storyLinks: [] };
+                  });
+                  setStoryLink('');
+                  setErrorMessage({
+                    selectedRoom: '',
+                    storyLink: '',
+                  });
+                }}
+              />
+            </div>
+          </div>
         </>
       )}
-      {/* optional step 4: create new room */}
+      {/* optional step 4: invite teammate to existing room */}
+      {showInviteTeammate && (
+        <FormInviteToRoom
+          form={form}
+          setForm={setForm}
+          handleFormSelectField={handleFormSelectField}
+          userRooms={userRooms}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          isAwaitingResponse={isAwaitingResponse}
+          setIsAwaitingResponse={setIsAwaitingResponse}
+          emailAddress={emailAddress}
+          setEmailAddress={setEmailAddress}
+          setShowInviteTeammate={setShowInviteTeammate}
+        />
+      )}
+      {/* optional step 5: create new room */}
       {showCreateNewRoom && (
         <FormCreateRoom
           form={form}
@@ -420,10 +473,10 @@ const Login = ({ user }) => {
           emailAddress={emailAddress}
           setEmailAddress={setEmailAddress}
           isLogin={true}
-          setshowCreateNewRoom={setshowCreateNewRoom}
+          setShowCreateNewRoom={setShowCreateNewRoom}
         />
       )}
-    </form>
+    </div>
   );
 };
 

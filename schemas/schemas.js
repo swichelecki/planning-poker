@@ -71,6 +71,15 @@ export const chooseRoomSchema = z.object({
   selectedRoom: z.string().min(1, MISSING_SELECTED_ROOM),
 });
 
+export const inviteToRoomSchema = z.object({
+  userId: z.string(),
+  selectedRoom: z.string().min(1, MISSING_SELECTED_ROOM),
+  teammates: z
+    .array(z.string())
+    .min(1, MISSING_TEAMMATES)
+    .max(20, TEAMMATES_LIMIT),
+});
+
 export const requestPasswordResetSchema = z.object({
   email: z
     .email(INVALID_EMAIL)

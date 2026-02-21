@@ -3,12 +3,13 @@
 import connectDB from '../../config/db';
 import User from '../../models/User';
 import { handleServerError, getUserFromCookie } from '../../utilities';
+import { handleRoomNameFormatting } from '../../utilities/handleRoomNameFormatting';
 import { Resend } from 'resend';
 import { UserInvitationEmail } from '../../components';
-import { createRoomSchema } from '../../schemas/schemas';
+import { inviteToRoomSchema } from '../../schemas/schemas';
 const resendApiKey = process.env.RESEND_API_KEY;
 
-export default async function createRoom(formData) {
+export default async function inviteToRoom(formData) {
   if (!(formData instanceof Object)) {
     return {
       status: 400,
@@ -29,7 +30,7 @@ export default async function createRoom(formData) {
   }
 
   // check that data shape is correct
-  const zodValidationResults = createRoomSchema.safeParse(formData);
+  const zodValidationResults = inviteToRoomSchema.safeParse(formData);
 
   const {
     data: zodData,
@@ -44,30 +45,18 @@ export default async function createRoom(formData) {
   try {
     await connectDB();
 
-    const { userId, team, teammates } = zodData;
+    const { userId, selectedRoom: roomNameUnique, teammates } = zodData;
 
     const user = await User.findOne({ _id: userId });
 
     if (!user) return { status: 404 };
 
-    const objectId = user._id;
-    const stringId = objectId.toString();
-    const teamFormatted = team.replace(/ /g, '_');
-    const roomNameUnique = `${teamFormatted}_${stringId}`;
+    const team = handleRoomNameFormatting(roomNameUnique);
 
     const room = {
       roomName: team,
       roomNameUnique,
     };
-
-    await User.updateOne(
-      {
-        _id: user._id,
-      },
-      {
-        $push: { rooms: room },
-      },
-    );
 
     const firstName = user.firstName;
     const lastName = user.lastName;
@@ -94,7 +83,7 @@ export default async function createRoom(formData) {
         from: 'Planning Poker <support@agilestoryplanningpoker.com>',
         to: email,
         subject: userExists
-          ? `${firstName} ${lastName} Has Invited You to a New Agile Story Planning Poker Team`
+          ? `${firstName} ${lastName} Has Invited You to an Agile Story Planning Poker Team`
           : `${firstName} ${lastName} Has Invited You to Agile Story Planning Poker`,
         react: UserInvitationEmail({
           firstName,

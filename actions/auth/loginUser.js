@@ -69,7 +69,7 @@ export default async function loginUser(formData) {
         id: user._id.toString(),
         isAdmin: user.isAdmin,
       })
-        .setExpirationTime('1h')
+        .setExpirationTime('2h')
         .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
         .sign(new TextEncoder().encode(jwtSecret));
       (await cookies()).set('planning_poker', token);
