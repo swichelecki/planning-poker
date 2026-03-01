@@ -82,25 +82,13 @@ const UserMenu = ({ isAdmin }) => {
             </Link>
           </li>
           <li>
-            <Link
-              href='/account'
-              prefetch={false}
-              onClick={() => {
-                alert('Coming soon');
-              }}
-            >
+            <Link href='/account' prefetch={false}>
               <MdManageAccounts />
               Account
             </Link>
           </li>
           <li>
-            <Link
-              href='/contact'
-              prefetch={false}
-              onClick={() => {
-                alert('Coming soon');
-              }}
-            >
+            <Link href='/contact' prefetch={false}>
               <MdMessage />
               Contact
             </Link>

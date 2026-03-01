@@ -6,3 +6,6 @@ export { default as request2FactorAuthentication } from './auth/request2FactorAu
 export { default as logoutUser } from './auth/logoutUser';
 export { default as requestUserPasswordReset } from './auth/requestUserPasswordReset';
 export { default as resetUserPassword } from './auth/resetUserPassword';
+export { default as changeUserPassword } from './auth/changeUserPassword';
+export { default as deleteUserAccount } from './auth/deleteUserAccount';
+export { default as createContactMessage } from './contact/createContactMessage';

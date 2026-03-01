@@ -8,7 +8,6 @@ import { User2FactorAuthEmail } from '../../components';
 import { handleServerError, getRandom6DigitNumber } from '../../utilities';
 import { loginSchema } from '../../schemas/schemas';
 const resendApiKey = process.env.RESEND_API_KEY;
-const supportEmail = process.env.SUPPORT_EMAIL;
 
 export default async function request2FactorAuthentication(formData) {
   if (!(formData instanceof Object)) {

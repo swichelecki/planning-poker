@@ -5,7 +5,8 @@
   flex-direction: column;
   position: relative;
   width: 100%;
-  label {
+  label,
+  & > p {
     display: flex;
     align-self: flex-start;
     margin-bottom: 4px;
@@ -52,6 +53,15 @@
       border-right: 6px solid transparent;
       border-top: 6px solid variables.$font-muted;
     }
+  }
+  &__text-area {
+    width: 100%;
+    min-height: 200px;
+    padding: 12px;
+    border-radius: 9px;
+    color: variables.$font;
+    border: 1px solid variables.$border-muted;
+    background-color: variables.$background-light;
   }
   .loader {
     position: absolute;

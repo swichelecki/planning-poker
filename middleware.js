@@ -38,5 +38,13 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/login', '/signup', '/invitation', '/room', '/'],
+  matcher: [
+    '/login',
+    '/signup',
+    '/invitation',
+    '/room',
+    '/account',
+    '/contact',
+    '/',
+  ],
 };

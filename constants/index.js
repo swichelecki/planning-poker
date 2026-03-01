@@ -17,9 +17,9 @@ export const CARDS = [
 ];
 
 export const MOBILE_BREAKPOINT = 600;
+export const CHARACTER_LIMIT_5000 = 'Limit 5000 Characters';
 export const CHARACTER_LIMIT_50 = 'Limit 50 Characters';
 export const MISSING_NAME = 'Name Required';
-export const MISSING_EMAIL = 'Email Address Required';
 export const INVALID_EMAIL = 'Invalid Email Address';
 export const FORM_ERROR_USER_NOT_FOUND = 'User Not Found';
 export const USER_NOT_FOUND = 'User Not Found';
@@ -46,3 +46,5 @@ export const TEAMMATES_LIMIT = 'Limit 20 Teammates Per Planning Poker Room';
 export const MISSING_SELECTED_ROOM = 'Must Select a Planning Poker Room';
 export const INVALID_URL = 'Invalid URL';
 export const MISSING_URL = 'URL Required';
+export const MISSING_SUBJECT = 'Subject Required';
+export const MISSING_MESSAGE = 'Message Required';
