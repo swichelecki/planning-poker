@@ -97,16 +97,11 @@ export const resetPasswordSchema = z
     path: ['confirmPassword'],
   });
 
-export const contactFormSchema = z
-  .object({
-    userId: z.string(),
-    subject: z.string().min(1, MISSING_SUBJECT).max(50, CHARACTER_LIMIT_50),
-    message: z.string().min(1, MISSING_MESSAGE).max(5000, CHARACTER_LIMIT_5000),
-  })
-  .refine((data) => data.message?.length > 0, {
-    message: MISSING_MESSAGE,
-    path: ['message'],
-  });
+export const contactFormSchema = z.object({
+  userId: z.string(),
+  subject: z.string().min(1, MISSING_SUBJECT).max(50, CHARACTER_LIMIT_50),
+  message: z.string().min(1, MISSING_MESSAGE).max(5000, CHARACTER_LIMIT_5000),
+});
 
 export const changePasswordSchema = z
   .object({
