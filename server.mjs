@@ -23,18 +23,33 @@ app.prepare().then(() => {
       if (!room || !username) return;
       socket.join(room);
 
+      // user enters room with other teammates
       if (teammates[room]) {
         teammates[room].push({ username, socket: socket.id });
-        rooms[socket.id] = room;
-        if (storyLinks && !links[room])
-          links[room] = { linkArray: JSON.parse(storyLinks), currentIndex: 0 };
       } else {
+        // user first to enter room
         teammates[room] = [];
         teammates[room].push({ username, socket: socket.id });
-        rooms[socket.id] = room;
-        if (storyLinks)
-          links[room] = { linkArray: JSON.parse(storyLinks), currentIndex: 0 };
       }
+
+      // associate user socket id with room joined
+      rooms[socket.id] = room;
+
+      // add story links
+      if (JSON.parse(storyLinks).length > 0)
+        links[room] = {
+          linkArray: JSON.parse(storyLinks),
+          currentIndex: 0,
+          username,
+        };
+
+      // if story links exist in state and user has removed story links delete story link state
+      if (
+        JSON.parse(storyLinks).length <= 0 &&
+        links[room] &&
+        links[room].username === username
+      )
+        delete links[room];
 
       io.to(room).emit(
         'user_joined',
@@ -42,8 +57,8 @@ app.prepare().then(() => {
         links[room]
           ? links[room]['linkArray'][links[room]['currentIndex']]
           : '',
-        links[room] ? links[room]['currentIndex'] : '',
-        links[room] ? links[room]['linkArray']?.length : '',
+        links[room] ? links[room]['currentIndex'] : 0,
+        links[room] ? links[room]['linkArray']?.length : 0,
       );
     });
 

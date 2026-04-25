@@ -81,6 +81,17 @@ const Login = ({ user }) => {
       setUserRooms(rooms);
       setUserId(userId);
       setIsAdmin(isAdmin);
+
+      // if story links already set, add to state
+      const storyLinks = sessionStorage.getItem('storyLinks') ?? '';
+      if (!storyLinks) return;
+
+      setForm((current) => {
+        return {
+          ...current,
+          storyLinks: JSON.parse(storyLinks),
+        };
+      });
     }
   }, [userId, rooms, isAdmin]);
 
@@ -221,6 +232,7 @@ const Login = ({ user }) => {
         storyLinks: [...current.storyLinks, zodFormData?.storyLink],
       };
     });
+    setStoryLink('');
     setAddStoryLinkAndEnterRoom(true);
   };
 
@@ -251,8 +263,7 @@ const Login = ({ user }) => {
     setIsAwaitingResponse(true);
 
     // add story links to session storage if any
-    if (form.storyLinks.length > 0)
-      sessionStorage.setItem('storyLinks', JSON.stringify(form.storyLinks));
+    sessionStorage.setItem('storyLinks', JSON.stringify(form.storyLinks));
 
     const params = new URLSearchParams();
     params.append('username', form.username);

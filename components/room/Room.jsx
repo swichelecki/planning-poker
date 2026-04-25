@@ -82,9 +82,9 @@ const Room = ({ user }) => {
           return { symbol: '', username: item.username };
         }),
       );
-      link && setStoryLink(link);
-      index && setStoryIndex(index);
-      length && setStoryArrayLength(length);
+      setStoryLink(link);
+      setStoryIndex(index);
+      setStoryArrayLength(length);
     });
 
     socketRef.current.on('new_vote', (vote) => {
