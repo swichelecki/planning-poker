@@ -1,6 +1,7 @@
 import { TikTok_Sans } from 'next/font/google';
 import { GloablContext } from '../components';
 import { Layout } from '../components';
+import Header from '../components/header/Header';
 import '../styles/styles.scss';
 
 const tikTokSans = TikTok_Sans({
@@ -68,6 +69,7 @@ export default function RootLayout({ children }) {
           }}
         />
         <GloablContext>
+          <Header />
           <Layout>{children}</Layout>
         </GloablContext>
       </body>

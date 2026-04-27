@@ -20,9 +20,8 @@ const StoryLinks = dynamic(() => import('../../components/room/StoryLinks'), {
   ssr: false,
 });
 
-const Room = ({ user }) => {
-  const { userId, isAdmin } = user;
-  const { setShowModal, setUserId, setIsAdmin } = useAppContext();
+const Room = () => {
+  const { setShowModal } = useAppContext();
   const searchParams = useSearchParams();
   useScrollToTop();
 
@@ -41,12 +40,6 @@ const Room = ({ user }) => {
   const [storyLink, setStoryLink] = useState('');
   const [storyIndex, setStoryIndex] = useState(0);
   const [storyArrayLength, setStoryArrayLength] = useState(0);
-
-  // set global state
-  useEffect(() => {
-    setUserId(userId);
-    setIsAdmin(isAdmin);
-  }, [userId, isAdmin]);
 
   // initialize socket only in this component
   useEffect(() => {

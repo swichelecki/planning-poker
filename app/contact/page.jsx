@@ -8,7 +8,7 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function ContactPage() {
-  const { userId, isAdmin } = await getUserFromCookie();
+  const { userId } = await getUserFromCookie();
 
-  return <Contact userId={userId} isAdmin={isAdmin} />;
+  return <Contact userId={userId} />;
 }

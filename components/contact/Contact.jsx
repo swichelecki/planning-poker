@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { FormTextField, CTA, FormTextArea } from '../../components';
 import { useAppContext } from '../../context';
@@ -12,16 +12,10 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
   ssr: false,
 });
 
-const Contact = ({ userId, isAdmin }) => {
+const Contact = ({ userId }) => {
   const editorRef = useRef(null);
 
-  const { setUserId, setShowToast, setIsAdmin } = useAppContext();
-
-  // set global state
-  useEffect(() => {
-    setUserId(userId);
-    setIsAdmin(isAdmin);
-  }, [userId, isAdmin]);
+  const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
     userId,

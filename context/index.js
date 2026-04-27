@@ -3,18 +3,12 @@ import { createContext, useContext, useState } from 'react';
 export const AppContext = createContext();
 
 export function AppWrapper({ children }) {
-  const [userId, setUserId] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
   const [toast, setShowToast] = useState(null);
   const [modal, setShowModal] = useState(null);
 
   return (
     <AppContext.Provider
       value={{
-        userId,
-        setUserId,
-        isAdmin,
-        setIsAdmin,
         toast,
         setShowToast,
         modal,

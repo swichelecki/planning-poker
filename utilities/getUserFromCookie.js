@@ -8,8 +8,8 @@ const jwtSecret = process.env.JWT_SECRET;
 export const getUserFromCookie = async () => {
   const token = (await cookies()).get('planning_poker');
   let user = false;
-  let userId;
-  let isAdmin;
+  let userId = '';
+  let isAdmin = false;
   let cookieError = false;
 
   if (!token?.value) return { user };

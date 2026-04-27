@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { changeUserPassword, deleteUserAccount } from '../../actions';
@@ -18,11 +18,11 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
   ssr: false,
 });
 
-function Account({ userId, isAdmin }) {
+function Account({ userId }) {
   const router = useRouter();
 
   useScrollToTop();
-  const { setShowToast, setUserId, setIsAdmin } = useAppContext();
+  const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
     userId,
@@ -44,12 +44,6 @@ function Account({ userId, isAdmin }) {
     deleteConfirmation: '',
   });
   const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
-
-  // set global state
-  useEffect(() => {
-    setUserId(userId);
-    setIsAdmin(isAdmin);
-  }, [userId, isAdmin]);
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -135,9 +129,8 @@ function Account({ userId, isAdmin }) {
     setIsAwaitingResponse(true);
     const response = await deleteUserAccount(zodFormData);
     if (response.status === 200) {
-      setUserId('');
-      setIsAdmin(false);
       router.push('/');
+      router.refresh();
     } else if (response.status === 403) {
       setIsAwaitingResponse(false);
       setErrorMessage({

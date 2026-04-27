@@ -1,5 +1,4 @@
 export { default as GloablContext } from './GlobalContext';
-export { default as Header } from './header/Header';
 export { default as Login } from './auth/Login';
 export { default as Signup } from './auth/Signup';
 export { default as Invitation } from './auth/Invitation';

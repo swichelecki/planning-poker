@@ -31,7 +31,7 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
 });
 
 const Login = ({ user }) => {
-  const { _id: userId, rooms, isAdmin, firstName, lastName } = user;
+  const { _id: userId, rooms, firstName, lastName } = user;
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,7 +41,7 @@ const Login = ({ user }) => {
   const decodedUsername = decodeURI(username);
 
   useScrollToTop();
-  const { setShowToast, setUserId, setIsAdmin } = useAppContext();
+  const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
     email: '',
@@ -79,8 +79,6 @@ const Login = ({ user }) => {
     if (userId) {
       setShowChooseRoom(true);
       setUserRooms(rooms);
-      setUserId(userId);
-      setIsAdmin(isAdmin);
 
       // if story links already set, add to state
       const storyLinks = sessionStorage.getItem('storyLinks') ?? '';
@@ -93,7 +91,7 @@ const Login = ({ user }) => {
         };
       });
     }
-  }, [userId, rooms, isAdmin]);
+  }, [rooms]);
 
   // if existing user invited via email to new room go directly to room
   useEffect(() => {
