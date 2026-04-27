@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 import PlayingCards from '../shared/PlayingCards';
 import UserOptions from './UserOptions';
 
@@ -10,7 +11,9 @@ const Header = () => {
           <PlayingCards />
           <span>Agile Story Planning Poker</span>
         </Link>
-        <UserOptions />
+        <Suspense>
+          <UserOptions />
+        </Suspense>
       </div>
     </header>
   );
