@@ -32,13 +32,15 @@ const Modal = ({ children, room, socket }) => {
     <dialog ref={modalRef} className='modal'>
       <div className='modal__inner-wrapper'>
         {children}
-        <CTA
-          handleClick={handleCloseModal}
-          btnType='button'
-          text='Clear'
-          ariaLabel='Reset Voting'
-          className='cta-button cta-button--small cta-button--black'
-        />
+        {socket && (
+          <CTA
+            handleClick={handleCloseModal}
+            btnType='button'
+            text='Clear'
+            ariaLabel='Reset Voting'
+            className='cta-button cta-button--small cta-button--black'
+          />
+        )}
       </div>
     </dialog>
   );

@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react';
 import { handleRoomNameFormatting } from '../../utilities/handleRoomNameFormatting';
 import { useInnerWidth } from '../../hooks';
-import { CTA } from '../../components';
+import { CTA, CopyLinkCTA } from '../../components';
 
 const Teammates = ({ teammates, room }) => {
   const teammatesListRef = useRef(null);
@@ -59,12 +59,21 @@ const Teammates = ({ teammates, room }) => {
         ref={teammatesListRef}
         className={`teammates__list ${isHideTeamList ? ' teammates__list--hide' : ''}`}
       >
-        <h2>{handleRoomNameFormatting(room)}</h2>
+        {/*  <h2>{handleRoomNameFormatting(room)}</h2> */}
+        {/*    <h2>Teammates</h2> */}
         <ul>
           {teammates?.map((teammate, index) => (
             <li key={`teammate__${index}`}>{teammate.username}</li>
           ))}
         </ul>
+        <div className='teammates__copy-cta-wrapper'>
+          <CopyLinkCTA
+            room={room}
+            classNames='cta-button cta-text-link cta-text-link--white'
+            notCopiedText='Share link'
+            copiedText='Copied!'
+          />
+        </div>
       </div>
     </>
   );

@@ -52,9 +52,9 @@ const CTA = ({
           {text && !icon && text}
           {!text && icon && icon}
           {text && icon && (
-            <span>
-              {icon}
+            <span className='cta-button__text-and-icon'>
               {text}
+              {icon}
             </span>
           )}
         </button>

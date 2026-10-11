@@ -12,7 +12,7 @@
     position: absolute;
     top: 32px;
     left: 12px;
-    padding: 12px 12px 24px;
+    padding: 16px 12px 24px;
     border-radius: 12px;
     background-color: variables.$background-light;
     border: 1px solid variables.$border;
@@ -43,6 +43,12 @@
         }
       }
     }
+  }
+  &__copy-cta-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding-top: 8px;
   }
   &__list--hide {
     display: none;

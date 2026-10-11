@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getUserFromCookie } from './utilities/getUserFromCookie';
+//import { getUserFromCookie } from './utilities/getUserFromCookie';
 
 export async function proxy(req) {
-  const { user, isAdmin } = await getUserFromCookie();
+  /* const { user, isAdmin } = await getUserFromCookie();
 
   if (
     (!user && req.nextUrl.pathname === '/login') ||
@@ -32,7 +32,7 @@ export async function proxy(req) {
   if (user && !isAdmin && req.nextUrl.pathname === '/admin') {
     req.nextUrl.pathname = '/login';
     return NextResponse.redirect(req.nextUrl);
-  }
+  } */
 
   return NextResponse.next();
 }
