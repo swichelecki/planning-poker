@@ -46,9 +46,9 @@ export default function Home() {
       <section className='homepage__direct-cta'>
         <h2 className='h1'>Try Agile Story Planning Poker Today!</h2>
         <CTA
-          text='Get Started'
+          text='Plan Now'
           type='anchor'
-          href='/signup'
+          href='/enter'
           className='cta-button cta-button--large cta-button--bold cta-button--purple'
           ariaLabel='Sign up for Agile Story Planning Poker'
         />

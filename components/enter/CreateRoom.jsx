@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -20,7 +20,7 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
   ssr: false,
 });
 
-const CreateRoom = () => {
+const CreateRoomForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   useScrollToTop();
@@ -293,6 +293,15 @@ const CreateRoom = () => {
         </>
       )}
     </div>
+  );
+};
+
+// have to wrap form in suspense boundry because it is a static page using useSearchParams
+const CreateRoom = () => {
+  return (
+    <Suspense>
+      <CreateRoomForm />
+    </Suspense>
   );
 };
 
