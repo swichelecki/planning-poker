@@ -7,6 +7,12 @@
   text-align: center;
   gap: 6px;
   transition: all 0.3s;
+  &__text-and-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
   &--small {
     padding: 8px 18px;
     border-radius: 20px;
@@ -142,18 +148,22 @@
     background-color: variables.$background-dark;
     color: variables.$font;
     border: 1px solid variables.$font;
-    transition: all 0.3s;
     svg {
       fill: variables.$font;
+      transition: all 0.3s;
     }
     .loader {
       border: 3px solid variables.$font;
       border-top: 3px solid transparent;
     }
-    &:hover {
+    &:hover,
+    &:active {
       color: variables.$background-dark;
       background-color: variables.$font;
       border: 1px solid variables.$font;
+      svg {
+        fill: variables.$background-dark;
+      }
     }
   }
   &--icon-green {
@@ -180,6 +190,11 @@
 }
 
 .cta-text-link {
-  color: variables.$button-purple;
   display: inline-block;
+  &--purple {
+    color: variables.$button-purple;
+  }
+  &--white {
+    color: variables.$font;
+  }
 }

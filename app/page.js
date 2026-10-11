@@ -12,11 +12,11 @@ export default function Home() {
             story point estimation.
           </p>
           <CTA
-            text='Get Started'
+            text='Plan Now'
             type='anchor'
-            href='/signup'
+            href='/enter'
             className='cta-button cta-button--large cta-button--bold cta-button--purple'
-            ariaLabel='Sign up for Agile Story Planning Poker'
+            ariaLabel='Plan now with Agile Story Planning Poker'
           />
         </div>
         <div className='homepage__hero-right'>

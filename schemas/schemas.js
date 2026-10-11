@@ -23,6 +23,11 @@ import {
   DELETE_MY_ACCOUNT,
 } from '../constants';
 
+export const createRoomSchema = z.object({
+  firstName: z.string().min(2, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
+  lastName: z.string().min(2, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
+});
+
 export const createUserSchema = z
   .object({
     firstName: z.string().min(1, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
@@ -48,14 +53,14 @@ export const storyLinkSchema = z.object({
   storyLink: z.url(INVALID_URL).min(1, MISSING_URL).max(100),
 });
 
-export const createRoomSchema = z.object({
+/* export const createRoomSchema = z.object({
   userId: z.string(),
   team: z.string().min(1, MISSING_TEAM_NAME).max(50, CHARACTER_LIMIT_50),
   teammates: z
     .array(z.string())
     .min(1, MISSING_TEAMMATES)
     .max(20, TEAMMATES_LIMIT),
-});
+}); */
 
 export const loginSchema = z.object({
   email: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),

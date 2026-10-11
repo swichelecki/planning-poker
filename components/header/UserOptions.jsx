@@ -7,17 +7,17 @@ const UserOptions = async () => {
 
   return (
     <div className='header__content-right'>
-      {userId ? (
+      {/*   {userId ? (
         <UserMenu userId={userId} isAdmin={isAdmin} />
       ) : (
         <CTA
-          text='Log In'
+          text='Plan Now'
           type='anchor'
-          href='/login'
-          className='cta-text-link'
-          ariaLabel='Log in to Agile Story Planning Poker'
+          href='/enter'
+          className='cta-text-link cta-text-link--purple'
+          ariaLabel='Plan now with Agile Story Planning Poker'
         />
-      )}
+      )} */}
     </div>
   );
 };

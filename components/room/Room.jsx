@@ -12,6 +12,7 @@ import {
   Indicator,
   Modal,
   ModalStorySelect,
+  CopyLinkCTA,
 } from '../../components';
 import { useScrollToTop } from '../../hooks';
 import { CARDS } from '../../constants';
@@ -158,6 +159,27 @@ const Room = () => {
     if (!votes || votes.length <= 0) return;
     if (!votes.some((item) => item.symbol.length <= 0)) setIsVoteComplete(true);
   }, [votes]);
+
+  // Open modal with link to share room after creating a new room
+  useEffect(() => {
+    const isNewRoom = sessionStorage?.getItem('isNewRoom');
+    if (!isNewRoom) return;
+
+    const invitationModal = setTimeout(() => {
+      setShowModal(
+        <Modal>
+          <CopyLinkCTA
+            room={room}
+            classNames='cta-button cta-button--large cta-button--full cta-button--bold cta-button--black'
+            notCopiedText='Click here to copy room link'
+            copiedText='Copied! Share link with teammates'
+          />
+        </Modal>,
+      );
+    }, 1000);
+
+    return () => clearTimeout(invitationModal);
+  }, []);
 
   // handle voting
   const handleVote = (symbol, username) => {

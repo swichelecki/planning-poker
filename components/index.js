@@ -1,4 +1,5 @@
 export { default as GloablContext } from './GlobalContext';
+export { default as CreateRoom } from './enter/CreateRoom';
 export { default as Login } from './auth/Login';
 export { default as Signup } from './auth/Signup';
 export { default as Invitation } from './auth/Invitation';
@@ -25,6 +26,7 @@ export { default as PlayingCards } from './shared/PlayingCards';
 export { default as Toast } from './shared/Toast';
 export { default as Tooltip } from './shared/Tooltip';
 export { default as CTA } from './shared/CTA';
+export { default as CopyLinkCTA } from './room/CopyLinkCTA';
 export { default as Modal } from './shared/Modal';
 export { default as UserCreatedEmail } from './emails/UserCreatedEmail';
 export { default as User2FactorAuthEmail } from './emails/User2FactorAuthEmail';
