@@ -13,37 +13,15 @@ export const CARDS = [
   '40',
   '100',
   '?',
-  <GiCoffeeMug />,
+  <GiCoffeeMug key='GiCoffeMug_key' />,
 ];
 
 export const MOBILE_BREAKPOINT = 600;
 export const CHARACTER_LIMIT_5000 = 'Limit 5000 Characters';
 export const CHARACTER_LIMIT_50 = 'Limit 50 Characters';
-export const MISSING_NAME = 'Name Required';
-export const INVALID_EMAIL = 'Invalid Email Address';
-export const FORM_ERROR_USER_NOT_FOUND = 'User Not Found';
-export const USER_NOT_FOUND = 'User Not Found';
-export const MISSING_PASSWORD = 'Password Required';
-export const MISSING_CONFIRM_PASSWORD = 'Confirm Password Required';
-export const MISSING_NEW_PASSWORD = 'New Password Required';
-export const VERIFICATION_EXPIRED = 'Verification Code Expired';
-export const VERIFICATION_INCORRECT = 'Incorrect Verification Code';
-export const MISSING_NEW_CONFIRM_PASSWORD = 'Confirm New Password Required';
-export const INCORRECT_EMAIL_PASSWORD = 'Incorrect Email Address or Password';
-export const INCORRECT_PASSWORD = 'Incorrect Password';
-export const PASSWORD_MISMATCH = 'Password and Confirm Password Do Not Match';
-export const MISSING_DELETE_CONFIRMATION = 'Delete Confirmation Required';
-export const MISSING_DELETE_MISMATCH = 'Delete Confirmation Is Not Correct';
-export const TWO_FACTOR_CODE_LIMIT =
-  'Verification Code May be No Longer Than 6 Digits';
-export const DELETE_MY_ACCOUNT = 'delete my account';
-export const INVALID_USER_DATA = 'Invalid User Data';
-export const USER_ALREADY_EXISTS = 'User Already Exists';
+export const MISSING_FIRST_NAME = 'First Name Required';
+export const MISSING_LAST_NAME = 'Last Name Required';
 export const SERVER_ERROR_MESSAGE = 'A Server Error Has Occurred';
-export const MISSING_TEAM_NAME = 'Team Name Required';
-export const MISSING_TEAMMATES = 'Must Invite at Least One Teammate';
-export const TEAMMATES_LIMIT = 'Limit 20 Teammates Per Planning Poker Room';
-export const MISSING_SELECTED_ROOM = 'Must Select a Planning Poker Room';
 export const INVALID_URL = 'Invalid URL';
 export const MISSING_URL = 'URL Required';
 export const MISSING_SUBJECT = 'Subject Required';

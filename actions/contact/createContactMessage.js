@@ -1,10 +1,8 @@
 'use server';
 
-import connectDB from '../../config/db';
 import { Resend } from 'resend';
-import User from '../../models/User';
 import { ContactFormEmail } from '../../components';
-import { handleServerError, getUserFromCookie } from '../../utilities';
+import { handleServerError } from '../../utilities';
 import { contactFormSchema } from '../../schemas/schemas';
 const resendApiKey = process.env.RESEND_API_KEY;
 const supportEmail = process.env.SUPPORT_EMAIL;
@@ -14,18 +12,6 @@ export default async function createContactMessage(formData) {
     return {
       status: 400,
       error: 'Bad Request',
-    };
-  }
-
-  // check that cookie user id matches FormData user id
-  const { userId: cookieUserId, cookieError } = await getUserFromCookie();
-  if (cookieError) return cookieError;
-
-  const { userId } = formData;
-  if (!userId || userId !== cookieUserId) {
-    return {
-      status: 400,
-      error: 'Unauthorized',
     };
   }
 
@@ -46,25 +32,20 @@ export default async function createContactMessage(formData) {
   }
 
   try {
-    await connectDB();
-    const { userId, subject, message } = zodData;
-
-    const user = await User.findOne({ _id: userId });
-    const { email } = user;
-
-    if (!email) return { status: 400, error: 'User email not found' };
+    const { subject, message } = zodData;
 
     const resend = new Resend(resendApiKey);
 
-    await resend.emails.send({
-      from: 'Planning Poker <support@agilestoryplanningpoker.com>',
+    const error = await resend.emails.send({
+      from: 'Express Planning Poker <support@agilestoryplanningpoker.com>',
       to: supportEmail,
       subject,
       react: ContactFormEmail({
-        email,
         message,
       }),
     });
+
+    if (error) console.error('Resend error: ', error);
 
     return { status: 200 };
   } catch (error) {

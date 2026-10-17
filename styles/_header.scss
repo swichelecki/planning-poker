@@ -39,5 +39,10 @@
     &__inner-wrapper {
       padding: 14px 16px 14px 6px;
     }
+    &__content-right {
+      a {
+        display: none;
+      }
+    }
   }
 }

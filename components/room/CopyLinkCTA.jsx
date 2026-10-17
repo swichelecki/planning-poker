@@ -9,7 +9,7 @@ const ModalInvite = ({ room, classNames, notCopiedText, copiedText }) => {
   const { setShowModal } = useAppContext();
   const [isCopied, setIsCopied] = useState(false);
 
-  const domain = process.env.NEXT_PUBLIC_DOMAIN;
+  const domain = process.env.NEXT_PUBLIC_URL;
 
   const roompath = `${domain}/enter?room=${room}&invite=true`;
 

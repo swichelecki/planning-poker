@@ -13,13 +13,13 @@ const tikTokSans = TikTok_Sans({
 
 export const metadata = {
   generator: 'Next.js',
-  applicationName: 'Agile Story Planning Poker',
+  applicationName: 'Express Planning Poker',
   title: {
-    template: '%s | Agile Story Planning Poker',
-    default: 'Agile Story Planning Poker | Free Story Point Estimation Tool',
+    template: '%s | Express Planning Poker',
+    default: 'Express Planning Poker | Instant Story Point Estimation',
   },
   description:
-    'Free planning poker tool for remote scrum team story point estimation. Create voting rooms and invite teammates for online story point estimation.',
+    'No user account required. Begin story pointing with your team in seconds with this free agile story point estimation tool.',
   keywords: [
     'planning poker',
     'pointing poker',
@@ -32,13 +32,13 @@ export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL),
   openGraph: {
     url: process.env.NEXT_PUBLIC_URL,
-    siteName: 'Agile Story Planning Poker',
+    siteName: 'Express Planning Poker',
     images: '/images/planning_poker_1200_630.webp',
     locale: 'en_US',
     type: 'website',
   },
   appleWebApp: {
-    title: 'Agile Story Planning Poker',
+    title: 'Express Planning Poker',
   },
   icons: {
     icon: '/images/favicon-32x32.png',
@@ -56,10 +56,10 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebApplication',
-              name: 'Agile Story Planning Poker',
+              name: 'Express Planning Poker',
               url: process.env.NEXT_PUBLIC_URL,
               description:
-                'Free planning poker tool for remote scrum team story point estimation. Create voting rooms and invite teammates for online story point estimation.',
+                'No user account required. Begin story pointing with your team in seconds with this free agile story point estimation tool.',
               applicationCategory: 'BusinessApplication',
               offers: {
                 '@type': 'Offer',

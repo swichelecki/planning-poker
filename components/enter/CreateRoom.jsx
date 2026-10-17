@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, Suspense, useReducer } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { createRoom } from '../../actions';
 import { z } from 'zod';
 import {
   FormTextField,
@@ -12,6 +13,7 @@ import {
   Tooltip,
 } from '../../components';
 import { useScrollToTop } from '../../hooks';
+import { getRandom6DigitNumber } from '../../utilities';
 import { createRoomSchema, storyLinkSchema } from '../../schemas/schemas';
 import { MdAddCircle } from 'react-icons/md';
 import { BsQuestionCircleFill } from 'react-icons/bs';
@@ -20,7 +22,13 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
   ssr: false,
 });
 
+const storyLinks = [];
+
 const CreateRoomForm = () => {
+  // Ignored state variable, but dispatching forces an update
+  // Used because storyLinks is not using useState
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   useScrollToTop();
@@ -32,7 +40,6 @@ const CreateRoomForm = () => {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
-    storyLinks: [],
   });
   const [errorMessage, setErrorMessage] = useState({
     firstName: '',
@@ -41,8 +48,6 @@ const CreateRoomForm = () => {
   });
   const [isStepOne, setIsStepOne] = useState(true);
   const [storyLink, setStoryLink] = useState('');
-  const [addStoryLinkAndEnterRoom, setAddStoryLinkAndEnterRoom] =
-    useState(false);
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -105,13 +110,11 @@ const CreateRoomForm = () => {
       });
     }
 
-    sessionStorage.setItem('storyLinks', JSON.stringify(form.storyLinks));
+    sessionStorage.setItem('storyLinks', JSON.stringify([]));
 
     const params = new URLSearchParams();
     params.append('username', `${form.firstName} ${form.lastName}`);
     params.append('room', room);
-
-    console.log(`/room?${params.toString()}`);
 
     router.push(`/room?${params.toString()}`);
   };
@@ -142,61 +145,45 @@ const CreateRoomForm = () => {
       });
     }
 
-    setForm((current) => {
-      return {
-        ...current,
-        storyLinks: [...current.storyLinks, zodFormData?.storyLink],
-      };
-    });
+    storyLinks.push(zodFormData?.storyLink);
     setStoryLink('');
   };
 
-  // When story link not yet in state and form is submitted, add to state and call handleChooseRoom on next render
-  const handleAddStoryLinkAndEnterRoom = () => {
-    const zodValidationResults = storyLinkSchema.safeParse({
-      storyLink,
-    });
-    const { data: zodFormData, success, error } = zodValidationResults;
-    if (!success) {
-      const { properties } = z.treeifyError(error);
-      const { storyLink } = properties;
-      return setErrorMessage({
-        ...errorMessage,
-        storyLink: storyLink?.errors[0],
+  // Enter room
+  const handleChooseRoom = () => {
+    if (storyLink && storyLink.length > 0) {
+      const zodValidationResults = storyLinkSchema.safeParse({
+        storyLink,
       });
+      const { data: zodFormData, success, error } = zodValidationResults;
+      if (!success) {
+        const { properties } = z.treeifyError(error);
+        const { storyLink } = properties;
+        return setErrorMessage({
+          ...errorMessage,
+          storyLink: storyLink?.errors[0],
+        });
+      }
+
+      storyLinks.push(zodFormData?.storyLink);
     }
 
-    setForm((current) => {
-      return {
-        ...current,
-        storyLinks: [...current.storyLinks, zodFormData?.storyLink],
-      };
-    });
-    setStoryLink('');
-    setAddStoryLinkAndEnterRoom(true);
-  };
-
-  // Choose and join room
-  const getRandom6DigitNumber = () => {
-    return Math.floor(100000 + Math.random() * 900000);
-  };
-
-  const handleChooseRoom = () => {
     // add story links to session storage if any
-    sessionStorage.setItem('storyLinks', JSON.stringify(form.storyLinks));
+    sessionStorage.setItem('storyLinks', JSON.stringify(storyLinks));
     sessionStorage.setItem('isNewRoom', 'true');
 
     const params = new URLSearchParams();
     params.append('username', `${form.firstName} ${form.lastName}`);
     params.append('room', `room_${getRandom6DigitNumber()}`);
 
+    // Send room-created email
+    createRoom(
+      `${form.firstName} ${form.lastName}`,
+      `room_${getRandom6DigitNumber()}`,
+    );
+
     router.push(`/room?${params.toString()}`);
   };
-
-  // when story link not yet in state and form is submitted, add to state and call handleChooseRoom on next render
-  useEffect(() => {
-    if (addStoryLinkAndEnterRoom) handleChooseRoom();
-  }, [addStoryLinkAndEnterRoom]);
 
   return (
     <div className='auth-form__form'>
@@ -246,12 +233,14 @@ const CreateRoomForm = () => {
                 </p>
               </Tooltip>
             </div>
-            {form?.storyLinks?.length > 0 &&
-              form?.storyLinks?.map((item, index) => (
+            {storyLinks?.length > 0 &&
+              storyLinks?.map((item, index) => (
                 <FormAddLinkField
                   key={`form-add-link-field__${index}`}
-                  setForm={setForm}
+                  storyLinks={storyLinks}
                   storyLinkItem={item}
+                  setStoryLink={setStoryLink}
+                  forceUpdate={forceUpdate}
                 />
               ))}
             <FormAddLinkField
@@ -273,17 +262,15 @@ const CreateRoomForm = () => {
           <CTA
             text='Create Room'
             className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
-            ariaLabel='Create and enter Agile Story Planning Poker Room'
+            ariaLabel='Create and enter Express Planning Poker room'
             btnType='button'
-            handleClick={
-              storyLink ? handleAddStoryLinkAndEnterRoom : handleChooseRoom
-            }
+            handleClick={handleChooseRoom}
           />
           {!isStepOne && (
             <CTA
               text='Go Back'
               className='cta-button cta-text-link--purple'
-              ariaLabel='Go Back to Choose Room, Create Room or Invite to Room'
+              ariaLabel='Go back to edit your name'
               btnType='button'
               handleClick={() => {
                 setIsStepOne(true);

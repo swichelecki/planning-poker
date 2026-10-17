@@ -11,7 +11,13 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer(handle);
-  const io = new Server(httpServer);
+  const io = new Server(httpServer, {
+    connectionStateRecovery: {
+      // Backup duration for sessions and packets (30 minutes)
+      maxDisconnectionDuration: 30 * 60 * 1000,
+      skipMiddlewares: true,
+    },
+  });
 
   const teammates = {};
   const rooms = {};

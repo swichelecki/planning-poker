@@ -1,50 +1,16 @@
 import { NextResponse } from 'next/server';
-//import { getUserFromCookie } from './utilities/getUserFromCookie';
 
 export async function proxy(req) {
-  /* const { user, isAdmin } = await getUserFromCookie();
+  const { searchParams } = req.nextUrl;
 
-  if (
-    (!user && req.nextUrl.pathname === '/login') ||
-    (!user && req.nextUrl.pathname === '/signup') ||
-    (!user && req.nextUrl.pathname === '/reset') ||
-    (!user && req.nextUrl.pathname === '/invitation') ||
-    (!user && req.nextUrl.pathname === '/')
-  ) {
-    return NextResponse.next();
-  }
-
-  if (!user && req.nextUrl.pathname !== '/') {
+  if (!searchParams.has('room') && req.nextUrl.pathname === '/room') {
     req.nextUrl.pathname = '/';
     return NextResponse.redirect(req.nextUrl);
   }
-
-  if (
-    (user && req.nextUrl.pathname === '/signup') ||
-    (user && req.nextUrl.pathname === '/reset') ||
-    (user && req.nextUrl.pathname === '/invitation') ||
-    (user && req.nextUrl.pathname === '/')
-  ) {
-    req.nextUrl.pathname = '/login';
-    return NextResponse.redirect(req.nextUrl);
-  }
-
-  if (user && !isAdmin && req.nextUrl.pathname === '/admin') {
-    req.nextUrl.pathname = '/login';
-    return NextResponse.redirect(req.nextUrl);
-  } */
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/login',
-    '/signup',
-    '/invitation',
-    '/room',
-    '/account',
-    '/contact',
-    '/',
-  ],
+  matcher: ['/room'],
 };

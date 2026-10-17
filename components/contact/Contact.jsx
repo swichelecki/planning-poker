@@ -12,13 +12,12 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
   ssr: false,
 });
 
-const Contact = ({ userId }) => {
+const Contact = () => {
   const editorRef = useRef(null);
 
   const { setShowToast } = useAppContext();
 
   const [form, setForm] = useState({
-    userId,
     subject: '',
     message: '',
   });
@@ -111,7 +110,7 @@ const Contact = ({ userId }) => {
         text='Submit'
         btnType='submit'
         className='cta-button cta-button--large cta-button--full cta-button--bold cta-button--purple'
-        ariaLabel='Submit feedback to Agile Story Planning Poker'
+        ariaLabel='Submit feedback to Express Planning Poker'
         showSpinner={isAwaitingResponse}
       />
     </form>

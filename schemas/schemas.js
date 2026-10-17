@@ -1,165 +1,30 @@
 import { z } from 'zod';
 import {
-  MISSING_NAME,
-  MISSING_PASSWORD,
-  MISSING_CONFIRM_PASSWORD,
-  INVALID_EMAIL,
-  PASSWORD_MISMATCH,
+  MISSING_FIRST_NAME,
+  MISSING_LAST_NAME,
   CHARACTER_LIMIT_50,
-  TWO_FACTOR_CODE_LIMIT,
-  MISSING_TEAM_NAME,
-  MISSING_TEAMMATES,
-  TEAMMATES_LIMIT,
-  MISSING_SELECTED_ROOM,
   INVALID_URL,
   MISSING_URL,
   CHARACTER_LIMIT_5000,
-  MISSING_NEW_PASSWORD,
-  MISSING_NEW_CONFIRM_PASSWORD,
   MISSING_SUBJECT,
   MISSING_MESSAGE,
-  MISSING_DELETE_CONFIRMATION,
-  MISSING_DELETE_MISMATCH,
-  DELETE_MY_ACCOUNT,
 } from '../constants';
 
 export const createRoomSchema = z.object({
-  firstName: z.string().min(2, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
-  lastName: z.string().min(2, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
-});
-
-export const createUserSchema = z
-  .object({
-    firstName: z.string().min(1, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
-    lastName: z.string().min(1, MISSING_NAME).max(50, CHARACTER_LIMIT_50),
-    email: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),
-    password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
-    confirmPassword: z
-      .string()
-      .min(1, MISSING_CONFIRM_PASSWORD)
-      .max(50, CHARACTER_LIMIT_50),
-    verification: z.string().max(6, TWO_FACTOR_CODE_LIMIT).optional(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: PASSWORD_MISMATCH,
-    path: ['confirmPassword'],
-  });
-
-export const emailAddressSchema = z.object({
-  email: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),
+  firstName: z.string().min(2, MISSING_FIRST_NAME).max(50, CHARACTER_LIMIT_50),
+  lastName: z.string().min(2, MISSING_LAST_NAME).max(50, CHARACTER_LIMIT_50),
 });
 
 export const storyLinkSchema = z.object({
-  storyLink: z.url(INVALID_URL).min(1, MISSING_URL).max(100),
+  storyLink: z.url(MISSING_URL).min(1).max(100, INVALID_URL),
 });
 
-/* export const createRoomSchema = z.object({
-  userId: z.string(),
-  team: z.string().min(1, MISSING_TEAM_NAME).max(50, CHARACTER_LIMIT_50),
-  teammates: z
-    .array(z.string())
-    .min(1, MISSING_TEAMMATES)
-    .max(20, TEAMMATES_LIMIT),
-}); */
-
-export const loginSchema = z.object({
-  email: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),
-  password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
-  verification: z.string().max(6, TWO_FACTOR_CODE_LIMIT).optional(),
+export const createRoomEmailSchema = z.object({
+  username: z.string().min(2).max(50, CHARACTER_LIMIT_50),
+  room: z.string().min(2).max(50, CHARACTER_LIMIT_50),
 });
-
-export const chooseRoomSchema = z.object({
-  userId: z.string(),
-  username: z.string(),
-  selectedRoom: z.string().min(1, MISSING_SELECTED_ROOM),
-});
-
-export const inviteToRoomSchema = z.object({
-  userId: z.string(),
-  selectedRoom: z.string().min(1, MISSING_SELECTED_ROOM),
-  teammates: z
-    .array(z.string())
-    .min(1, MISSING_TEAMMATES)
-    .max(20, TEAMMATES_LIMIT),
-});
-
-export const requestPasswordResetSchema = z.object({
-  email: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),
-});
-
-export const resetPasswordSchema = z
-  .object({
-    email: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),
-    password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
-    confirmPassword: z
-      .string()
-      .min(1, MISSING_CONFIRM_PASSWORD)
-      .max(50, CHARACTER_LIMIT_50),
-    userId: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: PASSWORD_MISMATCH,
-    path: ['confirmPassword'],
-  });
 
 export const contactFormSchema = z.object({
-  userId: z.string(),
   subject: z.string().min(1, MISSING_SUBJECT).max(50, CHARACTER_LIMIT_50),
   message: z.string().min(1, MISSING_MESSAGE).max(5000, CHARACTER_LIMIT_5000),
 });
-
-export const changePasswordSchema = z
-  .object({
-    userId: z.string(),
-    email: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),
-    password: z.string().min(1, MISSING_PASSWORD).max(50, CHARACTER_LIMIT_50),
-    newPassword: z
-      .string()
-      .min(1, MISSING_NEW_PASSWORD)
-      .max(50, CHARACTER_LIMIT_50),
-    confirmNewPassword: z
-      .string()
-      .min(1, MISSING_NEW_CONFIRM_PASSWORD)
-      .max(50, CHARACTER_LIMIT_50),
-  })
-  .superRefine((data, ctx) => {
-    if (data.newPassword !== data.confirmNewPassword) {
-      ctx.addIssue({
-        message: PASSWORD_MISMATCH,
-        path: ['newPassword'],
-      });
-      ctx.addIssue({
-        message: PASSWORD_MISMATCH,
-        path: ['confirmNewPassword'],
-      });
-    }
-  });
-
-export const deleteAccountSchema = z
-  .object({
-    userId: z.string(),
-    deleteEmail: z.email(INVALID_EMAIL).max(50, CHARACTER_LIMIT_50),
-    deletePassword: z
-      .string()
-      .min(1, MISSING_PASSWORD)
-      .max(50, CHARACTER_LIMIT_50),
-    deleteConfirmation: z
-      .string()
-      .min(1, MISSING_DELETE_CONFIRMATION)
-      .max(50, CHARACTER_LIMIT_50),
-  })
-  .refine(
-    (data) => data.deleteConfirmation.toLowerCase() === DELETE_MY_ACCOUNT,
-    {
-      message: MISSING_DELETE_MISMATCH,
-      path: ['deleteConfirmation'],
-    },
-  );
-
-/*  
-export const adminDeleteUserSchema = z.object({
-  password: z
-    .string()
-    .min(1, MISSING_PASSWORD)
-    .max(50, CHARACTER_LIMIT_50),
-}); */

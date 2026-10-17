@@ -1,19 +1,31 @@
+'use client';
+
 import Link from 'next/link';
-import { Suspense } from 'react';
+import CTA from '../shared/CTA';
 import PlayingCards from '../shared/PlayingCards';
-import UserOptions from './UserOptions';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
+  const pathname = usePathname();
+
   return (
     <header className='header'>
       <div className='header__inner-wrapper'>
-        <Link href='/' prefetch={false}>
+        <Link href='/'>
           <PlayingCards />
-          <span>Agile Story Planning Poker</span>
+          <span>Express Planning Poker</span>
         </Link>
-        <Suspense>
-          <UserOptions />
-        </Suspense>
+        <div className='header__content-right'>
+          {pathname === '/' && (
+            <CTA
+              text='Plan Now'
+              type='anchor'
+              href='/enter'
+              className='cta-text-link cta-text-link--purple'
+              ariaLabel='Get started with Express Planning Poker'
+            />
+          )}
+        </div>
       </div>
     </header>
   );

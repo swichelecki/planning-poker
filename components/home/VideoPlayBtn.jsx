@@ -19,7 +19,7 @@ const VideoPlayBtn = () => {
       onClick={handlePlayBtn}
       ref={playBtnRef}
       className='homepage__play-button'
-      aria-label='Play Agile Story Planning Poker demo video'
+      aria-label='Play Express Planning Poker demo video'
     >
       <MdPlayCircle />
     </button>

@@ -5,18 +5,17 @@ export default function Home() {
     <div className='homepage__wrapper'>
       <section className='homepage__hero'>
         <div className='homepage__hero-left'>
-          <h1>Agile Story Planning Poker</h1>
+          <h1>Express Planning Poker</h1>
           <p>
-            Free planning poker tool for remote scrum team story point
-            estimation. Create voting rooms and invite teammates for online
-            story point estimation.
+            No user account required. Begin story pointing with your team in
+            seconds with this free agile story point estimation tool.
           </p>
           <CTA
             text='Plan Now'
             type='anchor'
             href='/enter'
             className='cta-button cta-button--large cta-button--bold cta-button--purple'
-            ariaLabel='Plan now with Agile Story Planning Poker'
+            ariaLabel='Get started with Express Planning Poker'
           />
         </div>
         <div className='homepage__hero-right'>
@@ -44,13 +43,13 @@ export default function Home() {
         </div>
       </section>
       <section className='homepage__direct-cta'>
-        <h2 className='h1'>Try Agile Story Planning Poker Today!</h2>
+        <h2 className='h1'>Get started with Express Planning Poker now!</h2>
         <CTA
           text='Plan Now'
           type='anchor'
           href='/enter'
           className='cta-button cta-button--large cta-button--bold cta-button--purple'
-          ariaLabel='Sign up for Agile Story Planning Poker'
+          ariaLabel='Get started with Express Planning Poker'
         />
       </section>
     </div>
