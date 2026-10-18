@@ -173,14 +173,12 @@ const CreateRoom = () => {
     sessionStorage.setItem('isNewRoom', 'true');
 
     const params = new URLSearchParams();
+    const room = `room_${getRandom6DigitNumber()}`;
     params.append('username', `${form.firstName} ${form.lastName}`);
-    params.append('room', `room_${getRandom6DigitNumber()}`);
+    params.append('room', room);
 
     // Send room-created email
-    createRoom(
-      `${form.firstName} ${form.lastName}`,
-      `room_${getRandom6DigitNumber()}`,
-    );
+    createRoom(`${form.firstName} ${form.lastName}`, room);
 
     router.push(`/room?${params.toString()}`);
   };
