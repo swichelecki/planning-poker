@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { CreateRoom } from '../../components';
 
 export const metadata = {
@@ -5,5 +6,9 @@ export const metadata = {
 };
 
 export default function CreateRoomPage() {
-  return <CreateRoom />;
+  return (
+    <Suspense>
+      <CreateRoom />
+    </Suspense>
+  );
 }

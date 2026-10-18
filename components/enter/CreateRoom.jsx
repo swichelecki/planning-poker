@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense, useReducer } from 'react';
+import { useState, useReducer } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -24,7 +24,7 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
 
 const storyLinks = [];
 
-const CreateRoomForm = () => {
+const CreateRoom = () => {
   // Ignored state variable, but dispatching forces an update
   // Used because storyLinks is not using useState
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -280,15 +280,6 @@ const CreateRoomForm = () => {
         </>
       )}
     </div>
-  );
-};
-
-// have to wrap form in suspense boundry because it is a static page using useSearchParams
-const CreateRoom = () => {
-  return (
-    <Suspense>
-      <CreateRoomForm />
-    </Suspense>
   );
 };
 
