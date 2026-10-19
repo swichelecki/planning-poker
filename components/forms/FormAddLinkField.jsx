@@ -4,13 +4,12 @@ import { FormTextField, CTA } from '../../components';
 import { MdRemoveCircle } from 'react-icons/md';
 
 const FormAddLinkField = ({
-  storyLinks,
+  setForm,
   storyLink,
   storyLinkItem,
   setStoryLink,
   errorMessage,
   setErrorMessage,
-  forceUpdate,
 }) => {
   // handle adding story link
   const handleStoryLink = (e) => {
@@ -22,12 +21,16 @@ const FormAddLinkField = ({
 
   // delete story link
   const handleDeleteStoryLink = (storyLinkItem) => {
-    for (let i = storyLinks.length - 1; i >= 0; i--) {
-      if (storyLinks[i] === storyLinkItem) {
-        storyLinks.splice(i, 1);
-      }
-    }
-    forceUpdate();
+    setForm((current) => {
+      return {
+        ...current,
+        storyLinks: [
+          ...current.storyLinks.filter((item) => {
+            return item !== storyLinkItem;
+          }),
+        ],
+      };
+    });
   };
 
   return (

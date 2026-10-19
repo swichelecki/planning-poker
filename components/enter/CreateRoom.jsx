@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useReducer } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -22,13 +22,7 @@ const Toast = dynamic(() => import('../../components/shared/Toast'), {
   ssr: false,
 });
 
-const storyLinks = [];
-
 const CreateRoom = () => {
-  // Ignored state variable, but dispatching forces an update
-  // Used because storyLinks is not using useState
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-
   const router = useRouter();
   const searchParams = useSearchParams();
   useScrollToTop();
@@ -40,6 +34,7 @@ const CreateRoom = () => {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
+    storyLinks: [],
   });
   const [errorMessage, setErrorMessage] = useState({
     firstName: '',
@@ -145,31 +140,20 @@ const CreateRoom = () => {
       });
     }
 
-    storyLinks.push(zodFormData?.storyLink);
+    setForm((current) => {
+      return {
+        ...current,
+        storyLinks: [...current.storyLinks, zodFormData?.storyLink],
+      };
+    });
+
     setStoryLink('');
   };
 
   // Enter room
   const handleChooseRoom = () => {
-    if (storyLink && storyLink.length > 0) {
-      const zodValidationResults = storyLinkSchema.safeParse({
-        storyLink,
-      });
-      const { data: zodFormData, success, error } = zodValidationResults;
-      if (!success) {
-        const { properties } = z.treeifyError(error);
-        const { storyLink } = properties;
-        return setErrorMessage({
-          ...errorMessage,
-          storyLink: storyLink?.errors[0],
-        });
-      }
-
-      storyLinks.push(zodFormData?.storyLink);
-    }
-
     // add story links to session storage if any
-    sessionStorage.setItem('storyLinks', JSON.stringify(storyLinks));
+    sessionStorage.setItem('storyLinks', JSON.stringify(form?.storyLinks));
     sessionStorage.setItem('isNewRoom', 'true');
 
     const params = new URLSearchParams();
@@ -231,14 +215,12 @@ const CreateRoom = () => {
                 </p>
               </Tooltip>
             </div>
-            {storyLinks?.length > 0 &&
-              storyLinks?.map((item, index) => (
+            {form?.storyLinks?.length > 0 &&
+              form?.storyLinks?.map((item, index) => (
                 <FormAddLinkField
                   key={`form-add-link-field__${index}`}
-                  storyLinks={storyLinks}
+                  setForm={setForm}
                   storyLinkItem={item}
-                  setStoryLink={setStoryLink}
-                  forceUpdate={forceUpdate}
                 />
               ))}
             <FormAddLinkField
@@ -250,7 +232,8 @@ const CreateRoom = () => {
             />
             <CTA
               icon={<MdAddCircle />}
-              text='Add Another Story Link'
+              disabled={!storyLink}
+              text='Add Story Link'
               className='cta-button cta-button--icon cta-button--icon-green'
               ariaLabel='Add user story link'
               btnType='button'
